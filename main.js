@@ -2,26 +2,23 @@
  * 
  */
 
-var sokoban = new game();
-
 /*		*/
 function main () {
+	sokoban = new Game();
 	initGL(document.getElementById("canvas"));
 	
-	$('#loadingPage').fadeOut(1000);
-	
 	initShaders();
-	initTextures();
 	downloadObjects();
 	downloadTextures();
 	
 	gl.clearColor(0.0, 0.0, 0.2, 1.0);
 	gl.enable(gl.DEPTH_TEST);
 	
+	dwnldr = new Downloader(sokoban);
 	
-	tick();
+	downloadObjects(dwnldr);
 	
-	sokoban.start();
+	tick(sokoban);
 }	/*	main ()	*/
 
 /*		*/
@@ -47,20 +44,19 @@ function loadFile(url, data, callback, errorCallback) {
 }	/*	loadFile()	*/
 
 /*		*/
-function tick() {
-	requestAnimFrame(tick);	//	webgl-utils
-	drawScene();
-	animate();
-}	/*	tick()	*/
-
-/*		*/
-function downloadObjects () {
-	/* loadFile("./crate.json", null, function () {
-		// TODO crate.prototype. ...
-	}, null); /* */
+function downloadObjects (dwnldr) {
+	// example, TODO reszta
+	dwnldr.download('./crate.json');
 }	/*	downloadObjects()	*/
 
 /*		*/
 function downloadTextures () {
 	
 }	/*	downloadTextures()	*/
+
+/*		*/
+function tick(game) {
+	requestAnimFrame(tick);	//	webgl-utils
+	game.draw();
+	game.animate();
+}	/*	tick()	*/

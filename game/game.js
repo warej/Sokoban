@@ -1,23 +1,25 @@
-function game () {
+function Game () {
 	this.levelNo = 0;
 	this.startTime = 0;
 }
 
-game.prototype.start = function () {
+Game.prototype.start = function () {
+	$('#loadingPage').fadeOut(1000);
+	initTextures();
 	this.startTime = new Date().getTime();
 	this.scene = new menu();
 };
 
-game.prototype.drawScene = function () {
+Game.prototype.draw = function () {
 	this.scene.draw();
 	this.drawTime();
 	this.drawScore();
 };
 
-game.prototype.drawScore = function () {
+Game.prototype.drawScore = function () {
 	
 };
 
-game.prototype.drawTime = function () {
+Game.prototype.drawTime = function () {
 	
 };
