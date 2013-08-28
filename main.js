@@ -1,23 +1,16 @@
 /**
- * 
+ *
  */
+var sokoban; // Główny obiekt całej gry
 
 /*		*/
 function main () {
-	sokoban = new Game();
-	initGL(document.getElementById("canvas"));
-	
-	initShaders();
-	downloadObjects();
-	downloadTextures();
-	
-	gl.clearColor(0.0, 0.0, 0.2, 1.0);
-	gl.enable(gl.DEPTH_TEST);
-	
-	dwnldr = new Downloader(sokoban);
-	
-	downloadObjects(dwnldr);
-	
+	sokoban = new Sokoban();
+    init(sokoban);
+    $("#loadingPage").fadeOut(500);
+
+
+
 	tick(sokoban);
 }	/*	main ()	*/
 
@@ -40,19 +33,8 @@ function loadFile(url, data, callback, errorCallback) {
         }
     };
 
-    request.send(null);    
+    request.send(null);
 }	/*	loadFile()	*/
-
-/*		*/
-function downloadObjects (dwnldr) {
-	// example, TODO reszta
-	dwnldr.download('./crate.json');
-}	/*	downloadObjects()	*/
-
-/*		*/
-function downloadTextures () {
-	
-}	/*	downloadTextures()	*/
 
 /*		*/
 function tick(game) {

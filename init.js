@@ -1,3 +1,41 @@
+/*	Funkcja inicjująca grę	*/
+function init(game) {
+	// inicjalizacja WebGLa
+	initGL(document.getElementById("canvas"));
+
+	// inicjalizacja shaderów
+	initShaders();
+
+	// stworzenie pobieracza
+	dwnldr = new Downloader(/* callback function */);
+
+	// dodanie obiektów do kolejki pobierania
+	addObjects2Download(dwnldr);
+
+	// dodanie tekstur do kolejki pobierania
+	addTextures2Download(dwnldr);
+
+	// wyczyść ekran
+	gl.clearColor(0.0, 0.0, 0.2, 1.0);
+	gl.enable(gl.DEPTH_TEST);
+
+	// rozpocznij pobieranie
+	downloadObjects(dwnldr);
+} /*  init()  */
+
+
+/*		*/
+function addObjects2Download (dwnldr) {
+	// example, TODO reszta
+	dwnldr.download('./crate.json');
+}	/*	addObjects2Download()	*/
+
+/*		*/
+function addTextures2Download () {
+
+}	/*	addTextures2Download()	*/
+
+
 /*		*/
 function initGL(canvas) {
 	try {
@@ -17,7 +55,7 @@ function getShader(gl, id) {
 	if (!shaderScript) {
 		return null;
 	}
-	
+
 	var str = "";
 	var k = shaderScript.firstChild;
 	while (k) {
@@ -26,7 +64,7 @@ function getShader(gl, id) {
 		}
 		k = k.nextSibling;
 	}
-	
+
 	var shader;
 	if (shaderScript.type == "x-shader/x-fragment") {
 		shader = gl.createShader(gl.FRAGMENT_SHADER);
@@ -35,15 +73,15 @@ function getShader(gl, id) {
 	} else {
 		return null;
 	}
-	
+
 	gl.shaderSource(shader, str);
 	gl.compileShader(shader);
-	
+
 	if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
 		alert(gl.getShaderInfoLog(shader));
 		return null;
 	}
-	
+
 	return shader;
 }	/*	getShader()	*/
 
@@ -94,7 +132,7 @@ function handleLoadedTexture(texture) {
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
 	gl.generateMipmap(gl.TEXTURE_2D);
-	
+
 	gl.bindTexture(gl.TEXTURE_2D, null);
 }	/*	handleLoadedTexture()	*/
 
