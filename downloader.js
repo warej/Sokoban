@@ -1,7 +1,7 @@
 /*	author:	warej
 	state:	done
 */
-//	Konstruktor klasy odpowiedzialnej za pobieranie plików
+//	Konstruktor klasy odpowiedzialnej za pobieranie plikÃ³w
 function Downloader(callback) {
 	this.counter = 0;
 	this.finished = 0;
@@ -9,44 +9,70 @@ function Downloader(callback) {
 	this.callback = callback;
 };
 
-//	Funkcja dodaj¹ca nowy plik do pobieralni
+/*	Funkcja dodajÄ…ca nowy plik do pobieralni */
 Downloader.prototype.newFile = function (path, ldr) {
+    //  ZwiÄ™ksz counter plikÃ³w o 1
 	this.counter++;
-	// dodaj plik do pobierania
-	this.files.push({url:path, loader: ldr});
-};
 
-//	Funkcja rozpoczynaj¹ca pobieranie plików
+	// dodaj plik do listy pobierania
+	this.files.push({url:path, loader: ldr});
+}; /*   Downloader.newFile()    */
+
+/*	Funckja do pobierania danych z podanego URLa	*/
+Downloader.prototype.downloadFile = function (url, data, callback, errorCallback) {
+    // Set up an asynchronous request
+    var request = new XMLHttpRequest();
+    request.open('GET', url, true);
+
+    // Hook the event that gets called as the request progresses
+    request.onreadystatechange = function () {
+        // If the request is "DONE" (completed or failed)
+        if (request.readyState == 4) {
+            // If we got HTTP status 200 (OK)
+            if (request.status == 200) {
+                callback(request.responseText, data);
+            } else { // Failed
+                errorCallback(url);
+            }
+        }
+    };
+
+    request.send(null);
+}	/*	loadFile()	*/
+
+//	Funkcja rozpoczynajÄ…ca pobieranie plikÃ³w
 Downloader.prototype.start = function () {
-	foreach (file in this.list) {
-		loadFile(file.url, file.loader, this.done, this.error);
+	for (file in this.files) {
+		this.downloadFile(file.url, file.loader, this.done, this.error);
 	};
 };
 
-//	Funkcja wywo³ywana przy zakoñczeniu pobierania pliku
+//	Funkcja wywoÅ‚ywana przy zakoÅ„czeniu pobierania pliku
 Downloader.prototype.done = function (response, loader) {
+    //  Kolejny skoÅ„czony
 	this.finished++;
+
+    //  ObsÅ‚uÅ¼ pobrany plik
 	loader(response);
-	
+
 	if (this.finished == this.conter) {
-		if (!this.failed) {
-			//	B³¹d przy pobieraniu
-			alert("Wyst¹pi³ b³¹d przy pobieraniu plików");
+		if (this.failed) {
+			//	BÅ‚Ä…d przy pobieraniu
+			alert("WystÂ¹piÂ³ bÂ³Â¹d przy pobieraniu plikÃ³w");
 		}
 		else {
-			//	Pobieranie zakoñczone sukcesem
-			//	Obs³uga zakoñczenia
+			//	Pobieranie zakoÅ„czone sukcesem - powrÃ³t do programu
 			this.callback();
 		}
 	}
 };
 
-//	Funkcja wywo³ywana w przypadku b³êdu przy pobieraniu plików
+//	Funkcja wywoÅ‚ywana w przypadku wystÄ…pienia bÅ‚Ä™du przy pobieraniu plikÃ³w
 Downloader.prototype.error = function (url) {
 	this.failed = true;
 	this.finished++;
-	
+
 	if (this.finished == this.conter) {
-		alert("Wyst¹pi³ b³¹d przy pobieraniu plików");
+		alert("WystÄ…piÅ‚ bÅ‚Ä…d przy pobieraniu plikÃ³w");
 	}
 };

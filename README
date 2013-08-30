@@ -1,3 +1,10 @@
 Projekt na grafikę: SOKOBAN
 
-Ja robię w eclipsie
+Ja go jednak nie robię w eclipsie xD Przerzuciłem się na sublime'a, bo eclipse mi na linuksie odmawiał posłuszeństwa. W tym pliku proponuję robić sobie notatki apropo tego co jest zrobione, a co do zrobienia.
+
+2013.08.30, Warej:
+    Trochę poprawiłem strukturę na bardziej logiczna i postarałem się bardziej obkomentować kod.
+    Co do formatowania, to staram się żeby każda f-cja miała na początku opis w /* */, a na końcu jeszcze jeden blok komentarza z nazwą f-cji, żeby nie trzeba było scrollować na górę :) Każda f-cja jest oddzielona 2 pustymi liniami. Reszta sama się rzuca w oczy.
+
+    Tam, gdzie zostawiam coś do zrobienia staram się pisać 'TODO', a potem komentarz co jest do zrobienia. Jak gdzieś nie ma TODO, to jest pewna szansa, że już nic nie trzeba tam robić
+

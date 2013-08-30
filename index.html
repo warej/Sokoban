@@ -1,51 +1,51 @@
 <html>
 	<head>
-	
+
 	<style type="text/css" >
 		body {
 			background-color:	appworkspace;
 			margin:				0px;
-			padding:			0px;	
+			padding:			0px;
 		}
 	</style>
-	
-	<script type="text/javascript" src="./game/game.js" ></script>
-	<script type="text/javascript" src="./game/level.js" ></script>
-	<script type="text/javascript" src="./game/menu.js" ></script>
-	
+
+	<script type="text/javascript" src="./sokoban/sokoban.js" ></script>
+	<script type="text/javascript" src="./sokoban/level.js" ></script>
+	<script type="text/javascript" src="./sokoban/menu.js" ></script>
+
 	<script type="text/javascript" src="./graphicObjects/crate.js" ></script>
-	
+
 	<script type="text/javascript" src="./lib/glMatrix-0.9.5.min.js" ></script>
 	<script type="text/javascript" src="./lib/jquery-1.10.0.min.js" ></script>
 	<script type="text/javascript" src="./lib/json.js" ></script>
 	<script type="text/javascript" src="./lib/webgl-utils.js" ></script>
-	
+
 	<script type="text/javascript" src="./downloader.js" ></script>
-	<script type="text/javascript" src="./drawing.js" ></script>
 	<script type="text/javascript" src="./init.js" ></script>
+	<script type="text/javascript" src="./drawing.js" ></script>
 	<script type="text/javascript" src="./main.js" ></script>
-	
+
 	<script id="fshader" type="x-shader/x-fragment" >
 		precision mediump float;
-		
+
 		varying vec2 vTextureCoord;
 		varying vec3 vTransformedNormal;
 		varying vec4 vPosition;
-		
+
 		uniform bool uUseColorMap;
 		uniform bool uUseSpecularMap;
 		uniform bool uUseLighting;
-		
+
 		uniform vec3 uAmbientColor;
-		
+
 		uniform vec3 uPointLightingLocation;
 		uniform vec3 uPointLightingSpecularColor;
 		uniform vec3 uPointLightingDiffuseColor;
-		
+
 		uniform sampler2D uColorMapSampler;
 		uniform sampler2D uSpecularMapSampler;
-		
-		
+
+
 		void main(void) {
 			vec3 lightWeighting;
 			if (!uUseLighting) {
@@ -53,7 +53,7 @@
 			} else {
 				vec3 lightDirection = normalize(uPointLightingLocation - vPosition.xyz);
 				vec3 normal = normalize(vTransformedNormal);
-		
+
 				float specularLightWeighting = 0.0;
 				float shininess = 32.0;
 				if (uUseSpecularMap) {
@@ -62,16 +62,16 @@
 				if (shininess < 255.0) {
 					vec3 eyeDirection = normalize(-vPosition.xyz);
 					vec3 reflectionDirection = reflect(-lightDirection, normal);
-		
+
 					specularLightWeighting = pow(max(dot(reflectionDirection, eyeDirection), 0.0), shininess);
 				}
-		
+
 				float diffuseLightWeighting = max(dot(normal, lightDirection), 0.0);
 				lightWeighting = uAmbientColor
 					+ uPointLightingSpecularColor * specularLightWeighting
 					+ uPointLightingDiffuseColor * diffuseLightWeighting;
 			}
-		
+
 			vec4 fragmentColor;
 			if (uUseColorMap) {
 				fragmentColor = texture2D(uColorMapSampler, vec2(vTextureCoord.s, vTextureCoord.t));
@@ -81,21 +81,21 @@
 			gl_FragColor = vec4(fragmentColor.rgb * lightWeighting, fragmentColor.a);
 		}
 	</script>
-	
+
 	<script id="vshader" type="x-shader/x-vertex" >
 		attribute vec3 aVertexPosition;
 		attribute vec3 aVertexNormal;
 		attribute vec2 aTextureCoord;
-		
+
 		uniform mat4 uMVMatrix;
 		uniform mat4 uPMatrix;
 		uniform mat3 uNMatrix;
-		
+
 		varying vec2 vTextureCoord;
 		varying vec3 vTransformedNormal;
 		varying vec4 vPosition;
-		
-		
+
+
 		void main(void) {
 			vPosition = uMVMatrix * vec4(aVertexPosition, 1.0);
 			gl_Position = uPMatrix * vPosition;
@@ -103,9 +103,9 @@
 			vTransformedNormal = uNMatrix * aVertexNormal;
 		}
 	</script>
-	
+
 	</head>
-	
+
 	<body onload="main()">
 		<div id="gameContener" style="	float:		left;
 										width:		800px;
@@ -118,7 +118,7 @@
 				<center> <h1> Failed to load the canvas :( </h1> </center>
 			</canvas>
 		</div>
-		
+
 		<div id="space" style="	float:	left;
 										height:	100%;
 										width:	50px;
@@ -128,7 +128,7 @@
 										text-align: left;
 										background-image: url('./img/warning.png');" >
 		</div>
-		
+
 		<div id="optionsContener" style="	float:	left;
 											height:	100%;
 											width:	400;
@@ -139,8 +139,8 @@
 											background-color: #dddddd" >
 			<h1>Opcje:</h1> <hr />
 		</div>
-		
-		<div id="loadingPage" style="	
+
+		<div id="loadingPage" style="
 										position:		fixed;
 										top:			0px;
 										left:			0px;
@@ -154,6 +154,6 @@
 			<h1>Trwa �adowanie</h1> <br />
 			<img src="./img/ajaxSpinner.gif" />
 		</div>
-		
+
 	</body>
 </html>

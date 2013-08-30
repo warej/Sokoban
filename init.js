@@ -1,42 +1,48 @@
+
+/*
+ *
+ *	author: Warej & Radek
+ *	state: Almost done - only 90% remains :)
+ *
+ */
+
 /*	Funkcja inicjująca grę	*/
 function init(game) {
-	// inicjalizacja WebGLa
+	//	Inicjalizacja WebGLa
 	initGL(document.getElementById("canvas"));
 
-	// inicjalizacja shaderów
+	//	Inicjalizacja shaderów
 	initShaders();
 
-	// stworzenie pobieracza
-	dwnldr = new Downloader(/* callback function */);
+	//	Stworzenie pobieracza
+	dwnldr = new Downloader(game.start /* callback function */);
 
-	// dodanie obiektów do kolejki pobierania
-	addObjects2Download(dwnldr);
+	//	Dodanie obiektów do kolejki pobierania
+	addObjects2Download(game, dwnldr);
 
-	// dodanie tekstur do kolejki pobierania
-	addTextures2Download(dwnldr);
+	//	Zapuszczenie ładowania obrazków i tworzenia tekstur
+	initTextures();
 
-	// wyczyść ekran
+	//	Czyszczenie ekranu
 	gl.clearColor(0.0, 0.0, 0.2, 1.0);
 	gl.enable(gl.DEPTH_TEST);
 
-	// rozpocznij pobieranie
-	downloadObjects(dwnldr);
+	//	Rozpoczęcie pobierania (asynchroniczne!!!)
+	dwnldr.downloadObjects();
+	//	Po zakończeniu pobierania wywołana zostanie
 } /*  init()  */
 
 
-/*		*/
-function addObjects2Download (dwnldr) {
-	// example, TODO reszta
-	dwnldr.download('./crate.json');
+/*	Funkcja dodająca objekty do listy pobierania	*/
+function addObjects2Download (game, dwnldr) {
+	/*	example, TODO dodać obiekty do pobrania
+	dwnldr.newFile('./obj/crate.json', function (response) {
+		game.crate = JSON.parse(response);
+	});
 }	/*	addObjects2Download()	*/
 
-/*		*/
-function addTextures2Download () {
 
-}	/*	addTextures2Download()	*/
-
-
-/*		*/
+/*	Inicjalizacja WebGLa	*/
 function initGL(canvas) {
 	try {
 		gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
@@ -49,7 +55,8 @@ function initGL(canvas) {
 	}
 }	/*	initGl()	*/
 
-/*		*/
+
+/*	Pobranie shaderów	*/
 function getShader(gl, id) {
 	var shaderScript = document.getElementById(id);
 	if (!shaderScript) {
@@ -85,8 +92,12 @@ function getShader(gl, id) {
 	return shader;
 }	/*	getShader()	*/
 
-/*		*/
+
+/*	Iniclializacja shaderów	*/
 function initShaders() {
+	/*	TODO No i tutaj będzie jazda, żeby te shadery ładnie napisać :)
+	 */
+
 	var fragmentShader = getShader(gl, "fshader");
 	var vertexShader = getShader(gl, "vshader");
 
@@ -124,7 +135,8 @@ function initShaders() {
 	shaderProgram.pointLightingDiffuseColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingDiffuseColor");
 }	/*	initShaders()	*/
 
-/*		*/
+
+/*	Funkcja ładująca pobraną texturę	*/
 function handleLoadedTexture(texture) {
 	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 	gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -136,20 +148,27 @@ function handleLoadedTexture(texture) {
 	gl.bindTexture(gl.TEXTURE_2D, null);
 }	/*	handleLoadedTexture()	*/
 
-/*		*/
-function initTextures() {
-	earthColorMapTexture = gl.createTexture();
-	earthColorMapTexture.image = new Image();
-	earthColorMapTexture.image.onload = function () {
-		handleLoadedTexture(earthColorMapTexture);
-	};
-	earthColorMapTexture.image.src = "./earth.jpg";
 
-	earthSpecularMapTexture = gl.createTexture();
-	earthSpecularMapTexture.image = new Image();
-	earthSpecularMapTexture.image.onload = function () {
-		handleLoadedTexture(earthSpecularMapTexture);
+/*	Funkcja ładująca obrazek do tekstury	*/
+function loadImg (name) {
+	tex = gl.createTexture();
+	tex.image = new Image();
+	tex.image.onload = function () {
+		handleLoadedTexture(tex);
 	};
-	earthSpecularMapTexture.image.src = "earth-specular.gif";
+	tex.image.src = "./" + name + ".png";
+	return tex;
+}	/*	loadImg()	*/
+
+
+/*	Funkcja inicjująca wszystkie(!) tekstury	*/
+function initTextures(imageList) {
+	//	TODO Trzeba będzie tutaj dopisać wszystkie obrazki
+	var textures = new Object();
+
+	// Załaduj przykładowy obrazek
+	textures["example"] = loadImg("example");
+
+	return textures;
 }	/*	initTexture()	*/
 
