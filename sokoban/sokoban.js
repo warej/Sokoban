@@ -14,9 +14,6 @@ function Sokoban () {
 
 Sokoban.prototype.start = function () {
 
-	// Po pobraniu ładowane są tekstury
-	initTextures();
-
 	this.startTime = new Date().getTime();
 
 	this.scene = new menu();
