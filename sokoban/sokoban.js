@@ -10,9 +10,12 @@
 function Sokoban () {
 	this.levelNo = 0;
 	this.startTime = 0;
+	this.running = false;
 }
 
 Sokoban.prototype.start = function () {
+
+	this.running = true;
 
 	this.startTime = new Date().getTime();
 
