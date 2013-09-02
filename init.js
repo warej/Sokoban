@@ -35,7 +35,7 @@ function init(game) {
 
 /*	Funkcja dodająca objekty do listy pobierania	*/
 function addObjects2Download (game, dwnldr) {
-	/*	example, TODO dodać obiekty do pobrania
+	/*	example, TODO dodać obiekty do pobrania */
 	dwnldr.newFile('./obj/crate.json', function (response) {
 		game.crate = JSON.parse(response);
 	});

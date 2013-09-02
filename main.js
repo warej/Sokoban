@@ -10,7 +10,7 @@ function main () {
     //  Utworzenie obiektu gry.
 	game = new Sokoban();
 
-    /*  Inicjalizacja gry - załadowanie shaderów, obiektów, tekstur itp
+	/*  Inicjalizacja gry - załadowanie shaderów, obiektów, tekstur itp
      *  Tutaj sterowanie się rozdwaja: w jednym wątku idzie pobieranie plików, a w drugim rusza odświeżanie
      */
     init(game);

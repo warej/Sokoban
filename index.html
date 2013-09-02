@@ -1,13 +1,6 @@
 <html>
 	<head>
-
-	<style type="text/css" >
-		body {
-			background-color:	appworkspace;
-			margin:				0px;
-			padding:			0px;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="style.css" />
 
 	<script type="text/javascript" src="./sokoban/sokoban.js" ></script>
 	<script type="text/javascript" src="./sokoban/level.js" ></script>
@@ -106,51 +99,21 @@
 
 	</head>
 
-	<body onload="main()">
-		<div id="gameContener" style="	float:		left;
-										width:		800px;
-										height:		99%;
-										padding:	0px;
-										margin:		0px;
-										border:		2px solid black;" >
-			<canvas id="canvas" style="	width: 800px;
-										height: 99%;" >
+	<body onLoad="main()">
+		<div id="gameContener">
+			<canvas id="canvas">
 				<center> <h1> Failed to load the canvas :( </h1> </center>
 			</canvas>
 		</div>
 
-		<div id="space" style="	float:	left;
-										height:	100%;
-										width:	50px;
-										padding:0px;
-										margin:	0px;
-										border:	0;
-										text-align: left;
-										background-image: url('./img/warning.png');" >
+		<div id="space">
 		</div>
 
-		<div id="optionsContener" style="	float:	left;
-											height:	100%;
-											width:	400;
-											padding:15px;
-											margin:	0px;
-											border:	0;
-											text-align: left;
-											background-color: #dddddd" >
+		<div id="optionsContener">
 			<h1>Opcje:</h1> <hr />
 		</div>
 
-		<div id="loadingPage" style="
-										position:		fixed;
-										top:			0px;
-										left:			0px;
-										height:			100%;
-										width:			100%;
-										padding-top:	100px;
-										margin:			0px;
-										text-align: 	center;
-										text-shadow:	gray;
-										background-color: #008800" >
+		<div id="loadingPage">
 			<h1>Trwa �adowanie</h1> <br />
 			<img src="./img/ajaxSpinner.gif" />
 		</div>
