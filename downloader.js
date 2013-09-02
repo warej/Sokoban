@@ -7,6 +7,7 @@ function Downloader(callback) {
 	this.finished = 0;
 	this.failed = false;
 	this.callback = callback;
+    this.files = [];
 };
 
 /*	Funkcja dodająca nowy plik do pobieralni */
@@ -38,7 +39,7 @@ Downloader.prototype.downloadFile = function (url, data, callback, errorCallback
     };
 
     request.send(null);
-}	/*	loadFile()	*/
+};	/*	loadFile()	*/
 
 //	Funkcja rozpoczynająca pobieranie plików
 Downloader.prototype.start = function () {

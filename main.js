@@ -29,8 +29,8 @@ function tick(game) {
     requestAnimFrame(tick); //  z biblioteki 'webgl-utils'
 
     // Przeliczenie stanu gry
-    game.animate();
+    //game.animate();
 
     // Przerysowanie gry
-    game.draw();
+    //game.draw();
 }   /*  tick()  */

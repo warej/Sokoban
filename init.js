@@ -28,17 +28,18 @@ function init(game) {
 	gl.enable(gl.DEPTH_TEST);
 
 	//	Rozpoczęcie pobierania (asynchroniczne!!!)
-	dwnldr.downloadObjects();
+	dwnldr.start();
 	//	Po zakończeniu pobierania wywołana zostanie
 } /*  init()  */
 
 
 /*	Funkcja dodająca objekty do listy pobierania	*/
 function addObjects2Download (game, dwnldr) {
-	/*	example, TODO dodać obiekty do pobrania */
+	/*	example, TODO dodać obiekty do pobrania *
 	dwnldr.newFile('./obj/crate.json', function (response) {
 		game.crate = JSON.parse(response);
 	});
+	/*		*/
 }	/*	addObjects2Download()	*/
 
 
@@ -167,7 +168,7 @@ function initTextures(imageList) {
 	var textures = new Object();
 
 	// Załaduj przykładowy obrazek
-	textures["example"] = loadImg("example");
+	//textures["example"] = loadImg("example");
 
 	return textures;
 }	/*	initTexture()	*/

@@ -26,14 +26,14 @@ Sokoban.prototype.start = function () {
 };
 
 Sokoban.prototype.draw = function () {
-	this.scene.draw();
+
 	this.drawTime();
 	this.drawScore();
 };
 
 Sokoban.prototype.animate = function () {
-
-}
+	var tmp = 0;
+};
 
 Sokoban.prototype.drawScore = function () {
 
