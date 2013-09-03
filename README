@@ -1,6 +1,14 @@
-Projekt na grafikę: SOKOBAN
+﻿Projekt na grafikę: SOKOBAN
 
 Ja go jednak nie robię w eclipsie xD Przerzuciłem się na sublime'a, bo eclipse mi na linuksie odmawiał posłuszeństwa. W tym pliku proponuję robić sobie notatki apropo tego co jest zrobione, a co do zrobienia.
+
+
+
+2013.09.03, Radek:
+	Naprawiłem pojawiające się masowo "TypeError: game.animate is not a function	Sokoban/main.js		Line 34" - do funkcji tick() przekazywany był niepotrzebnie obiekt game, przez co zamiast na zmiennej globalnej funkcje odpalały się na atrybucie (ta sama nazwa zmiennych była). Nie wiem dlaczego to powodowało błąd, ale się naprawiło przez to.
+
+
+
 
 2013.08.30, Warej:
     Trochę poprawiłem strukturę na bardziej logiczna i postarałem się bardziej obkomentować kod.

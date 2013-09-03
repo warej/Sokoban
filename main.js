@@ -15,22 +15,24 @@ function main () {
      */
     init(game);
 
+	game.start();
+
     /*  tick() to funkcja, która we w miarę regularnych odstępach czasu wywołuje samą siebie,
      *  ale tylko kiedy dana karta przeglądarki jest aktywna.
      *  Stanowi główną pętlę programu.
      */
-	tick(game);
+	tick();
 }	/*	main ()	*/
 
 
 /*      */
-function tick(game) {
+function tick() {
     //  Przy kolejnym odświeżeniu ekranu wywołaj mnie ponownie
     requestAnimFrame(tick); //  z biblioteki 'webgl-utils'
 
     // Przeliczenie stanu gry
-    //game.animate();
+    game.animate();
 
     // Przerysowanie gry
-    //game.draw();
+    game.draw();
 }   /*  tick()  */

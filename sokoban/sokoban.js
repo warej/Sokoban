@@ -19,23 +19,29 @@ Sokoban.prototype.start = function () {
 	this.scene = new menu();
 
     // Po załadowaniu znika ekran ładowania gry
-    $("#loadingPage").fadeOut(1000);
+    $("#loadingPage").fadeOut(0);
 };
 
 Sokoban.prototype.draw = function () {
+	document.getElementById("konsola1").textContent = "Sokoban draw działa";
+	drawScene();
 
 	this.drawTime();
 	this.drawScore();
 };
 
 Sokoban.prototype.animate = function () {
-	var tmp = 0;
-};
+	
+	
+	document.getElementById("konsola2").textContent = "Sokoban animate działa ";
+	
+	return null;
+}
 
 Sokoban.prototype.drawScore = function () {
-
+	
 };
 
 Sokoban.prototype.drawTime = function () {
-
+	
 };

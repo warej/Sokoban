@@ -24,7 +24,7 @@ function init(game) {
 	initTextures();
 
 	//	Czyszczenie ekranu
-	gl.clearColor(0.0, 0.0, 0.2, 1.0);
+	gl.clearColor(0.0, 0.4, 0.4, 1.0);
 	gl.enable(gl.DEPTH_TEST);
 
 	//	Rozpoczęcie pobierania (asynchroniczne!!!)
@@ -113,6 +113,7 @@ function initShaders() {
 
 	gl.useProgram(shaderProgram);
 
+	// do VS:
 	shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
 	gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 
@@ -122,9 +123,12 @@ function initShaders() {
 	shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
 	gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
 
+
+	// do VS i FS:
 	shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
 	shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
 	shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
+	
 	shaderProgram.colorMapSamplerUniform = gl.getUniformLocation(shaderProgram, "uColorMapSampler");
 	shaderProgram.specularMapSamplerUniform = gl.getUniformLocation(shaderProgram, "uSpecularMapSampler");
 	shaderProgram.useColorMapUniform = gl.getUniformLocation(shaderProgram, "uUseColorMap");
