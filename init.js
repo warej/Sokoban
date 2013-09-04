@@ -22,6 +22,9 @@ function init(game) {
 
 	//	Zapuszczenie ładowania obrazków i tworzenia tekstur
 	initTextures();
+	
+	//	Funkcja ładująca wszystkie elementy sceny
+	loadWorld();
 
 	//	Czyszczenie ekranu
 	gl.clearColor(0.0, 0.4, 0.4, 1.0);
@@ -30,6 +33,10 @@ function init(game) {
 	//	Rozpoczęcie pobierania (asynchroniczne!!!)
 	dwnldr.start();
 	//	Po zakończeniu pobierania wywołana zostanie
+	
+	// Przechwytuj obsługę klawiszy
+	document.onkeydown = handleKeyDown;
+    document.onkeyup = handleKeyUp;
 } /*  init()  */
 
 
@@ -117,63 +124,170 @@ function initShaders() {
 	shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
 	gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 
-	shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
-	gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+	//shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
+	//gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
 
 	shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
 	gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
 
 
 	// do VS i FS:
-	shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-	shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-	shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
+	shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uM");
+	shaderProgram.vMatrixUniform = gl.getUniformLocation(shaderProgram, "uV");
+	shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uP");
+	shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uN");
 	
 	shaderProgram.colorMapSamplerUniform = gl.getUniformLocation(shaderProgram, "uColorMapSampler");
-	shaderProgram.specularMapSamplerUniform = gl.getUniformLocation(shaderProgram, "uSpecularMapSampler");
-	shaderProgram.useColorMapUniform = gl.getUniformLocation(shaderProgram, "uUseColorMap");
-	shaderProgram.useSpecularMapUniform = gl.getUniformLocation(shaderProgram, "uUseSpecularMap");
-	shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
-	shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
-	shaderProgram.pointLightingLocationUniform = gl.getUniformLocation(shaderProgram, "uPointLightingLocation");
-	shaderProgram.pointLightingSpecularColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingSpecularColor");
-	shaderProgram.pointLightingDiffuseColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingDiffuseColor");
+	//shaderProgram.specularMapSamplerUniform = gl.getUniformLocation(shaderProgram, "uSpecularMapSampler");
+	//shaderProgram.useColorMapUniform = gl.getUniformLocation(shaderProgram, "uUseColorMap");
+	//shaderProgram.useSpecularMapUniform = gl.getUniformLocation(shaderProgram, "uUseSpecularMap");
+	//shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
+	//shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
+	//shaderProgram.pointLightingLocationUniform = gl.getUniformLocation(shaderProgram, "uPointLightingLocation");
+	//shaderProgram.pointLightingSpecularColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingSpecularColor");
+	//shaderProgram.pointLightingDiffuseColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingDiffuseColor");
 }	/*	initShaders()	*/
 
 
 /*	Funkcja ładująca pobraną texturę	*/
 function handleLoadedTexture(texture) {
-	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-	gl.bindTexture(gl.TEXTURE_2D, texture);
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-	gl.generateMipmap(gl.TEXTURE_2D);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+		gl.generateMipmap(gl.TEXTURE_2D);
 
-	gl.bindTexture(gl.TEXTURE_2D, null);
+        gl.bindTexture(gl.TEXTURE_2D, null);
 }	/*	handleLoadedTexture()	*/
 
 
 /*	Funkcja ładująca obrazek do tekstury	*/
-function loadImg (name) {
-	tex = gl.createTexture();
+function loadImg (name, tex) {
 	tex.image = new Image();
 	tex.image.onload = function () {
 		handleLoadedTexture(tex);
 	};
-	tex.image.src = "./" + name + ".png";
+	tex.image.src = "./" + name;
 	return tex;
 }	/*	loadImg()	*/
 
 
 /*	Funkcja inicjująca wszystkie(!) tekstury	*/
-function initTextures(imageList) {
-	//	TODO Trzeba będzie tutaj dopisać wszystkie obrazki
-	var textures = new Object();
+function initTextures() {
 
-	// Załaduj przykładowy obrazek
-	//textures["example"] = loadImg("example");
+	tex1 = gl.createTexture();
+	textures["brick"] = loadImg("brick.gif", tex1);
+	
+	tex2 = gl.createTexture();
+	textures["grass"] = loadImg("trawa3.gif", tex2);
 
-	return textures;
 }	/*	initTexture()	*/
 
+
+
+/* Funkcja odcztyująca modele z plików txt */
+function handleLoadedWorld(data) {
+	var tempVertexPositionBuffer = null;
+	var tempVertexTextureCoordBuffer = null;
+
+	var lines = data.split("\n");
+	var vertexCount = 0;
+	var vertexPositions = [];
+	var vertexTextureCoords = [];
+	for (var i in lines) {
+		var vals = lines[i].replace(/^\s+/, "").split(/\s+/);
+		if (vals.length == 5 && vals[0] != "//") {
+			// It is a line describing a vertex; get X, Y and Z first
+			vertexPositions.push(parseFloat(vals[0]));
+			vertexPositions.push(parseFloat(vals[1]));
+			vertexPositions.push(parseFloat(vals[2]));
+
+			// And then the texture coords
+			vertexTextureCoords.push(parseFloat(vals[3]));
+			vertexTextureCoords.push(parseFloat(vals[4]));
+
+			vertexCount += 1;
+		}
+	}
+
+	tempVertexPositionBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, tempVertexPositionBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPositions), gl.STATIC_DRAW);
+	tempVertexPositionBuffer.itemSize = 3;
+	tempVertexPositionBuffer.numItems = vertexCount;
+
+	tempVertexTextureCoordBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, tempVertexTextureCoordBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexTextureCoords), gl.STATIC_DRAW);
+	tempVertexTextureCoordBuffer.itemSize = 2;
+	tempVertexTextureCoordBuffer.numItems = vertexCount;
+
+	//document.getElementById("loadingtext").textContent = "";
+				
+	var result = {};
+	result[0] = tempVertexPositionBuffer;
+	result[1] = tempVertexTextureCoordBuffer;
+	return result;
+}	/*	handleLoadedWorld(data)	*/
+
+/* Funkcja ładująca wszystkie elementy sceny */
+function loadWorld() {
+	loadFloor();
+	loadWalls();
+	loadPlayer();
+	
+}	/*	loadWorld()	*/
+
+
+// FLOOR:
+var floorVertexPositionBuffer = null;
+var floorVertexTextureCoordBuffer = null;
+
+function loadFloor() {
+	var request = new XMLHttpRequest();
+	request.open("GET", "floor.txt");
+	request.onreadystatechange = function () {
+		if (request.readyState == 4) {
+			 var result_temp = handleLoadedWorld(request.responseText);
+			 floorVertexPositionBuffer = result_temp[0];
+			 floorVertexTextureCoordBuffer = result_temp[1];
+		}
+	}
+	request.send();
+}	/*	loadFloor()	*/
+
+
+// WALLS:
+var wallsVertexPositionBuffer = null;
+var wallsVertexTextureCoordBuffer = null;
+
+function loadWalls() {
+	var request = new XMLHttpRequest();
+	request.open("GET", "walls.txt");
+	request.onreadystatechange = function () {
+		if (request.readyState == 4) {
+			 var result_temp = handleLoadedWorld(request.responseText);
+			 wallsVertexPositionBuffer = result_temp[0];
+			 wallsVertexTextureCoordBuffer = result_temp[1];
+		}
+	}
+	request.send();
+}	/*	loadWalls()	*/
+
+// PLAYER:
+var playerVertexPositionBuffer = null;
+var playerVertexTextureCoordBuffer = null;
+
+function loadPlayer() {
+	var request = new XMLHttpRequest();
+	request.open("GET", "player.txt");
+	request.onreadystatechange = function () {
+		if (request.readyState == 4) {
+			 var result_temp = handleLoadedWorld(request.responseText);
+			 playerVertexPositionBuffer = result_temp[0];
+			 playerVertexTextureCoordBuffer = result_temp[1];
+		}
+	}
+	request.send();
+}	/*	loadPlayer()	*/

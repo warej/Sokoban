@@ -30,6 +30,9 @@ function tick() {
     //  Przy kolejnym odświeżeniu ekranu wywołaj mnie ponownie
     requestAnimFrame(tick); //  z biblioteki 'webgl-utils'
 
+	// Sprawdzenie klawiatury
+	handleKeys();
+
     // Przeliczenie stanu gry
     game.animate();
 

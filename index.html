@@ -20,29 +20,32 @@
 	<script type="text/javascript" src="./init.js" ></script>
 	<script type="text/javascript" src="./drawing.js" ></script>
 	<script type="text/javascript" src="./main.js" ></script>
+	<script type="text/javascript" src="./keyboard.js" ></script>
 
 	<script id="fshader" type="x-shader/x-fragment" >
 		precision mediump float;
 
 		varying vec2 vTextureCoord;
-		varying vec3 vTransformedNormal;
+		//varying vec3 vTransformedNormal;
 		varying vec4 vPosition;
 
-		uniform bool uUseColorMap;
-		uniform bool uUseSpecularMap;
-		uniform bool uUseLighting;
+		//uniform bool uUseColorMap;
+		//uniform bool uUseSpecularMap;
+		//uniform bool uUseLighting;
 
-		uniform vec3 uAmbientColor;
+		//uniform vec3 uAmbientColor;
 
-		uniform vec3 uPointLightingLocation;
-		uniform vec3 uPointLightingSpecularColor;
-		uniform vec3 uPointLightingDiffuseColor;
+		//uniform vec3 uPointLightingLocation;
+		//uniform vec3 uPointLightingSpecularColor;
+		//uniform vec3 uPointLightingDiffuseColor;
 
 		uniform sampler2D uColorMapSampler;
-		uniform sampler2D uSpecularMapSampler;
+		//uniform sampler2D uSpecularMapSampler;
 
 
 		void main(void) {
+			gl_FragColor = texture2D(uColorMapSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+		/*
 			vec3 lightWeighting;
 			if (!uUseLighting) {
 				lightWeighting = vec3(1.0, 1.0, 1.0);
@@ -75,28 +78,31 @@
 				fragmentColor = vec4(1.0, 1.0, 1.0, 1.0);
 			}
 			gl_FragColor = vec4(fragmentColor.rgb * lightWeighting, fragmentColor.a);
+		/* */
 		}
 	</script>
 
 	<script id="vshader" type="x-shader/x-vertex" >
 		attribute vec3 aVertexPosition;
-		attribute vec3 aVertexNormal;
+		//attribute vec3 aVertexNormal;
 		attribute vec2 aTextureCoord;
 
-		uniform mat4 uMVMatrix;
-		uniform mat4 uPMatrix;
-		uniform mat3 uNMatrix;
+		uniform mat4 uM;
+		uniform mat4 uV;
+		uniform mat4 uP;
+		uniform mat3 uN;
 
 		varying vec2 vTextureCoord;
-		varying vec3 vTransformedNormal;
+		//varying vec3 vTransformedNormal;
 		varying vec4 vPosition;
 
 
 		void main(void) {
-			vPosition = uMVMatrix * vec4(aVertexPosition, 1.0);
-			gl_Position = uPMatrix * vPosition;
+			vPosition =  uV *uM * vec4(aVertexPosition, 1.0);
+			gl_Position = uP * vPosition;
+			
 			vTextureCoord = aTextureCoord;
-			vTransformedNormal = uNMatrix * aVertexNormal;
+			//vTransformedNormal = uNMatrix * aVertexNormal;
 		}
 	</script>
 
@@ -118,6 +124,13 @@
 			<div id="konsola1">start</div>
 			<div id="konsola2">start</div>
 			<div id="konsola3">start</div>
+			
+			<hr />
+			Sterowanie kamerą:<br />
+			&nbsp;Obracanie: strzałki<br />
+			&nbsp;Ruch: YHGJ<br />
+			<br />
+			Ruch pionkiem: WSAD
 			
 		</div>
 
