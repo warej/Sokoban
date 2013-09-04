@@ -33,9 +33,11 @@ function tick() {
 	// Sprawdzenie klawiatury
 	handleKeys();
 
-    // Przeliczenie stanu gry
-    game.animate();
-
-    // Przerysowanie gry
-    game.draw();
+	if(game.running){
+		// Przeliczenie stanu gry
+		game.animate();
+	
+		// Przerysowanie gry
+		game.draw();
+	}
 }   /*  tick()  */
