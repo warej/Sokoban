@@ -9,7 +9,7 @@
 /*	Funkcja inicjująca grę	*/
 function init(game) {
 	//	Inicjalizacja WebGLa
-	initGL(document.getElementById("canvas"));
+	initGL(document.getElementById("main_canvas"));
 
 	//	Inicjalizacja shaderów
 	initShaders();
@@ -27,7 +27,7 @@ function init(game) {
 	loadWorld();
 
 	//	Czyszczenie ekranu
-	gl.clearColor(0.0, 0.4, 0.4, 1.0);
+	gl.clearColor(0.0, 0.0, 0.0, 1.0);
 	gl.enable(gl.DEPTH_TEST);
 
 	//	Rozpoczęcie pobierania (asynchroniczne!!!)

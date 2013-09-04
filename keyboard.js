@@ -46,6 +46,15 @@ function handleKeys() {
 	}
 	
 	
+	if (currentlyPressedKeys[33]) { //key PageUp
+		speedPion = 0.01;
+	} else if (currentlyPressedKeys[34]) { // key PageDown
+		speedPion = -0.01;
+	} else {
+		speedPion = 0;
+	}
+	
+	
 	if (currentlyPressedKeys[87]) { //key W
 		speedPlayerX = 0.01;
 	} else if (currentlyPressedKeys[83]) { // key S

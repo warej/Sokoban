@@ -64,10 +64,10 @@ function drawScene() {
 	gl.drawArrays(gl.TRIANGLES, 0, wallsVertexPositionBuffer.numItems);
 	
 	
-	vStackPush();
+	//vStackPush();
 	
 // PLAYER	
-	mat4.translate(V, [-xPlayer, 0.0, zPlayer]);
+	mat4.translate(M, [-xPlayer, 0.0, zPlayer]);
 
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, textures["brick"]);
@@ -83,7 +83,7 @@ function drawScene() {
 	gl.drawArrays(gl.TRIANGLES, 0, playerVertexPositionBuffer.numItems);
 	
 	
-	vStackPop();
+	//vStackPop();
 		
 		
 
@@ -161,6 +161,7 @@ function animate() {
 	if (lastTime != 0) {
 		var elapsed = timeNow - lastTime;
 
+// KAMERA:
 		if (speed != 0) {
 			xPos -= speed * elapsed * Math.sin(degToRad(yaw));
 			zPos -= speed * elapsed * Math.cos(degToRad(yaw));
@@ -174,6 +175,11 @@ function animate() {
 			xPos -= speedBok * elapsed * Math.cos(degToRad(yaw));
 			zPos -= speedBok * elapsed * Math.sin(degToRad(-yaw));
 		}
+		
+		if (speedPion != 0) {
+			yPos += speedPion * elapsed;
+		}
+		
 		yaw += yawRate * elapsed;
 		pitch += pitchRate * elapsed;
 		

@@ -6,7 +6,10 @@ Ja go jednak nie robię w eclipsie xD Przerzuciłem się na sublime'a, bo eclips
 
 2013.09.03, Radek:
 	Naprawiłem pojawiające się masowo "TypeError: game.animate is not a function	Sokoban/main.js		Line 34" - do funkcji tick() przekazywany był niepotrzebnie obiekt game, przez co zamiast na zmiennej globalnej funkcje odpalały się na atrybucie (ta sama nazwa zmiennych była). Nie wiem dlaczego to powodowało błąd, ale się naprawiło przez to.
-
+	Połączyłem kod gry z tym co napisałem wcześniej - plansza z murem i pionek. Nic nadzwyczajego to nie jest, ma robić tylko jako baza do daleszej pracy.
+	Zrobiłem podział na macierze M i V.
+	Shadery póki co są w większości zakomentowane, oświetlenie jest wyłączone.
+	Ważna kwestia - <canvas id="main_canvas" width="900" height="600"> musi mieć ustawione width i height właśnie w tym miejscu, nie w stylach css. Mechanizm WebGL bierze informacje o rozmiarze płótna z tych html-owych parametrów. Gdy ich nie ma tutaj ustawionych, to przyjmuje sobie domyślne (300x150 px) i dla nich tworzy obraz, po czym przeglądarka rozciąga to do wielkości ustawionej w css. Efektem jest kompletna pixeloza i deformacja. Kilka godzin przesiedziałem, zanim na to trafiłem... Cały kod rozwaliłem, zmieniając najróżniejsze rzeczy. Ale kto by wpadł, że ustawienia w css, a te w html to dwie różne rzeczy?!
 
 
 

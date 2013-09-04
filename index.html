@@ -109,8 +109,9 @@
 	</head>
 
 	<body onLoad="main()">
-		<div id="gameContener">
-			<canvas id="canvas">
+	
+     		<div id="gameContener">
+			<canvas id="main_canvas" width="900" height="600">	<!-- WAŻNE - wartości width i height muszą być koniecznie nadane tutaj, w html, a nie w css. W przeciwnym razie canvas się skaluje i wygląda dupnie http://stackoverflow.com/questions/4938346/canvas-width-and-height-in-html5 -->
 				<center> <h1> Failed to load the canvas :( </h1> </center>
 			</canvas>
 		</div>
@@ -127,7 +128,7 @@
 			
 			<hr />
 			Sterowanie kamerą:<br />
-			&nbsp;Obracanie: strzałki<br />
+			&nbsp;Obracanie: strzałki oraz PageUp/PageDown<br />
 			&nbsp;Ruch: YHGJ<br />
 			<br />
 			Ruch pionkiem: WSAD
@@ -138,6 +139,5 @@
 			<h1>Trwa ładowanie</h1> <br />
 			<img src="./img/ajaxSpinner.gif" />
 		</div>
-
 	</body>
 </html>

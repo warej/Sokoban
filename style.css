@@ -6,16 +6,15 @@ body {
 
 #gameContener {
 	float:		left;
-	width:		800px;
-	height:		99%;
+	width:		900px;
+	height:		100%;
 	padding:	0px;
 	margin:		0px;
-	border:		2px solid black;
+	border:		opx solid black;
 }
 
-#canvas {
-	width: 800px;
-	height: 99%;
+#main_canvas {
+	border: none;
 }
 
 #space {
@@ -32,8 +31,9 @@ body {
 #optionsContener {
 	float:	left;
 	height:	100%;
-	width:	400;
-	padding:15px;
+	width:	300;
+	padding-left:15px;
+	padding-right:15px;
 	margin:	0px;
 	border:	0;
 	text-align: left;

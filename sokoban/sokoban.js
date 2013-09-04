@@ -20,6 +20,7 @@ var zPos = -5;
 
 var speed = 0;
 var speedBok = 0;
+var speedPion = 0;
 
 
 // Obsługa gracza:
@@ -50,7 +51,7 @@ Sokoban.prototype.start = function () {
 };
 
 Sokoban.prototype.draw = function () {
-	document.getElementById("konsola1").textContent = "Sokoban draw działa";
+	//document.getElementById("konsola1").textContent = "Sokoban draw działa";
 	
 	drawScene();
 
