@@ -27,7 +27,7 @@ function init(game) {
 	loadWorld();
 
 	//	Czyszczenie ekranu
-	gl.clearColor(0.0, 0.0, 0.0, 1.0);
+	gl.clearColor(0.35, 0.35, 0.4, 1.0);
 	gl.enable(gl.DEPTH_TEST);
 
 	//	Rozpoczęcie pobierania (asynchroniczne!!!)
@@ -124,8 +124,8 @@ function initShaders() {
 	shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
 	gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 
-	//shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
-	//gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+	shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
+	gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
 
 	shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
 	gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
@@ -138,14 +138,14 @@ function initShaders() {
 	shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uN");
 	
 	shaderProgram.colorMapSamplerUniform = gl.getUniformLocation(shaderProgram, "uColorMapSampler");
-	//shaderProgram.specularMapSamplerUniform = gl.getUniformLocation(shaderProgram, "uSpecularMapSampler");
-	//shaderProgram.useColorMapUniform = gl.getUniformLocation(shaderProgram, "uUseColorMap");
-	//shaderProgram.useSpecularMapUniform = gl.getUniformLocation(shaderProgram, "uUseSpecularMap");
-	//shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
-	//shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
-	//shaderProgram.pointLightingLocationUniform = gl.getUniformLocation(shaderProgram, "uPointLightingLocation");
-	//shaderProgram.pointLightingSpecularColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingSpecularColor");
-	//shaderProgram.pointLightingDiffuseColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingDiffuseColor");
+		//shaderProgram.specularMapSamplerUniform = gl.getUniformLocation(shaderProgram, "uSpecularMapSampler");	// oddzielna tekstura dla odbijania światła
+	shaderProgram.useColorMapUniform = gl.getUniformLocation(shaderProgram, "uUseColorMap");	// decyduje, czy używać tekstur
+		//shaderProgram.useSpecularMapUniform = gl.getUniformLocation(shaderProgram, "uUseSpecularMap");
+	shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
+	shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
+	shaderProgram.pointLightingLocationUniform = gl.getUniformLocation(shaderProgram, "uPointLightingLocation");
+	shaderProgram.pointLightingSpecularColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingSpecularColor");
+	shaderProgram.pointLightingDiffuseColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingDiffuseColor");
 }	/*	initShaders()	*/
 
 
@@ -187,7 +187,7 @@ function initTextures() {
 
 
 /* Funkcja odcztyująca modele z plików txt */
-function handleLoadedWorld(data) {
+function handleLoadedModelTXT(data) {
 	var tempVertexPositionBuffer = null;
 	var tempVertexTextureCoordBuffer = null;
 
@@ -223,13 +223,57 @@ function handleLoadedWorld(data) {
 	tempVertexTextureCoordBuffer.itemSize = 2;
 	tempVertexTextureCoordBuffer.numItems = vertexCount;
 
-	//document.getElementById("loadingtext").textContent = "";
-				
+
 	var result = {};
 	result[0] = tempVertexPositionBuffer;
 	result[1] = tempVertexTextureCoordBuffer;
 	return result;
-}	/*	handleLoadedWorld(data)	*/
+}	/*	handleLoadedModelTXT(data)	*/
+
+
+
+/* Funkcja odczytująca modele z plików JSON */
+function handleLoadedModelJSON(data) {
+	var tempVertexNormalBuffer = null;
+	var tempVertexTextureCoordBuffer = null;
+	var tempVertexPositionBuffer = null;
+	var tempVertexIndexBuffer = null;
+	
+	tempVertexNormalBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, tempVertexNormalBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data.vertexNormals), gl.STATIC_DRAW);
+	tempVertexNormalBuffer.itemSize = 3;
+	tempVertexNormalBuffer.numItems = data.vertexNormals.length / 3;
+
+
+	tempVertexTextureCoordBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, tempVertexTextureCoordBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data.vertexTextureCoords), gl.STATIC_DRAW);
+	tempVertexTextureCoordBuffer.itemSize = 2;
+	tempVertexTextureCoordBuffer.numItems = data.vertexTextureCoords.length / 2;
+
+	tempVertexPositionBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, tempVertexPositionBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data.vertexPositions), gl.STATIC_DRAW);
+	tempVertexPositionBuffer.itemSize = 3;
+	tempVertexPositionBuffer.numItems = data.vertexPositions.length / 3;
+
+	tempVertexIndexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, tempVertexIndexBuffer);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(data.indices), gl.STATIC_DRAW);
+	tempVertexIndexBuffer.itemSize = 1;
+	tempVertexIndexBuffer.numItems = data.indices.length;
+	
+	
+	var result = {};
+	result[0] = tempVertexPositionBuffer;
+	result[1] = tempVertexTextureCoordBuffer;
+	result[2] = tempVertexNormalBuffer;
+	result[3] = tempVertexIndexBuffer;
+	return result;
+}	/*	handleLoadedModelJSON(data)	*/
+
+
 
 /* Funkcja ładująca wszystkie elementy sceny */
 function loadWorld() {
@@ -237,7 +281,32 @@ function loadWorld() {
 	loadWalls();
 	loadPlayer();
 	
+	loadTeapot();
+	
 }	/*	loadWorld()	*/
+
+
+
+var teapotVertexPositionBuffer = null;
+var teapotVertexNormalBuffer = null;
+var teapotVertexTextureCoordBuffer = null;
+var teapotVertexIndexBuffer = null;	
+	
+function loadTeapot() {
+	var request = new XMLHttpRequest();
+	request.open("GET", "models/sword.json");
+	request.onreadystatechange = function () {
+		if (request.readyState == 4) {
+			var result_temp = handleLoadedModelJSON(JSON.parse(request.responseText));
+			teapotVertexPositionBuffer = result_temp[0];
+			teapotVertexTextureCoordBuffer = result_temp[1];
+			teapotVertexNormalBuffer = result_temp[2];
+			teapotVertexIndexBuffer = result_temp[3];
+		}
+	}
+	request.send();
+}
+
 
 
 // FLOOR:
@@ -246,10 +315,10 @@ var floorVertexTextureCoordBuffer = null;
 
 function loadFloor() {
 	var request = new XMLHttpRequest();
-	request.open("GET", "floor.txt");
+	request.open("GET", "models/floor.txt");
 	request.onreadystatechange = function () {
 		if (request.readyState == 4) {
-			 var result_temp = handleLoadedWorld(request.responseText);
+			 var result_temp = handleLoadedModelTXT(request.responseText);
 			 floorVertexPositionBuffer = result_temp[0];
 			 floorVertexTextureCoordBuffer = result_temp[1];
 		}
@@ -264,10 +333,10 @@ var wallsVertexTextureCoordBuffer = null;
 
 function loadWalls() {
 	var request = new XMLHttpRequest();
-	request.open("GET", "walls.txt");
+	request.open("GET", "models/walls.txt");
 	request.onreadystatechange = function () {
 		if (request.readyState == 4) {
-			 var result_temp = handleLoadedWorld(request.responseText);
+			 var result_temp = handleLoadedModelTXT(request.responseText);
 			 wallsVertexPositionBuffer = result_temp[0];
 			 wallsVertexTextureCoordBuffer = result_temp[1];
 		}
@@ -281,10 +350,10 @@ var playerVertexTextureCoordBuffer = null;
 
 function loadPlayer() {
 	var request = new XMLHttpRequest();
-	request.open("GET", "player.txt");
+	request.open("GET", "models/player.txt");
 	request.onreadystatechange = function () {
 		if (request.readyState == 4) {
-			 var result_temp = handleLoadedWorld(request.responseText);
+			 var result_temp = handleLoadedModelTXT(request.responseText);
 			 playerVertexPositionBuffer = result_temp[0];
 			 playerVertexTextureCoordBuffer = result_temp[1];
 		}

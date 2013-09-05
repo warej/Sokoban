@@ -23,6 +23,43 @@ function drawScene() {
 		wallsVertexTextureCoordBuffer == null || wallsVertexPositionBuffer == null) {
 		return;
 	}
+	
+	
+	var useColorMap = document.getElementById("color-map").checked;
+    gl.uniform1i(shaderProgram.useColorMapUniform, useColorMap);
+	
+	var lighting = document.getElementById("lighting").checked;
+	gl.uniform1i(shaderProgram.useLightingUniform, lighting);
+	if (lighting) {
+		gl.uniform3f(
+			shaderProgram.ambientColorUniform,
+			parseFloat(document.getElementById("ambientR").value),
+			parseFloat(document.getElementById("ambientG").value),
+			parseFloat(document.getElementById("ambientB").value)
+		);
+
+		gl.uniform3f(
+			shaderProgram.pointLightingLocationUniform,
+			parseFloat(document.getElementById("lightPositionX").value),
+			parseFloat(document.getElementById("lightPositionY").value),
+			parseFloat(document.getElementById("lightPositionZ").value)
+		);
+
+		gl.uniform3f(
+			shaderProgram.pointLightingSpecularColorUniform,
+			parseFloat(document.getElementById("specularR").value),
+			parseFloat(document.getElementById("specularG").value),
+			parseFloat(document.getElementById("specularB").value)
+		);
+
+		gl.uniform3f(
+			shaderProgram.pointLightingDiffuseColorUniform,
+			parseFloat(document.getElementById("diffuseR").value),
+			parseFloat(document.getElementById("diffuseG").value),
+			parseFloat(document.getElementById("diffuseB").value)
+		);
+	}
+	
 
 	mat4.perspective(55, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, P);
 
@@ -34,11 +71,19 @@ function drawScene() {
 	mat4.rotate(V, degToRad(-yaw), [0, 1, 0]);
 	mat4.translate(V, [-xPos, -yPos, -zPos]);
 
-
-// FLOOR:
+	var textures_numbers = {};
+	
+	textures_numbers["grass"] = 0;
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, textures["grass"]);
-	gl.uniform1i(shaderProgram.colorMapSamplerUniform, 0);
+	
+	textures_numbers["brick"] = 1;
+	gl.activeTexture(gl.TEXTURE1);
+	gl.bindTexture(gl.TEXTURE_2D, textures["brick"]);
+
+
+// FLOOR:
+	gl.uniform1i(shaderProgram.colorMapSamplerUniform, textures_numbers["grass"]);
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, floorVertexTextureCoordBuffer);
 	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, floorVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -50,9 +95,7 @@ function drawScene() {
 	gl.drawArrays(gl.TRIANGLES, 0, floorVertexPositionBuffer.numItems);
 
 // WALLS	
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, textures["brick"]);
-	gl.uniform1i(shaderProgram.colorMapSamplerUniform, 0);
+	gl.uniform1i(shaderProgram.colorMapSamplerUniform, textures_numbers["brick"]);
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, wallsVertexTextureCoordBuffer);
 	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, wallsVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -67,11 +110,10 @@ function drawScene() {
 	//vStackPush();
 	
 // PLAYER	
+	mat4.identity(M);
 	mat4.translate(M, [-xPlayer, 0.0, zPlayer]);
 
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, textures["brick"]);
-	gl.uniform1i(shaderProgram.colorMapSamplerUniform, 0);
+	gl.uniform1i(shaderProgram.colorMapSamplerUniform, textures_numbers["brick"]);
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, playerVertexTextureCoordBuffer);
 	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, playerVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -82,8 +124,27 @@ function drawScene() {
 	setMatrixUniforms();
 	gl.drawArrays(gl.TRIANGLES, 0, playerVertexPositionBuffer.numItems);
 	
-	
 	//vStackPop();
+	
+	
+// TEST
+	mat4.identity(M);
+	mat4.translate(M, [0.0, 3.0, 0.0]);
+	
+	gl.uniform1i(shaderProgram.colorMapSamplerUniform, textures_numbers["brick"]);
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, teapotVertexPositionBuffer);
+	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, teapotVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+	gl.bindBuffer(gl.ARRAY_BUFFER, teapotVertexTextureCoordBuffer);
+	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, teapotVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+	gl.bindBuffer(gl.ARRAY_BUFFER, teapotVertexNormalBuffer);
+	gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, teapotVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, teapotVertexIndexBuffer);
+	setMatrixUniforms();
+	gl.drawElements(gl.TRIANGLES, teapotVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 		
 		
 
