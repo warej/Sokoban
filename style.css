@@ -43,7 +43,7 @@ body {
 
 #options {
 	width:				inherit;
-	max-height: 		370px;
+	max-height: 		220px;
 	overflow-y:			auto;
 }
 
@@ -67,7 +67,7 @@ tr {
 
 #logs {
 	width:				inherit;
-	max-height:			300px;
+	max-height:			220px;
 	overflow-y:			auto;
 	background-color: 	#000000;
 	font-size: 			inherit;
