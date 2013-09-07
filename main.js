@@ -4,12 +4,13 @@
  */
 
 log = new Logger();
+var game;
 
 /*	Główna funkcja wywoływana po załadowaniu strony	*/
 function main () {
     //  Utworzenie obiektu gry.
     log.i("Startuję grę.");
-	var game = new Sokoban();
+	game = new Sokoban();
 
 	/*  Inicjalizacja gry - załadowanie shaderów, obiektów, tekstur itp
      *  Tutaj sterowanie się rozdwaja: w jednym wątku idzie pobieranie plików, a w drugim rusza odświeżanie
@@ -27,7 +28,7 @@ function main () {
 
 
 /*      */
-function tick(game) {
+function tick() {
     //  Przy kolejnym odświeżeniu ekranu wywołaj mnie ponownie
     requestAnimFrame(tick); //  z biblioteki 'webgl-utils'
 
