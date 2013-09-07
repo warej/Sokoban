@@ -16,7 +16,7 @@ Downloader.prototype.newFile = function (path, ldr) {
 	this.counter++;
 
 	// dodaj plik do listy pobierania
-	this.files.push({url:path, loader: ldr});
+	this.files.push({url: path, loader: ldr});
 }; /*   Downloader.newFile()    */
 
 /*	Funckja do pobierania danych z podanego URLa	*/
@@ -43,9 +43,12 @@ Downloader.prototype.downloadFile = function (url, data, callback, errorCallback
 
 //	Funkcja rozpoczynająca pobieranie plików
 Downloader.prototype.start = function () {
-	for (file in this.files) {
-		this.downloadFile(file.url, file.loader, this.done, this.error);
-	};
+    if (this.counter > 0)
+    	for (file in this.files) {
+    		this.downloadFile(file.url, file.loader, this.done, this.error);
+    	};
+    else
+        callback();
 };
 
 //	Funkcja wywoływana przy zakończeniu pobierania pliku
