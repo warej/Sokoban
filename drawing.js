@@ -127,9 +127,28 @@ function drawScene() {
 	//vStackPop();
 	
 	
-// TEST
+// TEST 1
 	mat4.identity(M);
 	mat4.translate(M, [0.0, 3.0, 0.0]);
+	
+	gl.uniform1i(shaderProgram.colorMapSamplerUniform, textures_numbers["brick"]);
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, teapotVertexPositionBuffer);
+	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, teapotVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+	gl.bindBuffer(gl.ARRAY_BUFFER, teapotVertexTextureCoordBuffer);
+	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, teapotVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+	//gl.bindBuffer(gl.ARRAY_BUFFER, teapotVertexNormalBuffer);
+	//gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, teapotVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, teapotVertexIndexBuffer);
+	setMatrixUniforms();
+	gl.drawElements(gl.TRIANGLES, teapotVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+	
+// TEST
+	mat4.identity(M);
+	mat4.translate(M, [0.0, 6.0, 0.0]);
 	
 	gl.uniform1i(shaderProgram.colorMapSamplerUniform, textures_numbers["brick"]);
 	
