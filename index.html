@@ -132,7 +132,7 @@
 		<div id="space">
 		</div>
 
-		<div id="optionsContener">
+		<div id="panel">
 			<h2>Opcje:</h2> <hr />
 
 			<!--
@@ -142,56 +142,58 @@
 			<hr />
 			-->
 
-			<b>Sterowanie kamerą:</b>
-			<ul>
-				<li>Przód/tył/lewo/prawo => strzałki</li>
-				<li>góra => r</li>
-				<li>dół => f</li>
-			</ul><
+			<div id="options" >
+				<b>Sterowanie kamerą:</b>
+				<ul>
+					<li>Przód/tył/lewo/prawo => strzałki</li>
+					<li>góra => r</li>
+					<li>dół => f</li>
+				</ul>
 
-			<b>Sterowanie pionkiem:</b>
-			<ul>
-				<li>Przód/tył/lewo/prawo => W S A D</li>
-			</ul>
+				<b>Sterowanie pionkiem:</b>
+				<ul>
+					<li>Przód/tył/lewo/prawo => W S A D</li>
+				</ul>
 
-			<hr />
+				<hr />
 
-			<input type="checkbox" id="color-map" checked />Używaj mapy kolorów<br/>
-			<input type="checkbox" id="lighting" checked />Używaj oświetlenia<br/>
+				<input type="checkbox" id="color-map" checked />Używaj mapy kolorów<br/>
+				<input type="checkbox" id="lighting" checked />Używaj oświetlenia<br/>
 
-			<h3> Oświetlenie punktowe:</h3>
+				<h3> Oświetlenie punktowe:</h3>
 
-			<table style="border: 0; padding: 10px;">
-				<tr>
-					<td><b>Pozycja:</b>
-					<td>X: <input type="text" id="lightPositionX" value="-10.0" size="4" />
-					<td>Y: <input type="text" id="lightPositionY" value="4.0" size="4" />
-					<td>Z: <input type="text" id="lightPositionZ" value="-20.0" size="4" />
-				</tr>
-				<tr>
-					<td><b>Specular colour:</b>
-					<td>R: <input type="text" id="specularR" value="5.0" size="4" />
-					<td>G: <input type="text" id="specularG" value="5.0" size="4" />
-					<td>B: <input type="text" id="specularB" value="5.0" size="4" />
-				</tr>
-				<tr>
-					<td><b>Diffuse colour:</b>
-					<td>R: <input type="text" id="diffuseR" value="0.8" size="4" />
-					<td>G: <input type="text" id="diffuseG" value="0.8" size="4" />
-					<td>B: <input type="text" id="diffuseB" value="0.8" size="4" />
-				</tr>
-			</table>
+				<table style="border: 0; padding: 10px;">
+					<tr>
+						<td><b>Pozycja:</b>
+						<td>X: <input type="text" id="lightPositionX" value="-10.0" size="4" />
+						<td>Y: <input type="text" id="lightPositionY" value="4.0" size="4" />
+						<td>Z: <input type="text" id="lightPositionZ" value="-20.0" size="4" />
+					</tr>
+					<tr>
+						<td><b>Specular colour:</b>
+						<td>R: <input type="text" id="specularR" value="5.0" size="4" />
+						<td>G: <input type="text" id="specularG" value="5.0" size="4" />
+						<td>B: <input type="text" id="specularB" value="5.0" size="4" />
+					</tr>
+					<tr>
+						<td><b>Diffuse colour:</b>
+						<td>R: <input type="text" id="diffuseR" value="0.8" size="4" />
+						<td>G: <input type="text" id="diffuseG" value="0.8" size="4" />
+						<td>B: <input type="text" id="diffuseB" value="0.8" size="4" />
+					</tr>
+				</table>
 
-			<h3>Światło rozproszone:</h3>
+				<h3>Światło rozproszone:</h3>
 
-			<table style="border: 0; padding: 10px;">
-				<tr>
-					<td><b>Kolor:</b>
-					<td>R: <input type="text" id="ambientR" value="0.4" size="4" />
-					<td>G: <input type="text" id="ambientG" value="0.4" size="4" />
-					<td>B: <input type="text" id="ambientB" value="0.4" size="4" />
-				</tr>
-			</table>
+				<table style="border: 0; padding: 10px;">
+					<tr>
+						<td><b>Kolor:</b>
+						<td>R: <input type="text" id="ambientR" value="0.4" size="4" />
+						<td>G: <input type="text" id="ambientG" value="0.4" size="4" />
+						<td>B: <input type="text" id="ambientB" value="0.4" size="4" />
+					</tr>
+				</table>
+			</div>
 
 			<hr>
 

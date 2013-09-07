@@ -5,30 +5,30 @@ body {
 }
 
 #gameContener {
-	float:		left;
-	width:		900px;
-	height:		100%;
-	padding:	0px;
-	margin:		0px;
-	border:		opx solid black;
+	float:				left;
+	width:				900px;
+	height:				100%;
+	padding:			0px;
+	margin:				0px;
+	border:				0px solid black;
 }
 
 #main_canvas {
-	border: none;
+	border: 			none;
 }
 
 #space {
-	float:	left;
-	height:	100%;
-	width:	30px;
-	padding:0px;
-	margin:	0px;
-	border:	0;
-	text-align: left;
-	background-image: url('./img/warning.png');
+	float:				left;
+	height:				100%;
+	width:				30px;
+	padding:			0px;
+	margin:				0px;
+	border:				0;
+	text-align: 		left;
+	background-image: 	url('./img/warning.png');
 }
 
-#optionsContener {
+#panel {
 	float:				left;
 	height:				100%;
 	width:				370;
@@ -39,6 +39,12 @@ body {
 	text-align: 		left;
 	background-color: 	#dddddd;
 	font-size: 			10;
+}
+
+#options {
+	width:				inherit;
+	max-height: 		370px;
+	overflow-y:			auto;
 }
 
 #loadingPage {
@@ -52,7 +58,7 @@ body {
 	text-align: 		center;
 	text-shadow:		gray;
 	background-color: 	#008800;
-	visibility:		hidden;
+	visibility:			hidden;
 }
 
 tr {
@@ -61,8 +67,8 @@ tr {
 
 #logs {
 	width:				inherit;
-	height:				auto;
-	max-height:			400px;
+	max-height:			300px;
+	overflow-y:			auto;
 	background-color: 	#000000;
 	font-size: 			inherit;
 	color: 				#ffffff;
