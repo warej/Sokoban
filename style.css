@@ -20,7 +20,7 @@ body {
 #space {
 	float:	left;
 	height:	100%;
-	width:	50px;
+	width:	30px;
 	padding:0px;
 	margin:	0px;
 	border:	0;
@@ -29,27 +29,41 @@ body {
 }
 
 #optionsContener {
-	float:	left;
-	height:	100%;
-	width:	300;
-	padding-left:15px;
-	padding-right:15px;
-	margin:	0px;
-	border:	0;
-	text-align: left;
-	background-color: #dddddd;
+	float:				left;
+	height:				100%;
+	width:				370;
+	padding-left:		15px;
+	padding-right:		15px;
+	margin:				0px;
+	border:				0;
+	text-align: 		left;
+	background-color: 	#dddddd;
+	font-size: 			10;
 }
 
 #loadingPage {
-	position:		fixed;
-	top:			0px;
-	left:			0px;
-	height:			100%;
-	width:			100%;
-	padding-top:	100px;
-	margin:			0px;
-	text-align: 	center;
-	text-shadow:	gray;
-	background-color: #008800;
-	//visibility:hidden;
+	position:			fixed;
+	top:				0px;
+	left:				0px;
+	height:				100%;
+	width:				100%;
+	padding-top:		100px;
+	margin:				0px;
+	text-align: 		center;
+	text-shadow:		gray;
+	background-color: 	#008800;
+	visibility:		hidden;
+}
+
+tr {
+	font-size: 			10;
+}
+
+#logs {
+	width:				inherit;
+	height:				auto;
+	background-color: 	#000000;
+	font-size: 			inherit;
+	color: 				#ffffff;
+	font-family: 		monospace;
 }
