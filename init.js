@@ -9,35 +9,37 @@
 /*	Funkcja inicjująca grę	*/
 function init(game) {
 	//	Inicjalizacja WebGLa
+	log.i("Ładuję WebGLa.");
 	initGL(document.getElementById("main_canvas"));
 
 	//	Inicjalizacja shaderów
+	log.i("Ładuję shadery.");
 	initShaders();
 
 	//	Stworzenie pobieracza
-	dwnldr = new Downloader(game.start /* callback function */);
+	dwnldr = new Downloader(game.start /* callback function */, game /* context */);
 
 	//	Dodanie obiektów do kolejki pobierania
+	log.d("Dodawanie plików do kolejki pobierania.");
 	addObjects2Download(game, dwnldr);
 
 	//	Zapuszczenie ładowania obrazków i tworzenia tekstur
+	log.i("Ładuję tekstury.");
 	initTextures();
 
-	//	Funkcja ładująca wszystkie elementy sceny
-	loadWorld();
-
 	//	Czyszczenie ekranu
+	log.d("Czyszczenie ekranu.");
 	gl.clearColor(0.35, 0.35, 0.4, 1.0);
 	gl.enable(gl.DEPTH_TEST);
 
 	//	Rozpoczęcie pobierania (asynchroniczne!!!)
 	dwnldr.start();
-	//	Po zakończeniu pobierania wywołana zostanie metoda game.start.
+	//	Po zakończeniu pobierania wywołana zostanie metoda game.start().
 
 	// Przechwytuj obsługę klawiszy
+	log.d("Ładowanie obsługi klawiszy");
 	document.onkeydown = handleKeyDown;
     document.onkeyup = handleKeyUp;
-
 } /*  init()  */
 
 
@@ -48,6 +50,7 @@ function addObjects2Download (game, dwnldr) {
 		game.crate = JSON.parse(response);
 	});
 	/*		*/
+	log.d("OK");
 }	/*	addObjects2Download()	*/
 
 
@@ -60,8 +63,10 @@ function initGL(canvas) {
 	} catch (e) {
 	}
 	if (!gl) {
-		alert("Failed to load WebGL :(");
+		log.e("Failed to load WebGL :(");
+		return;
 	}
+	log.d("OK");
 }	/*	initGl()	*/
 
 
@@ -116,7 +121,8 @@ function initShaders() {
 	gl.linkProgram(shaderProgram);
 
 	if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-		alert("Could not initialise shaders");
+		log.e("Could not initialise shaders");
+		return;
 	}
 
 	gl.useProgram(shaderProgram);
@@ -147,6 +153,8 @@ function initShaders() {
 	shaderProgram.pointLightingLocationUniform = gl.getUniformLocation(shaderProgram, "uPointLightingLocation");
 	shaderProgram.pointLightingSpecularColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingSpecularColor");
 	shaderProgram.pointLightingDiffuseColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingDiffuseColor");
+
+	log.d("OK");
 }	/*	initShaders()	*/
 
 
@@ -177,12 +185,15 @@ function loadImg (name, tex) {
 /*	Funkcja inicjująca wszystkie(!) tekstury	*/
 function initTextures() {
 
+	log.d("Ładowanie tekstury 'brick.gif'");
 	tex1 = gl.createTexture();
 	textures["brick"] = loadImg("brick.gif", tex1);
 
+	log.d("Ładowanie tekstury 'trawa3.gif'");
 	tex2 = gl.createTexture();
 	textures["grass"] = loadImg("trawa3.gif", tex2);
 
+	log.d("OK");
 }	/*	initTexture()	*/
 
 

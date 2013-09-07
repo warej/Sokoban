@@ -2,11 +2,12 @@
 	state:	done
 */
 //	Konstruktor klasy odpowiedzialnej za pobieranie plików
-function Downloader(callback) {
+function Downloader(callback, context) {
 	this.counter = 0;
 	this.finished = 0;
 	this.failed = false;
 	this.callback = callback;
+    this.context = context;
     this.files = [];
 };
 
@@ -44,12 +45,16 @@ Downloader.prototype.downloadFile = function (url, data, callback, errorCallback
 //	Funkcja rozpoczynająca pobieranie plików
 Downloader.prototype.start = function () {
     if (this.counter > 0) {
+    log.i("Rozpoczynam pobieranie.");
     	for (file in this.files) {
+            log.d("Pobieram plik " + file.url);
     		this.downloadFile(file.url, file.loader, this.done, this.error);
     	};
+        log.i("Zakończyłem pobieranie.");
     }
     else {
-        this.callback();
+    	log.i("Nie ma nic do pobrania.");
+        this.callback.apply(this.context);
     }
 };
 
@@ -64,21 +69,24 @@ Downloader.prototype.done = function (response, loader) {
 	if (this.finished == this.conter) {
 		if (this.failed) {
 			//	Błąd przy pobieraniu
-			alert("Wyst¹pi³ b³¹d przy pobieraniu plików");
+			log.e("Wystąpią błąd przy pobieraniu plików");
+    		$("#loadingPage").hide();
 		}
 		else {
 			//	Pobieranie zakończone sukcesem - powrót do programu
-			this.callback();
+			this.callback.apply(this.context);
 		}
 	}
 };
 
 //	Funkcja wywoływana w przypadku wystąpienia błędu przy pobieraniu plików
 Downloader.prototype.error = function (url) {
+    log.e("Nie udało się pobrać pliku " + url);
 	this.failed = true;
 	this.finished++;
 
 	if (this.finished == this.conter) {
-		alert("Wystąpił błąd przy pobieraniu plików");
+		log.e("Wystąpił błąd przy pobieraniu plików.");
+		$("#loadingPage").hide();
 	}
 };
