@@ -43,12 +43,14 @@ Downloader.prototype.downloadFile = function (url, data, callback, errorCallback
 
 //	Funkcja rozpoczynająca pobieranie plików
 Downloader.prototype.start = function () {
-    if (this.counter > 0)
+    if (this.counter > 0) {
     	for (file in this.files) {
     		this.downloadFile(file.url, file.loader, this.done, this.error);
     	};
-    else
-        callback();
+    }
+    else {
+        this.callback();
+    }
 };
 
 //	Funkcja wywoływana przy zakończeniu pobierania pliku
