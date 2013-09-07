@@ -3,30 +3,29 @@
  *  status: done
  */
 
-var game; // Główny obiekt całej gry
+log = new Logger();
 
 /*	Główna funkcja wywoływana po załadowaniu strony	*/
 function main () {
+    log.d("Moja pierwsza linijka.");
     //  Utworzenie obiektu gry.
-	game = new Sokoban();
+	var game = new Sokoban();
 
 	/*  Inicjalizacja gry - załadowanie shaderów, obiektów, tekstur itp
      *  Tutaj sterowanie się rozdwaja: w jednym wątku idzie pobieranie plików, a w drugim rusza odświeżanie
      */
     init(game);
 
-	game.start();
-
     /*  tick() to funkcja, która we w miarę regularnych odstępach czasu wywołuje samą siebie,
      *  ale tylko kiedy dana karta przeglądarki jest aktywna.
      *  Stanowi główną pętlę programu.
      */
-	tick();
+	//tick(game);
 }	/*	main ()	*/
 
 
 /*      */
-function tick() {
+function tick(game) {
     //  Przy kolejnym odświeżeniu ekranu wywołaj mnie ponownie
     requestAnimFrame(tick); //  z biblioteki 'webgl-utils'
 
@@ -36,7 +35,7 @@ function tick() {
 	if(game.running){
 		// Przeliczenie stanu gry
 		game.animate();
-	
+
 		// Przerysowanie gry
 		game.draw();
 	}

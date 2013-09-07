@@ -2,7 +2,7 @@
 	<head>
 	<title>Sokoban !</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	
+
 	<link rel="stylesheet" type="text/css" href="style.css" />
 
 	<script type="text/javascript" src="./sokoban/sokoban.js" ></script>
@@ -16,6 +16,7 @@
 	<script type="text/javascript" src="./lib/json.js" ></script>
 	<script type="text/javascript" src="./lib/webgl-utils.js" ></script>
 
+	<script type="text/javascript" src="./logger.js" ></script>
 	<script type="text/javascript" src="./downloader.js" ></script>
 	<script type="text/javascript" src="./init.js" ></script>
 	<script type="text/javascript" src="./drawing.js" ></script>
@@ -28,7 +29,7 @@
 		varying vec2 vTextureCoord;
 		varying vec3 vTransformedNormal;
 		varying vec4 vPosition;
-		
+
 		uniform mat4 uM;
 		uniform mat4 uV;
 		uniform mat4 uP;
@@ -50,18 +51,18 @@
 
 		void main(void) {
 			//gl_FragColor = texture2D(uColorMapSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-		
+
 			vec3 lightWeighting;
-			
+
 			if (!uUseLighting) {
 				lightWeighting = vec3(1.0, 1.0, 1.0);
 			} else {
-			
+
 				vec3 lightDirection = normalize(uPointLightingLocation - vPosition.xyz);
 				vec3 normal = normalize(vTransformedNormal);
 
 				float specularLightWeighting = 0.0;
-				
+
 				float shininess = 32.0;
 				/*
 						if (uUseSpecularMap) {
@@ -90,7 +91,7 @@
 				fragmentColor = vec4(1.0, 1.0, 1.0, 1.0);
 			}
 			gl_FragColor = vec4(fragmentColor.rgb * lightWeighting, fragmentColor.a);
-		
+
 		}
 	</script>
 
@@ -112,7 +113,7 @@
 		void main(void) {
 			vPosition =  uV *uM * vec4(aVertexPosition, 1.0);
 			gl_Position = uP * vPosition;
-			
+
 			vTextureCoord = aTextureCoord;
 			vTransformedNormal = uN * aVertexNormal;
 		}
@@ -121,9 +122,9 @@
 	</head>
 
 	<body onLoad="main()">
-	
+
      		<div id="gameContener">
-			<canvas id="main_canvas" width="900" height="600">	<!-- WAŻNE - wartości width i height muszą być koniecznie nadane tutaj, w html, a nie w css. W przeciwnym razie canvas się skaluje i wygląda dupnie http://stackoverflow.com/questions/4938346/canvas-width-and-height-in-html5 -->
+			<canvas id="main_canvas" width="900" height="500">	<!-- WAŻNE - wartości width i height muszą być koniecznie nadane tutaj, w html, a nie w css. W przeciwnym razie canvas się skaluje i wygląda dupnie http://stackoverflow.com/questions/4938346/canvas-width-and-height-in-html5 -->
 				<center> <h1> Failed to load the canvas :( </h1> </center>
 			</canvas>
 		</div>
@@ -132,32 +133,37 @@
 		</div>
 
 		<div id="optionsContener">
-			<h1>Opcje:</h1> <hr />
-			
+			<h2>Opcje:</h2> <hr />
+
 			<!--
 			<div id="konsola1">start</div>
 			<div id="konsola2">start</div>
 			<div id="konsola3">start</div>
 			<hr />
 			-->
-		
-			
-			Sterowanie kamerą:<br />
-			&nbsp;Obracanie: strzałki oraz PageUp/PageDown<br />
-			&nbsp;Ruch: YHGJ<br />
-			<br />
-			Ruch pionkiem: WSAD
-			
-			<hr />
-			
-			<input type="checkbox" id="color-map" checked /> Use color map<br/>
-			<input type="checkbox" id="lighting" checked /> Use lighting<br/>
 
-			Oświetlenie punktowe:	
-		
+			<b>Sterowanie kamerą:</b>
+			<ul>
+				<li>Przód/tył/lewo/prawo => strzałki</li>
+				<li>góra => r</li>
+				<li>dół => f</li>
+			</ul><
+
+			<b>Sterowanie pionkiem:</b>
+			<ul>
+				<li>Przód/tył/lewo/prawo => W S A D</li>
+			</ul>
+
+			<hr />
+
+			<input type="checkbox" id="color-map" checked />Używaj mapy kolorów<br/>
+			<input type="checkbox" id="lighting" checked />Używaj oświetlenia<br/>
+
+			<h3> Oświetlenie punktowe:</h3>
+
 			<table style="border: 0; padding: 10px;">
 				<tr>
-					<td><b>Location:</b>
+					<td><b>Pozycja:</b>
 					<td>X: <input type="text" id="lightPositionX" value="-10.0" size="4" />
 					<td>Y: <input type="text" id="lightPositionY" value="4.0" size="4" />
 					<td>Z: <input type="text" id="lightPositionZ" value="-20.0" size="4" />
@@ -175,18 +181,27 @@
 					<td>B: <input type="text" id="diffuseB" value="0.8" size="4" />
 				</tr>
 			</table>
-		
-			<h2>Ambient light:</h2>
-		
+
+			<h3>Światło rozproszone:</h3>
+
 			<table style="border: 0; padding: 10px;">
 				<tr>
-					<td><b>Colour:</b>
+					<td><b>Kolor:</b>
 					<td>R: <input type="text" id="ambientR" value="0.4" size="4" />
 					<td>G: <input type="text" id="ambientG" value="0.4" size="4" />
 					<td>B: <input type="text" id="ambientB" value="0.4" size="4" />
 				</tr>
 			</table>
-			
+
+			<hr>
+
+			<h3> Logi </h3>
+
+			<hr>
+
+			<div id="logs">
+				Sapmle log<br>
+			</div>
 		</div>
 
 		<div id="loadingPage">
