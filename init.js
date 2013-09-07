@@ -22,7 +22,7 @@ function init(game) {
 
 	//	Zapuszczenie ładowania obrazków i tworzenia tekstur
 	initTextures();
-	
+
 	//	Funkcja ładująca wszystkie elementy sceny
 	loadWorld();
 
@@ -32,11 +32,12 @@ function init(game) {
 
 	//	Rozpoczęcie pobierania (asynchroniczne!!!)
 	dwnldr.start();
-	//	Po zakończeniu pobierania wywołana zostanie
-	
+	//	Po zakończeniu pobierania wywołana zostanie metoda game.start.
+
 	// Przechwytuj obsługę klawiszy
 	document.onkeydown = handleKeyDown;
     document.onkeyup = handleKeyUp;
+
 } /*  init()  */
 
 
@@ -136,7 +137,7 @@ function initShaders() {
 	shaderProgram.vMatrixUniform = gl.getUniformLocation(shaderProgram, "uV");
 	shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uP");
 	shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uN");
-	
+
 	shaderProgram.colorMapSamplerUniform = gl.getUniformLocation(shaderProgram, "uColorMapSampler");
 		//shaderProgram.specularMapSamplerUniform = gl.getUniformLocation(shaderProgram, "uSpecularMapSampler");	// oddzielna tekstura dla odbijania światła
 	shaderProgram.useColorMapUniform = gl.getUniformLocation(shaderProgram, "uUseColorMap");	// decyduje, czy używać tekstur
@@ -178,7 +179,7 @@ function initTextures() {
 
 	tex1 = gl.createTexture();
 	textures["brick"] = loadImg("brick.gif", tex1);
-	
+
 	tex2 = gl.createTexture();
 	textures["grass"] = loadImg("trawa3.gif", tex2);
 
@@ -238,7 +239,7 @@ function handleLoadedModelJSON(data) {
 	var tempVertexTextureCoordBuffer = null;
 	var tempVertexPositionBuffer = null;
 	var tempVertexIndexBuffer = null;
-	
+
 	tempVertexNormalBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, tempVertexNormalBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data.vertexNormals), gl.STATIC_DRAW);
@@ -263,8 +264,8 @@ function handleLoadedModelJSON(data) {
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(data.indices), gl.STATIC_DRAW);
 	tempVertexIndexBuffer.itemSize = 1;
 	tempVertexIndexBuffer.numItems = data.indices.length;
-	
-	
+
+
 	var result = {};
 	result[0] = tempVertexPositionBuffer;
 	result[1] = tempVertexTextureCoordBuffer;
@@ -280,9 +281,9 @@ function loadWorld() {
 	loadFloor();
 	loadWalls();
 	loadPlayer();
-	
+
 	loadTeapot();
-	
+
 }	/*	loadWorld()	*/
 
 
@@ -290,8 +291,8 @@ function loadWorld() {
 var teapotVertexPositionBuffer = null;
 var teapotVertexNormalBuffer = null;
 var teapotVertexTextureCoordBuffer = null;
-var teapotVertexIndexBuffer = null;	
-	
+var teapotVertexIndexBuffer = null;
+
 function loadTeapot() {
 	var request = new XMLHttpRequest();
 	request.open("GET", "models/sword.json");

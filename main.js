@@ -7,19 +7,21 @@ log = new Logger();
 
 /*	Główna funkcja wywoływana po załadowaniu strony	*/
 function main () {
-    log.d("Moja pierwsza linijka.");
     //  Utworzenie obiektu gry.
+    log.i("Startuję grę.");
 	var game = new Sokoban();
 
 	/*  Inicjalizacja gry - załadowanie shaderów, obiektów, tekstur itp
      *  Tutaj sterowanie się rozdwaja: w jednym wątku idzie pobieranie plików, a w drugim rusza odświeżanie
      */
+    log.d("Inicjalizacja gry.");
     init(game);
 
     /*  tick() to funkcja, która we w miarę regularnych odstępach czasu wywołuje samą siebie,
      *  ale tylko kiedy dana karta przeglądarki jest aktywna.
      *  Stanowi główną pętlę programu.
      */
+     //log.d("tick()");
 	//tick(game);
 }	/*	main ()	*/
 

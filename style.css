@@ -62,6 +62,7 @@ tr {
 #logs {
 	width:				inherit;
 	height:				auto;
+	max-height:			400px;
 	background-color: 	#000000;
 	font-size: 			inherit;
 	color: 				#ffffff;
