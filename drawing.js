@@ -126,7 +126,7 @@ function drawScene() {
 	
 	//vStackPop();
 	
-	
+/*	
 // TEST 1
 	mat4.identity(M);
 	mat4.translate(M, [0.0, 3.0, 0.0]);
@@ -165,7 +165,7 @@ function drawScene() {
 	setMatrixUniforms();
 	gl.drawElements(gl.TRIANGLES, teapotVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 		
-		
+*/	
 
 	
 }	/*	drawScene ()	*/

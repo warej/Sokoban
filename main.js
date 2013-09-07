@@ -22,7 +22,7 @@ function main () {
      *  Stanowi główną pętlę programu.
      */
      //log.d("tick()");
-	//tick(game);
+	tick(game);
 }	/*	main ()	*/
 
 
