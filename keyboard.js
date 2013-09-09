@@ -2,6 +2,7 @@ var currentlyPressedKeys = {};
 
 function handleKeyDown(event) {
 	currentlyPressedKeys[event.keyCode] = true;
+    //log.d("Wciśnięto klawisz nr " + event.keyCode);
 }
 
 
@@ -12,6 +13,5 @@ function handleKeyUp(event) {
 
 
 function handleKeys(gra) {
-	//game.scene.handleKeys();
 	gra.scene.handleKeys();
 }

@@ -4,210 +4,99 @@
  **
  **/
 
-/*      */
+
+/*		*/
 function Menu (gra) {
-    this.game = gra;
-};  /*  Menu() */
+	this.game = gra;
+	this.choice = 0;
+	this.choices = 3;
+
+	this.items = [];
+	this.items[0] = this.runLevel;
+	this.items[1] = this.runLevel;
+	this.items[2] = this.finish;
+
+	this.load();
+};	/*	Menu()	*/
 
 
-/*      */
+/*	Menu.draw()	*/
 Menu.prototype.draw = function () {
 
-};
+};	/*	Menu.draw()	*/
 
 
 /*  Menu.load()  */
 Menu.prototype.load = function() {
 
-};  /*  Menu.load()  */
+};	/*	Menu.load()	*/
 
+
+/*	Menu.run()	*/
 Menu.prototype.run = function() {
-    log.i("Witaj w menu!");
-    loadWorld();    //  Testowo
-};
+	log.i("Witaj w menu!");
+	gl.clearColor(0.35, 0.35, 0.4, 1.0);
+	gl.enable(gl.DEPTH_TEST);
+};	/*	Menu.run()	*/
 
+
+/*	Menu.handleKeys()	*/
 Menu.prototype.handleKeys = function () {
-    new Level().handleKeys();
-};
+	if (currentlyPressedKeys[37] || currentlyPressedKeys[38]) {	//	Lewo/góra
+		currentlyPressedKeys[37] = false;
+		currentlyPressedKeys[38] = false;
+		this.choice = (this.choice -1 +this.choices) %this.choices;
+		log.d("current choice is " + this.choice);
+	} else if (currentlyPressedKeys[39] || currentlyPressedKeys[40]) {	//	Prawo/dół
+		currentlyPressedKeys[39] = false;
+		currentlyPressedKeys[40] = false;
+		this.choice = (this.choice +1 +this.choices) %this.choices;
+		log.d("current choice is " + this.choice);
+	} else if (currentlyPressedKeys[13] || currentlyPressedKeys[32]) {	//	Enter/spacja
+		currentlyPressedKeys[13] = false;
+		currentlyPressedKeys[32] = false;
+
+		switch (this.choice) {
+			case 0:
+				this.continueLevel();
+				break;
+			case 1:
+				this.runLevel(0);
+				break;
+			case 2:
+				this.finish();
+				break;
+		}
+	}
+};	/*	Menu.handleKeys()	*/
 
 
-/* Funkcja odcztyująca modele z plików txt */
-function handleLoadedModelTXT(data) {
-    var tempVertexPositionBuffer = null;
-    var tempVertexTextureCoordBuffer = null;
-
-    var lines = data.split("\n");
-    var vertexCount = 0;
-    var vertexPositions = [];
-    var vertexTextureCoords = [];
-    for (var i in lines) {
-        var vals = lines[i].replace(/^\s+/, "").split(/\s+/);
-        if (vals.length == 5 && vals[0] != "//") {
-            // It is a line describing a vertex; get X, Y and Z first
-            vertexPositions.push(parseFloat(vals[0]));
-            vertexPositions.push(parseFloat(vals[1]));
-            vertexPositions.push(parseFloat(vals[2]));
-
-            // And then the texture coords
-            vertexTextureCoords.push(parseFloat(vals[3]));
-            vertexTextureCoords.push(parseFloat(vals[4]));
-
-            vertexCount += 1;
-        }
-    }
-
-    tempVertexPositionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, tempVertexPositionBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPositions), gl.STATIC_DRAW);
-    tempVertexPositionBuffer.itemSize = 3;
-    tempVertexPositionBuffer.numItems = vertexCount;
-
-    tempVertexTextureCoordBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, tempVertexTextureCoordBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexTextureCoords), gl.STATIC_DRAW);
-    tempVertexTextureCoordBuffer.itemSize = 2;
-    tempVertexTextureCoordBuffer.numItems = vertexCount;
+/*	Menu.continueLevel()	*/
+Menu.prototype.continueLevel = function () {
+	if (this.game.lastState != null) {
+		this.game.scene = this.game.lastState;
+		this.game.lastState = null;
+		this.game.scene.run();
+	}
+	else {
+		this.runLevel(1);
+	}
+};	/*	Menu.continueLevel()	*/
 
 
-    var result = {};
-    result[0] = tempVertexPositionBuffer;
-    result[1] = tempVertexTextureCoordBuffer;
-    return result;
-}   /*  handleLoadedModelTXT(data)  */
+/*	Menu.runLevel()	*/
+Menu.prototype.runLevel = function (nr) {
+	log.d("Runing level " + nr);
+	//	Uruchom poziom numer 'nr'
+	this.game.scene = new Level(this.game, nr);
+	this.game.scene.run();
+};	/*	Menu.runLevel()	*/
 
 
-
-/* Funkcja odczytująca modele z plików JSON */
-function handleLoadedModelJSON(data) {
-    var tempVertexNormalBuffer = null;
-    var tempVertexTextureCoordBuffer = null;
-    var tempVertexPositionBuffer = null;
-    var tempVertexIndexBuffer = null;
-
-    tempVertexNormalBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, tempVertexNormalBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data.vertexNormals), gl.STATIC_DRAW);
-    tempVertexNormalBuffer.itemSize = 3;
-    tempVertexNormalBuffer.numItems = data.vertexNormals.length / 3;
-
-
-    tempVertexTextureCoordBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, tempVertexTextureCoordBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data.vertexTextureCoords), gl.STATIC_DRAW);
-    tempVertexTextureCoordBuffer.itemSize = 2;
-    tempVertexTextureCoordBuffer.numItems = data.vertexTextureCoords.length / 2;
-
-    tempVertexPositionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, tempVertexPositionBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data.vertexPositions), gl.STATIC_DRAW);
-    tempVertexPositionBuffer.itemSize = 3;
-    tempVertexPositionBuffer.numItems = data.vertexPositions.length / 3;
-
-    tempVertexIndexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, tempVertexIndexBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(data.indices), gl.STATIC_DRAW);
-    tempVertexIndexBuffer.itemSize = 1;
-    tempVertexIndexBuffer.numItems = data.indices.length;
-
-
-    var result = {};
-    result[0] = tempVertexPositionBuffer;
-    result[1] = tempVertexTextureCoordBuffer;
-    result[2] = tempVertexNormalBuffer;
-    result[3] = tempVertexIndexBuffer;
-    return result;
-}   /*  handleLoadedModelJSON(data) */
-
-/* Funkcja ładująca wszystkie elementy sceny */
-function loadWorld() {
-    // Przechwytuj obsługę klawiszy
-    log.d("Ładowanie obsługi klawiszy");
-    document.onkeydown = handleKeyDown;
-    document.onkeyup = handleKeyUp;
-
-    loadFloor();
-    loadWalls();
-    loadPlayer();
-
-    loadTeapot();
-}   /*  loadWorld() */
-
-
-
-
-var teapotVertexPositionBuffer = null;
-var teapotVertexNormalBuffer = null;
-var teapotVertexTextureCoordBuffer = null;
-var teapotVertexIndexBuffer = null;
-
-function loadTeapot() {
-    var request = new XMLHttpRequest();
-    request.open("GET", "models/sword.json");
-    request.onreadystatechange = function () {
-        if (request.readyState == 4) {
-            var result_temp = handleLoadedModelJSON(JSON.parse(request.responseText));
-            teapotVertexPositionBuffer = result_temp[0];
-            teapotVertexTextureCoordBuffer = result_temp[1];
-            teapotVertexNormalBuffer = result_temp[2];
-            teapotVertexIndexBuffer = result_temp[3];
-        }
-    }
-    request.send();
-}
-
-
-
-// FLOOR:
-var floorVertexPositionBuffer = null;
-var floorVertexTextureCoordBuffer = null;
-
-function loadFloor() {
-    var request = new XMLHttpRequest();
-    request.open("GET", "models/floor.txt");
-    request.onreadystatechange = function () {
-        if (request.readyState == 4) {
-             var result_temp = handleLoadedModelTXT(request.responseText);
-             floorVertexPositionBuffer = result_temp[0];
-             floorVertexTextureCoordBuffer = result_temp[1];
-        }
-    }
-    request.send();
-}   /*  loadFloor() */
-
-
-// WALLS:
-var wallsVertexPositionBuffer = null;
-var wallsVertexTextureCoordBuffer = null;
-
-function loadWalls() {
-    var request = new XMLHttpRequest();
-    request.open("GET", "models/walls.txt");
-    request.onreadystatechange = function () {
-        if (request.readyState == 4) {
-             var result_temp = handleLoadedModelTXT(request.responseText);
-             wallsVertexPositionBuffer = result_temp[0];
-             wallsVertexTextureCoordBuffer = result_temp[1];
-        }
-    }
-    request.send();
-}   /*  loadWalls() */
-
-// PLAYER:
-var playerVertexPositionBuffer = null;
-var playerVertexTextureCoordBuffer = null;
-
-function loadPlayer() {
-    var request = new XMLHttpRequest();
-    request.open("GET", "models/player.txt");
-    request.onreadystatechange = function () {
-        if (request.readyState == 4) {
-             var result_temp = handleLoadedModelTXT(request.responseText);
-             playerVertexPositionBuffer = result_temp[0];
-             playerVertexTextureCoordBuffer = result_temp[1];
-        }
-    }
-    request.send();
-}   /*  loadPlayer()    */
-
-
-
+/*	Menu.finish()	*/
+Menu.prototype.finish = function () {
+	log.d("Finishing");
+	this.game.running = false;
+	this.game.finished = true;
+	this.game.scene = null;
+};	/*	Menu.finish()	*/
