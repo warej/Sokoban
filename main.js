@@ -33,7 +33,7 @@ function tick() {
     requestAnimFrame(tick); //  z biblioteki 'webgl-utils'
 
 	// Sprawdzenie klawiatury
-	handleKeys();
+	handleKeys(game);
 
 	if(game.running){
 		// Przeliczenie stanu gry

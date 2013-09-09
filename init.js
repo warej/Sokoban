@@ -32,6 +32,11 @@ function init(game) {
 	gl.clearColor(0.35, 0.35, 0.4, 1.0);
 	gl.enable(gl.DEPTH_TEST);
 
+    // Obsługa klawiszy
+    log.d("Ładowanie obsługi klawiszy");
+    document.onkeydown = handleKeyDown;
+    document.onkeyup = handleKeyUp;
+
 	//	Rozpoczęcie pobierania (asynchroniczne!!!)
 	dwnldr.start();
 	//	Po zakończeniu pobierania wywołana zostanie metoda game.start().
