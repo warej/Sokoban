@@ -7,7 +7,7 @@
  */
 
 /*	Funkcja inicjująca grę	*/
-function init(game) {
+function init(gra) {
 	//	Inicjalizacja WebGLa
 	log.i("Ładuję WebGLa.");
 	initGL(document.getElementById("main_canvas"));
@@ -17,15 +17,15 @@ function init(game) {
 	initShaders();
 
 	//	Stworzenie pobieracza
-	dwnldr = new Downloader(game.start /* callback function */, game /* context */);
+	dwnldr = new Downloader(gra.start /* callback function */, gra /* context */);
 
 	//	Dodanie obiektów do kolejki pobierania
 	log.d("Dodawanie plików do kolejki pobierania.");
-	addObjects2Download(game, dwnldr);
+	addObjects2Download(gra, dwnldr);
 
 	//	Zapuszczenie ładowania obrazków i tworzenia tekstur
 	log.i("Ładuję tekstury.");
-	initTextures();
+	initTextures(gra);
 
 	//	Czyszczenie ekranu
 	log.d("Czyszczenie ekranu.");
@@ -183,15 +183,15 @@ function loadImg (name, tex) {
 
 
 /*	Funkcja inicjująca wszystkie(!) tekstury	*/
-function initTextures() {
+function initTextures(gra) {
 
 	log.d("Ładowanie tekstury 'brick.gif'");
 	tex1 = gl.createTexture();
-	textures["brick"] = loadImg("brick.gif", tex1);
+	gra.textures["brick"] = loadImg("brick.gif", tex1);
 
 	log.d("Ładowanie tekstury 'trawa3.gif'");
 	tex2 = gl.createTexture();
-	textures["grass"] = loadImg("trawa3.gif", tex2);
+	gra.textures["grass"] = loadImg("trawa3.gif", tex2);
 
 	log.d("OK");
 }	/*	initTexture()	*/

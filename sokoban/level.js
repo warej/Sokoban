@@ -46,12 +46,12 @@ function Level (gra, nr) {
 	mat4.identity(V);
 
 	//	Załadowanie obiektów
-	this.objects = {};
+	this.objects = ne Array();
 	this.load();
 };	/*	Level()	*/
 
 
-/*	Funkcja ładująca wszystkie potrzebne obiekty	*/
+/*	Funkcja ładująca wszystkie potrzebne modele	*/
 Level.prototype.load = function () {
 	loadFloor();
 
@@ -63,76 +63,25 @@ Level.prototype.load = function () {
 };	/*	Level.load()	*/
 
 
+/*	Funkcja dodająca nowy obiekt	*/
+Level.prototype.addObject = function () {
+	var i = this.objects.length;
+	//this.objects[i]
+};	/*	Level.addObject()	*/
+
+
 /*	Level.draw()	*/
 Level.prototype.draw = function () {
-	//	Czyszczenie ekranu
-	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
-	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-	//	RADKOWE =========================================
-	//	=================================================
-/*
-	if (floorVertexTextureCoordBuffer == null || floorVertexPositionBuffer == null	||
-		wallsVertexTextureCoordBuffer == null || wallsVertexPositionBuffer == null) {
-		return null;
-	}	*/
-
-
-	var useColorMap = document.getElementById("color-map").checked;
-    gl.uniform1i(shaderProgram.useColorMapUniform, useColorMap);
-
-	var lighting = document.getElementById("lighting").checked;
-	gl.uniform1i(shaderProgram.useLightingUniform, lighting);
-	if (lighting) {
-		gl.uniform3f(
-			shaderProgram.ambientColorUniform,
-			parseFloat(document.getElementById("ambientR").value),
-			parseFloat(document.getElementById("ambientG").value),
-			parseFloat(document.getElementById("ambientB").value)
-		);
-
-		gl.uniform3f(
-			shaderProgram.pointLightingLocationUniform,
-			parseFloat(document.getElementById("lightPositionX").value),
-			parseFloat(document.getElementById("lightPositionY").value),
-			parseFloat(document.getElementById("lightPositionZ").value)
-		);
-
-		gl.uniform3f(
-			shaderProgram.pointLightingSpecularColorUniform,
-			parseFloat(document.getElementById("specularR").value),
-			parseFloat(document.getElementById("specularG").value),
-			parseFloat(document.getElementById("specularB").value)
-		);
-
-		gl.uniform3f(
-			shaderProgram.pointLightingDiffuseColorUniform,
-			parseFloat(document.getElementById("diffuseR").value),
-			parseFloat(document.getElementById("diffuseG").value),
-			parseFloat(document.getElementById("diffuseB").value)
-		);
-	}
-
-
+	//	Wyzerowanie macierzy
 	mat4.perspective(55, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, P);
-
 
 	mat4.identity(M);
 	mat4.identity(V);
 
+	//	Ustawienie macierzy widoku - kamery
 	mat4.rotate(V, degToRad(-pitch), [1, 0, 0]);
 	mat4.rotate(V, degToRad(-yaw), [0, 1, 0]);
 	mat4.translate(V, [-xPos, -yPos, -zPos]);
-
-	var textures_numbers = {};
-
-	textures_numbers["grass"] = 0;
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, textures["grass"]);
-
-	textures_numbers["brick"] = 1;
-	gl.activeTexture(gl.TEXTURE1);
-	gl.bindTexture(gl.TEXTURE_2D, textures["brick"]);
 
 
 	// FLOOR:

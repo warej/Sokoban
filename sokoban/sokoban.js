@@ -25,6 +25,10 @@ function Sokoban () {
 	//	Na razie nie ma załadowanego żadnego modelu
 	this.models = {};
 
+	//	Na razie nie ma żadnej tekstury
+	this.textures = {};
+	this.texturesNumbers = {};
+
 	//	Załaduj se co trzeba
 	this.load();
 };	/*		Sokoban()	*/
@@ -32,6 +36,11 @@ function Sokoban () {
 
 /*	Sokoban.load()	*/
 Sokoban.prototype.load = function () {
+	/*  Inicjalizacja gry - załadowanie shaderów, obiektów, tekstur itp
+	 *  Tutaj sterowanie się rozdwaja: w jednym wątku idzie pobieranie plików, a w drugim rusza odświeżanie
+	 */
+	log.d("Inicjalizacja gry.");
+	init(this);
 };	/*	Sokoban.load()	*/
 
 
@@ -57,7 +66,58 @@ Sokoban.prototype.start = function () {
 
 /*	Funkcja rysująca zawartość gry	*/
 Sokoban.prototype.draw = function () {
-	//	Narysuj obecną scenę
+	//	Czyszczenie ekranu
+	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+	//	Ładowanie zmiennych jednorodnych
+	var useColorMap = document.getElementById("color-map").checked;
+    gl.uniform1i(shaderProgram.useColorMapUniform, useColorMap);
+
+	var lighting = document.getElementById("lighting").checked;
+	gl.uniform1i(shaderProgram.useLightingUniform, lighting);
+	if (lighting) {
+		gl.uniform3f(
+			shaderProgram.ambientColorUniform,
+			parseFloat(document.getElementById("ambientR").value),
+			parseFloat(document.getElementById("ambientG").value),
+			parseFloat(document.getElementById("ambientB").value)
+		);
+
+		gl.uniform3f(
+			shaderProgram.pointLightingLocationUniform,
+			parseFloat(document.getElementById("lightPositionX").value),
+			parseFloat(document.getElementById("lightPositionY").value),
+			parseFloat(document.getElementById("lightPositionZ").value)
+		);
+
+		gl.uniform3f(
+			shaderProgram.pointLightingSpecularColorUniform,
+			parseFloat(document.getElementById("specularR").value),
+			parseFloat(document.getElementById("specularG").value),
+			parseFloat(document.getElementById("specularB").value)
+		);
+
+		gl.uniform3f(
+			shaderProgram.pointLightingDiffuseColorUniform,
+			parseFloat(document.getElementById("diffuseR").value),
+			parseFloat(document.getElementById("diffuseG").value),
+			parseFloat(document.getElementById("diffuseB").value)
+		);
+	}
+
+	//	Ładowanie tekstur do buforów
+	this.texturesNumbers["grass"] = 0;
+	gl.activeTexture(gl.TEXTURE0);
+	gl.bindTexture(gl.TEXTURE_2D, this.textures["grass"]);
+
+	this.texturesNumbers["brick"] = 1;
+	gl.activeTexture(gl.TEXTURE1);
+	gl.bindTexture(gl.TEXTURE_2D, this.textures["brick"]);
+
+
+
+	//	Rysowanie obecnej sceny
 	this.scene.draw();
 
 	//	W menu nie wypisujemy czasu, ani wyniku chyba, że to jest pauza
@@ -91,20 +151,8 @@ Sokoban.prototype.drawModel = function (model) {
 		return null;
 	}
 
-	//	Na to na razie nie mam pomysłu
-	var textures_numbers = {};
-
-	textures_numbers["grass"] = 0;
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, textures["grass"]);
-
-	textures_numbers["brick"] = 1;
-	gl.activeTexture(gl.TEXTURE1);
-	gl.bindTexture(gl.TEXTURE_2D, textures["brick"]);
-	//	Dotąd jest do przerobienia
-
-
-	gl.uniform1i(shaderProgram.colorMapSamplerUniform, textures_numbers["brick"]);
+	//	Tmp - przypisanie numeru tekstury
+	gl.uniform1i(shaderProgram.colorMapSamplerUniform, this.texturesNumbers["brick"]);
 
 	//	Ładowanie pozycji wierzchołków
 	if (model.vPosition) {

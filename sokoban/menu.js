@@ -22,9 +22,6 @@ function Menu (gra) {
 
 /*	Menu.draw()	*/
 Menu.prototype.draw = function () {
-	//	Czyszczenie ekranu
-	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
-	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 };	/*	Menu.draw()	*/
 
