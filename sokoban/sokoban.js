@@ -42,12 +42,13 @@ Sokoban.prototype.start = function () {
 };
 
 Sokoban.prototype.draw = function () {
+	//	Narysuj obecną scenę
 	this.scene.draw();
 
-	drawScene();
-
-	this.drawTime();
-	this.drawScore();
+	//	W menu nie wypisujemy czasu
+	if (this.scene instanceof Level) {
+		this.drawTime();
+	}
 };
 
 Sokoban.prototype.animate = function () {
