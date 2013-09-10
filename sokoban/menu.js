@@ -29,6 +29,12 @@ Menu.prototype.draw = function () {
 };	/*	Menu.draw()	*/
 
 
+/*	*/
+Menu.prototype.animate = function () {
+
+};	/*	Menu.animate()	*/
+
+
 /*  Menu.load()  */
 Menu.prototype.load = function() {
 
