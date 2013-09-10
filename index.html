@@ -50,8 +50,8 @@
 
 
 		void main(void) {
-			gl_FragColor = texture2D(uColorMapSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-/*
+			//gl_FragColor = texture2D(uColorMapSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+
 			vec3 lightWeighting;
 
 			if (!uUseLighting) {
@@ -91,7 +91,7 @@
 				fragmentColor = vec4(1.0, 1.0, 1.0, 1.0);
 			}
 			gl_FragColor = vec4(fragmentColor.rgb * lightWeighting, fragmentColor.a);
-*/
+
 		}
 	</script>
 

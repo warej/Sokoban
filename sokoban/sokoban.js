@@ -121,10 +121,10 @@ Sokoban.prototype.draw = function () {
 	this.scene.draw();
 
 	//	W menu nie wypisujemy czasu, ani wyniku chyba, że to jest pauza
-	if (this.scene instanceof Level) {
+	//if (this.scene instanceof Level) {
 		this.drawTime();
 		this.drawScore();
-	}
+	//}
 };	/*	Sokoban.draw()	*/
 
 

@@ -68,7 +68,7 @@ function setMatrixUniforms() {
 
 
 	var N = mat3.create();
-	mat4.toInverseMat3(V*M, N);	// TODO czy na pewno V*M ?
+	mat4.toInverseMat3(M*V, N);	// TODO czy na pewno V*M ?
 	mat3.transpose(N);
 	gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, N);
 

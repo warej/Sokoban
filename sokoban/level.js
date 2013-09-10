@@ -46,7 +46,7 @@ function Level (gra, nr) {
 	mat4.identity(V);
 
 	//	Załadowanie obiektów
-	this.objects = ne Array();
+	this.objects = new Array();
 	this.load();
 };	/*	Level()	*/
 
@@ -150,7 +150,7 @@ Level.prototype.handleKeys = function(first_argument) {
 	//	Ruch kamerą: C + klawisze sterujące
 	//	Co do tego, że po puszczeniu najpierw C ruch się blokuje powiem tak:
 	//	"It's not a bug. It's a feature" xD
-	if (currentlyPressedKeys[67]) {
+	if (currentlyPressedKeys[67]) {	// key C
 		if (currentlyPressedKeys[38]) { // GÓRA
 			pitchRate = 0.05;
 		} else if (currentlyPressedKeys[40]) { // DÓL
