@@ -39,6 +39,11 @@ function tick() {
 		// Sprawdzenie klawiatury
 		handleKeys(game);
 
+		//	Jeżeli gracz wyszedł z menu, to nie ma sensu dalej tickować, bo wywali błąd
+		if (!game.scene) {
+			return null;
+		}
+
 		// Przeliczenie stanu gry
 		game.animate();
 
