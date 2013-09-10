@@ -32,6 +32,7 @@ Sokoban.prototype.start = function () {
 	// Załadowanie menu
 	log.i("Ładuję menu.");
 	this.scene = new Menu(this);
+	this.scene.run();
 
     // Po załadowaniu znika ekran ładowania gry
     $("#loadingPage").fadeOut(300);

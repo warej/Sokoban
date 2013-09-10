@@ -23,17 +23,42 @@ var speedPlayerX = 0;
 var speedPlayerZ = 0;
 
 
-/*	Level()	*/
+/*	Konstruktor klasy Level.	*/
 function Level (gra, nr) {
+	//	Numer poziomu
 	this.number = nr;
+
+	//	Sumaryczny (odliczenie pauz) czas gry
 	this.totalTime = 0;
+
+	//	Czy gra jest spauzowana
 	this.paused = false;
+
+	//	Obiekt nadrzędny
 	this.game = gra;
+
+	//	Sposób liczenia wyniku:
+	//	każde przesunięcie pionka inkrementuje wynik.
+	this.score = 0;
+
+	//	Macierze przekształceń, które są jednakowe dla wszystkich obiektów
+	mat4.perspective(55, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, P);
+	mat4.identity(V);
+
+	//	Załadowanie obiektów
+	this.objects = {};
+	this.load();
 };	/*	Level()	*/
 
 
-/*	Level.load()	*/
-Level.prototype.load = function (no) {
+/*	Funkcja ładująca wszystkie potrzebne obiekty	*/
+Level.prototype.load = function () {
+	loadFloor();
+	loadWalls();
+	loadPlayer();
+
+	loadTeapot();
+	this.loadJSON("sword");
 };	/*	Level.load()	*/
 
 
@@ -46,7 +71,7 @@ Level.prototype.draw = function () {
 	//	RADKOWE =========================================
 	//	=================================================
 
-		if (floorVertexTextureCoordBuffer == null || floorVertexPositionBuffer == null	||
+	if (floorVertexTextureCoordBuffer == null || floorVertexPositionBuffer == null	||
 		wallsVertexTextureCoordBuffer == null || wallsVertexPositionBuffer == null) {
 		return null;
 	}
@@ -109,7 +134,7 @@ Level.prototype.draw = function () {
 	gl.bindTexture(gl.TEXTURE_2D, textures["brick"]);
 
 
-// FLOOR:
+	// FLOOR:
 	gl.uniform1i(shaderProgram.colorMapSamplerUniform, textures_numbers["grass"]);
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, floorVertexTextureCoordBuffer);
@@ -121,7 +146,7 @@ Level.prototype.draw = function () {
 	setMatrixUniforms();
 	gl.drawArrays(gl.TRIANGLES, 0, floorVertexPositionBuffer.numItems);
 
-// WALLS
+	// WALLS
 	gl.uniform1i(shaderProgram.colorMapSamplerUniform, textures_numbers["brick"]);
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, wallsVertexTextureCoordBuffer);
@@ -136,7 +161,7 @@ Level.prototype.draw = function () {
 
 	//vStackPush();
 
-// PLAYER
+	// PLAYER
 	mat4.identity(M);
 	mat4.translate(M, [-xPlayer, 0.0, zPlayer]);
 
@@ -153,58 +178,88 @@ Level.prototype.draw = function () {
 
 	//vStackPop();
 
+	//	Tu dalej jest rysowanie mieczyków w wersji uproszczonej :)
 
-// TEST 1
+	//	Test 1 - wareja
 	mat4.identity(M);
 	mat4.translate(M, [0.0, 3.0, 0.0]);
+	var model = this.objects["sword"];
+	model.M = M;
+	this.drawModel(model);
 
-	gl.uniform1i(shaderProgram.colorMapSamplerUniform, textures_numbers["brick"]);
-
-	gl.bindBuffer(gl.ARRAY_BUFFER, teapotVertexPositionBuffer);
-	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, teapotVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	gl.bindBuffer(gl.ARRAY_BUFFER, teapotVertexTextureCoordBuffer);
-	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, teapotVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	gl.bindBuffer(gl.ARRAY_BUFFER, teapotVertexNormalBuffer);
-	gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, teapotVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, teapotVertexIndexBuffer);
-	setMatrixUniforms();
-	gl.drawElements(gl.TRIANGLES, teapotVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
-
-// TEST
+	//	Test 2 - wareja
 	mat4.identity(M);
 	mat4.translate(M, [0.0, 6.0, 0.0]);
+	var model = this.objects["sword"];
+	model.M = M;
+	this.drawModel(model);
 
-	gl.uniform1i(shaderProgram.colorMapSamplerUniform, textures_numbers["brick"]);
-
-	gl.bindBuffer(gl.ARRAY_BUFFER, teapotVertexPositionBuffer);
-	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, teapotVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	gl.bindBuffer(gl.ARRAY_BUFFER, teapotVertexTextureCoordBuffer);
-	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, teapotVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	gl.bindBuffer(gl.ARRAY_BUFFER, teapotVertexNormalBuffer);
-	gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, teapotVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, teapotVertexIndexBuffer);
-	setMatrixUniforms();
-	gl.drawElements(gl.TRIANGLES, teapotVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+	//	Test 3 - wareja
+	mat4.identity(M);
+	mat4.translate(M, [0.0, 9.0, 0.0]);
+	var model = this.objects["sword"];
+	model.M = M;
+	this.drawModel(model);
 };	/*	Level.draw()	*/
+
+
+/*	Metoda rysująca dany obiekty	*/
+Level.prototype.drawModel = function (model) {
+	if (!model) {
+		log.e("Podany model nie istnieje!");
+		return null;
+	}
+
+	//	Na to na razie nie mam pomysłu
+	var textures_numbers = {};
+
+	textures_numbers["grass"] = 0;
+	gl.activeTexture(gl.TEXTURE0);
+	gl.bindTexture(gl.TEXTURE_2D, textures["grass"]);
+
+	textures_numbers["brick"] = 1;
+	gl.activeTexture(gl.TEXTURE1);
+	gl.bindTexture(gl.TEXTURE_2D, textures["brick"]);
+	//	Dotąd jest do przerobienia
+
+
+	gl.uniform1i(shaderProgram.colorMapSamplerUniform, textures_numbers["grass"]);
+
+	//	Ładowanie pozycji wierzchołków
+	gl.bindBuffer(gl.ARRAY_BUFFER, model.vPosition);
+	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, model.vPosition.itemSize, gl.FLOAT, false, 0, 0);
+
+	//	Ładowanie współrzędnych teksturowania
+	gl.bindBuffer(gl.ARRAY_BUFFER, model.vTextureCoords);
+	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, model.vTextureCoords.itemSize, gl.FLOAT, false, 0, 0);
+
+	//	Ładowanie wektorów normalnych
+	gl.bindBuffer(gl.ARRAY_BUFFER, model.vNormal);
+	gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, model.vNormal.itemSize, gl.FLOAT, false, 0, 0);
+
+	//	Ładowanie indeksów
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, model.vIndex);
+
+	//	Przesyłanie buforów
+	setMatrixUniforms();
+
+	//	Rysowanie!
+	gl.drawElements(gl.TRIANGLES, model.vIndex.numItems, gl.UNSIGNED_SHORT, 0);
+};	/* Level.drawModel()	*/
 
 
 /*	Level.run()	*/
 Level.prototype.run = function () {
 	log.d("Startuję poziom " + this.number);
 	this.startTime = new Date().getTime();
-	loadWorld();    //  Testowo
 };  /*	Level.roun()	*/
 
 
 /*	Level.handleKeys()	*/
 Level.prototype.handleKeys = function(first_argument) {
 	//	Ruch kamerą: C + klawisze sterujące
+	//	Co do tego, że po puszczeniu najpierw C ruch się blokuje powiem tak:
+	//	"It's not a bug. It's a feature" xD
 	if (currentlyPressedKeys[67]) {
 		if (currentlyPressedKeys[38]) { // GÓRA
 			pitchRate = 0.05;
@@ -315,7 +370,35 @@ Level.prototype.pause = function () {
 };	/*	Level.pause()	*/
 
 
+/*	Funkcja ładująca mieczyk	*/
+Level.prototype.loadJSON = function (name) {
+	var model = {};
+	model.vPosition = null;
+	model.vTextureCoords = null;
+	model.vNormal = null;
+	model.vIndex = null;
+	model.M = null;
 
+	//	Z jakiegoś powodu to mi nie działa ;/
+
+	//	Macierz modelu jest indywidualna dla każdego obiektu
+	//mat4.identity(model.M);
+
+	var request = new XMLHttpRequest();
+	request.open("GET", "models/" + name + ".json");
+	request.onreadystatechange = function () {
+		if (request.readyState == 4) {
+			var result_temp = handleLoadedModelJSON(JSON.parse(request.responseText));
+			model.vPosition = result_temp.vPosition;
+			model.vTextureCoords = result_temp.vTextureCoords;
+			model.vNormal = result_temp.vNormal;
+			model.vIndex = result_temp.vIndex;
+		}
+	}
+	request.send();
+
+	this.objects[name] = model;
+};	/*	Level.loadJSON()	*/
 
 
 
@@ -357,13 +440,17 @@ function handleLoadedModelTXT(data) {
 	tempVertexTextureCoordBuffer.itemSize = 2;
 	tempVertexTextureCoordBuffer.numItems = vertexCount;
 
-
+	//	Stare
 	var result = {};
 	result[0] = tempVertexPositionBuffer;
 	result[1] = tempVertexTextureCoordBuffer;
+
+	//	Docelowo
+	result["vPosition"] = tempVertexPositionBuffer;
+	result["vTextureCoords"] = tempVertexTextureCoordBuffer;
+
 	return result;
 }   /*  handleLoadedModelTXT(data)  */
-
 
 
 /* Funkcja odczytująca modele z plików JSON */
@@ -400,23 +487,19 @@ function handleLoadedModelJSON(data) {
 
 
 	var result = {};
+	//	Stare
 	result[0] = tempVertexPositionBuffer;
 	result[1] = tempVertexTextureCoordBuffer;
 	result[2] = tempVertexNormalBuffer;
 	result[3] = tempVertexIndexBuffer;
+
+	//	Docelowe
+	result["vPosition"] = tempVertexPositionBuffer;
+	result["vTextureCoords"] = tempVertexTextureCoordBuffer;
+	result["vNormal"] = tempVertexNormalBuffer;
+	result["vIndex"] = tempVertexIndexBuffer;
 	return result;
 }   /*  handleLoadedModelJSON(data) */
-
-/* Funkcja ładująca wszystkie elementy sceny */
-function loadWorld() {
-	loadFloor();
-	loadWalls();
-	loadPlayer();
-
-	loadTeapot();
-}   /*  loadWorld() */
-
-
 
 
 var teapotVertexPositionBuffer = null;

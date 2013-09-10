@@ -38,8 +38,6 @@ Menu.prototype.load = function() {
 /*	Menu.run()	*/
 Menu.prototype.run = function() {
 	log.i("Witaj w menu!");
-	gl.clearColor(0.35, 0.35, 0.4, 1.0);
-	gl.enable(gl.DEPTH_TEST);
 };	/*	Menu.run()	*/
 
 
