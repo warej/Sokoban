@@ -202,8 +202,12 @@ function initTextures(gra) {
 	gra.textures["target_tex"] = loadImg("target_tex.gif", tex4);
 	
 	log.d("Ładowanie tekstury 'steel.gif'");
-	tex4 = gl.createTexture();
-	gra.textures["steel"] = loadImg("steel.gif", tex4);
+	tex5 = gl.createTexture();
+	gra.textures["steel"] = loadImg("steel.gif", tex5);
+	
+	log.d("Ładowanie tekstury sword_tex.gif'");
+	tex6 = gl.createTexture();
+	gra.textures["sword_tex"] = loadImg("sword_tex.gif", tex6);
 
 	log.d("OK");
 }	/*	initTexture()	*/

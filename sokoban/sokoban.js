@@ -127,6 +127,10 @@ Sokoban.prototype.draw = function () {
 	gl.activeTexture(gl.TEXTURE4);
 	gl.bindTexture(gl.TEXTURE_2D, this.textures["steel"]);
 	
+	this.texturesNumbers["sword_tex"] =5;
+	gl.activeTexture(gl.TEXTURE5);
+	gl.bindTexture(gl.TEXTURE_2D, this.textures["sword_tex"]);
+	
 
 	mat4.identity(M);
 	mat4.translate(M, [parseFloat(document.getElementById("lightPositionX").value), parseFloat(document.getElementById("lightPositionY").value), parseFloat(document.getElementById("lightPositionZ").value)]);
