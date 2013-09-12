@@ -193,7 +193,8 @@ Level.prototype.handleLevel = function (data) {
 						var fig = {};
 
 						fig.type = "target";
-						fig.index = -1;
+						fig.index = -1;	//TODO
+						fig.fig = null;
 
 						this.plansza[j][z] = fig;
 						break;
@@ -220,7 +221,7 @@ Level.prototype.handleLevel = function (data) {
 						this.player.z = z;
 						mat4.identity(mMatrix);
 						mat4.translate(mMatrix, [xOffset + this.player.x, 0.5, zOffset - this.player.z]);
-						this.player.id = this.addObject("proste", "brick", mMatrix);
+						this.player.id = this.addObject("sword", "brick", mMatrix);
 						break;
 				}
 			}
@@ -408,33 +409,87 @@ Level.prototype.moveLeft = function () {
 	if (this.player && this.player.x > 0) {
 		var oldX = this.player.x;
 		var oldZ = this.player.z;
-		log.d("x: " + oldX + ", z: " + oldZ);
+		var move = false;
+		var box;
+		var src;
+		var dst;
+
 		if (this.plansza[oldX - 1][oldZ] == null) {
 			//	Puste pole - przesuń pionka
 			this.player.x--;
 			log.d("Puste pole");
 		}
-		else if (this.plansza[oldX - 1][oldZ].type == "box" && (oldX > 1) && (this.plansza[oldX - 2][oldZ] == null)) {
-			log.d("Przesun");
-			//	Box do przesunięcia
-			var box = this.objects[this.plansza[oldX - 1][oldZ].index];
-			//	Przesuń box
-			this.plansza[oldX - 2][oldZ] = this.plansza[oldX - 1][oldZ];
-			this.plansza[oldX - 1][oldZ] = null;
+		else if (this.plansza[oldX - 1][oldZ].type == "box" && (oldX > 1)) {
+			//	Mamy boxa obok i nie jest dosunięty do samego końca
+			if (this.plansza[oldX - 2][oldZ] == null) {
+				//	Za boxem jest pusta przestrzeń
+				log.d("Przesun");
+				move = true;
+				//	Box do przesunięcia
+				box = this.objects[this.plansza[oldX - 1][oldZ].index];
+				//	Przesuń box
+
+				this.plansza[oldX - 2][oldZ] = this.plansza[oldX - 1][oldZ];
+				this.plansza[oldX - 1][oldZ] = null;
+				//	Przesuń pionka
+				this.player.x--;
+			}
+			else if (this.plansza[oldX - 2][oldZ].type == "target" && this.plansza[oldX - 2][oldZ].fig == null) {
+				//	Za boxem jest target
+				move = true;
+				log.d("Przesun na cel");
+				//	Box do przesunięcia
+				box = this.objects[this.plansza[oldX - 1][oldZ].index];
+				//	Przesuń box
+				this.plansza[oldX - 2][oldZ].fig = this.plansza[oldX - 1][oldZ];
+				this.plansza[oldX - 1][oldZ] = null;
+
+				//	Przesuń pionka
+				this.player.x--;
+			}
+		}
+		else if (this.plansza[oldX - 1][oldZ].type == "target" && this.plansza[oldX - 1][oldZ].fig.type == "box" && (oldX > 1)) {
+			//	Mamy obok boxa na target'cie i nie jest dosunięty do samego końca
+			if (this.plansza[oldX - 2][oldZ] == null) {
+				//	Za boxem jest pusta przestrzeń
+				log.d("Przesun tgt na puste");
+				move = true;
+				//	Box do przesunięcia
+				box = this.objects[this.plansza[oldX - 1][oldZ].fig.index];
+				//	Przesuń box
+
+				this.plansza[oldX - 2][oldZ] = this.plansza[oldX - 1][oldZ].fig;
+				this.plansza[oldX - 1][oldZ].fig = null;
+				//	Przesuń pionka
+				this.player.x--;
+			}
+			else if (this.plansza[oldX - 2][oldZ].type == "target" && this.plansza[oldX - 2][oldZ].fig == null) {
+				//	Za boxem jest target
+				move = true;
+				log.d("Przesun tgt na tgt");
+				//	Box do przesunięcia
+				box = this.objects[this.plansza[oldX - 1][oldZ].fig.index];
+				//	Przesuń box
+				this.plansza[oldX - 2][oldZ].fig = this.plansza[oldX - 1][oldZ].fig;
+				this.plansza[oldX - 1][oldZ].fig = null;
+
+				//	Przesuń pionka
+				this.player.x--;
+			}
+		}
+
+		if (move) {
+			//	Przerysuj box
 			mat4.identity(box.M);
 			mat4.translate(box.M, [this.xOffset + oldX - 2, 0.5, this.zOffset - oldZ]);
-
-			//	Przesuń pionka
-			this.player.x--;
-		}
-		else if (this.plansza[oldX - 1][oldZ].type == "target") {
-			log.d("target");
-			//	Coś innego TODO
 		}
 
-		//	Przerysuj pozycję
+		//	Przerysuj pozycję grajka
 		mat4.identity(this.objects[this.player.id].M);
 		mat4.translate(this.objects[this.player.id].M, [this.xOffset + this.player.x, 0.5, this.zOffset - this.player.z]);
+
+		//	Zinkrementuj wynik
+		this.score++;
 	}
 };	/* Level.moveLeft() */
 
