@@ -46,7 +46,7 @@ function Level (gra, nr) {
 	mat4.identity(V);
 
 	//	Załadowanie obiektów
-	this.objects = new Array();
+	this.objects = [];
 	this.load();
 
 	//	Stworzenie planszy
@@ -59,7 +59,6 @@ function Level (gra, nr) {
 	this.loadLvl();
 };	/*	Level()	*/
 
-
 /*	Funkcja ładująca wszystkie potrzebne modele	*/
 Level.prototype.load = function () {
 
@@ -69,6 +68,13 @@ Level.prototype.load = function () {
 	this.game.loadTXT("floor");
 
 	this.game.loadJSON("sword");
+
+
+	var mMatrix = [];
+	mat4.identity(mMatrix);
+	mat4.translate(mMatrix, [-xPlayer, 4.0, zPlayer]);
+	this.addObject("player", "brick", mMatrix);
+
 };	/*	Level.load()	*/
 
 
@@ -87,6 +93,8 @@ Level.prototype.loadLvl = function () {
 		}
 	}
 	request.send();
+
+	//this.addObject();
 };	/*	Level.loadLvl()	*/
 
 
@@ -105,13 +113,36 @@ Level.prototype.handleLevel = function (data) {
 	}
 
 	log.d(this.plansza);
-	alert(this.plansza);
 };	/*	Level.handleLevel()	*/
 
 /*	Funkcja dodająca nowy obiekt	*/
-Level.prototype.addObject = function () {
+Level.prototype.addObject = function (modelName, textureName, mMatrix) {
 	var i = this.objects.length;
-	//this.objects[i]
+	var newObject = {};
+
+	newObject.model = this.game.models[modelName];
+	if (!newObject.model) {
+		log.e("Brak modelu " + modelName);
+	}
+
+	newObject.textureId = this.game.texturesNumbers[textureName];
+	newObject.M = mMatrix;
+
+	if (newObject.model) {
+		log.d("Model załadowany pomyślnie");
+	}
+	else {
+		log.d("Coś się skiepściło");
+	}
+
+	this.objects[i] = newObject;
+	log.d("i = " + i);
+	if (this.objects[i].model) {
+		log.d("Model załadowany pomyślnie");
+	}
+	else {
+		log.d("Coś się skiepściło");
+	}
 };	/*	Level.addObject()	*/
 
 
@@ -128,7 +159,6 @@ Level.prototype.draw = function () {
 	mat4.rotate(V, degToRad(-yaw), [0, 1, 0]);
 	mat4.translate(V, [-xPos, -yPos, -zPos]);
 
-
 	// FLOOR:
 	var model = this.game.models["floor"];
 	//model.M = M;
@@ -142,6 +172,12 @@ Level.prototype.draw = function () {
 	this.game.drawModel(model);
 
 	//vStackPush();
+
+
+	//	Objects
+	for (i = 0; i < this.objects.length; i++) {
+		this.drawObject(this.objects[i]);
+	}
 
 	// PLAYER
 	mat4.identity(M);
@@ -176,6 +212,17 @@ Level.prototype.draw = function () {
 	//model.M = M;
 	this.game.drawModel(model);
 };	/*	Level.draw()	*/
+
+
+/*	Metoda rysująca obiekt	*/
+Level.prototype.drawObject = function (obj) {
+	mat4.identity(M);
+	mat4.translate(M, [-xPlayer, 2.0, zPlayer]);
+
+	M = obj.M;
+	this.game.drawModel(obj.model);
+
+};	/*	Level.drawObject()	*/
 
 
 /*		*/
@@ -309,25 +356,6 @@ Level.prototype.pause = function () {
 	this.game.scene = new Menu(this.game);
 	this.game.scene.run();
 };	/*	Level.pause()	*/
-
-
-// FLOOR:
-var floorVertexPositionBuffer = null;
-var floorVertexTextureCoordBuffer = null;
-
-function loadFloor() {
-	var request = new XMLHttpRequest();
-	request.open("GET", "models/floor.txt");
-	request.onreadystatechange = function () {
-		if (request.readyState == 4) {
-			 var result_temp = handleLoadedModelTXT(request.responseText);
-			 floorVertexPositionBuffer = result_temp[0];
-			 floorVertexTextureCoordBuffer = result_temp[1];
-		}
-	}
-	request.send();
-}   /*  loadFloor() */
-
 
 
 
