@@ -44,18 +44,31 @@ Menu.prototype.run = function() {
 };	/*	Menu.run()	*/
 
 
+/*	Tłumaczy choice na tekst	*/
+Menu.prototype.translateChoice = function () {
+	switch (this.choice) {
+		case 0:
+			return "Kontynuuj";
+		case 1:
+			return "Nowa gra";
+		case 2:
+			return "Wyjdź";
+	}
+};	/*	Menu.translate()	*/
+
+
 /*	Menu.handleKeys()	*/
 Menu.prototype.handleKeys = function () {
 	if (currentlyPressedKeys[37] || currentlyPressedKeys[38]) {	//	Lewo/góra
 		currentlyPressedKeys[37] = false;
 		currentlyPressedKeys[38] = false;
 		this.choice = (this.choice -1 +this.choices) %this.choices;
-		log.d("current choice is " + this.choice);
+		log.d("current choice is " + this.translateChoice());
 	} else if (currentlyPressedKeys[39] || currentlyPressedKeys[40]) {	//	Prawo/dół
 		currentlyPressedKeys[39] = false;
 		currentlyPressedKeys[40] = false;
 		this.choice = (this.choice +1 +this.choices) %this.choices;
-		log.d("current choice is " + this.choice);
+		log.d("current choice is " + this.translateChoice());
 	} else if (currentlyPressedKeys[13] || currentlyPressedKeys[32]) {	//	Enter/spacja
 		currentlyPressedKeys[13] = false;
 		currentlyPressedKeys[32] = false;
@@ -65,7 +78,7 @@ Menu.prototype.handleKeys = function () {
 				this.continueLevel();
 				break;
 			case 1:
-				this.runLevel(0);
+				this.runLevel(1);
 				break;
 			case 2:
 				this.finish();
