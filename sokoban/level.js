@@ -81,6 +81,10 @@ Level.prototype.load = function () {
 	if (this.game.models["walls2"]) {
 		log.d("OK");
 	}
+	this.game.loadJSON("box");
+	if (this.game.models["box"]) {
+		log.d("OK");
+	}
 
 	var mMatrix = [];
 
@@ -97,7 +101,7 @@ Level.prototype.load = function () {
 	//	Ładowanie ścian
 	mMatrix = [];
 	mat4.identity(mMatrix);
-	this.addObject("walls2", "grass", mMatrix);
+	this.addObject("walls2", "brick", mMatrix);
 
 	//	Ładowanie mieczyka 1
 	mMatrix = [];
@@ -122,6 +126,12 @@ Level.prototype.load = function () {
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [10.0, 2.0, -10.0]);
 	this.addObject("sword", "brick", mMatrix);
+	
+	//	Ładowanie skrzyni
+	mMatrix = [];
+	mat4.identity(mMatrix);
+	mat4.translate(mMatrix, [4.0, 1.0, 4.0]);
+	this.addObject("box", "crate", mMatrix);
 };	/*	Level.load()	*/
 
 

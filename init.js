@@ -192,6 +192,10 @@ function initTextures(gra) {
 	log.d("Ładowanie tekstury 'trawa3.gif'");
 	tex2 = gl.createTexture();
 	gra.textures["grass"] = loadImg("trawa3.gif", tex2);
+	
+	log.d("Ładowanie tekstury 'crate.gif'");
+	tex3 = gl.createTexture();
+	gra.textures["crate"] = loadImg("crate.gif", tex3);
 
 	log.d("OK");
 }	/*	initTexture()	*/

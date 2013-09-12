@@ -114,6 +114,10 @@ Sokoban.prototype.draw = function () {
 	this.texturesNumbers["brick"] = 1;
 	gl.activeTexture(gl.TEXTURE1);
 	gl.bindTexture(gl.TEXTURE_2D, this.textures["brick"]);
+	
+	this.texturesNumbers["crate"] = 2;
+	gl.activeTexture(gl.TEXTURE2);
+	gl.bindTexture(gl.TEXTURE_2D, this.textures["crate"]);
 
 
 
