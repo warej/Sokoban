@@ -114,12 +114,16 @@ Sokoban.prototype.draw = function () {
 	this.texturesNumbers["brick"] = 1;
 	gl.activeTexture(gl.TEXTURE1);
 	gl.bindTexture(gl.TEXTURE_2D, this.textures["brick"]);
-	
+
 	this.texturesNumbers["crate"] = 2;
 	gl.activeTexture(gl.TEXTURE2);
 	gl.bindTexture(gl.TEXTURE_2D, this.textures["crate"]);
 
-
+	mat4.identity(M);
+	mat4.translate(M, [parseFloat(document.getElementById("lightPositionX").value), parseFloat(document.getElementById("lightPositionY").value), parseFloat(document.getElementById("lightPositionZ").value)]);
+	if (this.models["sword"]) {
+		this.drawModel(this.models["sword"], M, this.texturesNumbers["grass"]);
+	}
 
 	//	Rysowanie obecnej sceny
 	this.scene.draw();
