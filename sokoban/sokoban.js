@@ -188,7 +188,7 @@ Sokoban.prototype.drawModel = function (model) {
 		gl.drawArrays(gl.TRIANGLES, 0, model.vPosition.numItems);
 	}
 	else {
-		log.e("Nie ma modelu do narysowania " + model.name);
+		log.e("Nie ma modelu do narysowania: " + model.name);
 	}
 };	/* Sokoban.drawModel()	*/
 
@@ -270,7 +270,7 @@ function handleLoadedModelTXT(data) {
 	var vertexCount = 0;
 	var vertexPositions = [];
 	var vertexTextureCoords = [];
-	for (var i in lines) {
+	for (var i = 0; i < lines.length; i++) {
 		var vals = lines[i].replace(/^\s+/, "").split(/\s+/);
 		if (vals.length == 5 && vals[0] != "//") {
 			// It is a line describing a vertex; get X, Y and Z first
