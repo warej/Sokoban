@@ -118,6 +118,15 @@ Sokoban.prototype.draw = function () {
 	this.texturesNumbers["crate"] = 2;
 	gl.activeTexture(gl.TEXTURE2);
 	gl.bindTexture(gl.TEXTURE_2D, this.textures["crate"]);
+	
+	this.texturesNumbers["target_tex"] =3;
+	gl.activeTexture(gl.TEXTURE3);
+	gl.bindTexture(gl.TEXTURE_2D, this.textures["target_tex"]);
+
+	this.texturesNumbers["steel"] =4;
+	gl.activeTexture(gl.TEXTURE4);
+	gl.bindTexture(gl.TEXTURE_2D, this.textures["steel"]);
+	
 
 	mat4.identity(M);
 	mat4.translate(M, [parseFloat(document.getElementById("lightPositionX").value), parseFloat(document.getElementById("lightPositionY").value), parseFloat(document.getElementById("lightPositionZ").value)]);

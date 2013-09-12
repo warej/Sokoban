@@ -89,6 +89,10 @@ Level.prototype.load = function () {
 	if (this.game.models["box"]) {
 		log.d("OK");
 	}
+	this.game.loadJSON("target");
+	if (this.game.models["target"]) {
+		log.d("OK");
+	}
 
 	var mMatrix = [];
 
@@ -144,6 +148,12 @@ Level.prototype.load = function () {
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [10.0, 2.0, -10.0]);
 	this.addObject("sword", "brick", mMatrix);
+	
+	
+	mMatrix = [];
+	mat4.identity(mMatrix);
+	mat4.translate(mMatrix, [-3.0, 0.5, -3.0]);
+	this.addObject("target", "target_tex", mMatrix);
 };	/*	Level.load()	*/
 
 
@@ -221,7 +231,7 @@ Level.prototype.handleLevel = function (data) {
 						this.player.z = z;
 						mat4.identity(mMatrix);
 						mat4.translate(mMatrix, [xOffset + this.player.x, 0.5, zOffset - this.player.z]);
-						this.player.id = this.addObject("sword", "brick", mMatrix);
+						this.player.id = this.addObject("box", "steel", mMatrix);
 						break;
 				}
 			}

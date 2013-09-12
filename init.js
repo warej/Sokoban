@@ -197,6 +197,14 @@ function initTextures(gra) {
 	tex3 = gl.createTexture();
 	gra.textures["crate"] = loadImg("crate.gif", tex3);
 
+	log.d("Ładowanie tekstury 'target_tex.gif'");
+	tex4 = gl.createTexture();
+	gra.textures["target_tex"] = loadImg("target_tex.gif", tex4);
+	
+	log.d("Ładowanie tekstury 'steel.gif'");
+	tex4 = gl.createTexture();
+	gra.textures["steel"] = loadImg("steel.gif", tex4);
+
 	log.d("OK");
 }	/*	initTexture()	*/
 
