@@ -48,20 +48,65 @@ function Level (gra, nr) {
 	//	Załadowanie obiektów
 	this.objects = new Array();
 	this.load();
+
+	//	Stworzenie planszy
+	this.plansza = new Array (20);
+	for (i=0; i < 20; i++) {
+		this.plansza[i] = new Array (20);
+	}
+
+
+	this.loadLvl();
 };	/*	Level()	*/
 
 
 /*	Funkcja ładująca wszystkie potrzebne modele	*/
 Level.prototype.load = function () {
-	loadFloor();
 
-	this.game.loadTXT("floor");
 	this.game.loadTXT("walls");
 	this.game.loadTXT("player");
+	//this.game.loadJSON("floor");
+	this.game.loadTXT("floor");
 
 	this.game.loadJSON("sword");
 };	/*	Level.load()	*/
 
+
+/*	Funkcja ładująca poziom	*/
+Level.prototype.loadLvl = function () {
+	this.plansza[0][0] = 1;
+
+	var request = new XMLHttpRequest();
+	var callback = this;
+	var path = "sokoban/level" + this.number + ".txt";
+	log.d("Loading file " + path);
+	request.open("GET", path);
+	request.onreadystatechange = function () {
+		if (request.readyState == 4) {
+			callback.handleLevel(request.responseText);
+		}
+	}
+	request.send();
+};	/*	Level.loadLvl()	*/
+
+
+/*	Funkcja obsługująca pobrany poziom	*/
+Level.prototype.handleLevel = function (data) {
+	var lines = data.split("\n");
+	var y = 0;
+	for (var i = 0; i < lines.length; i++) {
+		var vals = lines[i].replace(/^\s+/, "").split(/\s+/);
+		if (vals.length >= 20 && vals[0] != "//") {
+			for (j = 0; j < 20; j++) {
+				this.plansza[j][y] = vals[j];
+			}
+			y++;
+		}
+	}
+
+	log.d(this.plansza);
+	alert(this.plansza);
+};	/*	Level.handleLevel()	*/
 
 /*	Funkcja dodająca nowy obiekt	*/
 Level.prototype.addObject = function () {
@@ -247,6 +292,12 @@ Level.prototype.handleKeys = function(first_argument) {
 		this.pause();
 	}
 };	/*	Level.handleKeys()	*/
+
+
+/*	Rusz pionkiem w lewo	*/
+Level.prototype.moveLeft = function () {
+	//
+};	/* Level.moveLeft() */
 
 
 /*	Level.pause()	*/
