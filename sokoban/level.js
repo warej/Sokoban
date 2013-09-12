@@ -45,6 +45,9 @@ function Level (gra, nr) {
 	mat4.perspective(55, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, P);
 	mat4.identity(V);
 
+	//	Pole na id obiektu playera
+	this.player = null;
+
 	//	Załadowanie obiektów
 	this.objects = [];
 	this.load();
@@ -81,27 +84,44 @@ Level.prototype.load = function () {
 
 	var mMatrix = [];
 
-	// Ładowanie playera
-	mat4.identity(mMatrix);
-	this.addObject("proste", "brick", mMatrix);
-
-	// Ładowanie mieczyka 1
+	//	Ładowanie playera
 	mMatrix = [];
 	mat4.identity(mMatrix);
-	mat4.translate(mMatrix, [-3.0, 5.0, 0.0]);
+	this.player = this.addObject("proste", "brick", mMatrix);
+
+	//	Ładowanie podłogi
+	mMatrix = [];
+	mat4.identity(mMatrix);
+	this.addObject("floor2", "grass", mMatrix);
+
+	//	Ładowanie ścian
+	mMatrix = [];
+	mat4.identity(mMatrix);
+	this.addObject("walls2", "grass", mMatrix);
+
+	//	Ładowanie mieczyka 1
+	mMatrix = [];
+	mat4.identity(mMatrix);
+	mat4.translate(mMatrix, [-10.0, 2.0, -10.0]);
 	this.addObject("sword", "grass", mMatrix);
 
-	// Ładowanie mieczyka 2
+	//	Ładowanie mieczyka 2
 	mMatrix = [];
 	mat4.identity(mMatrix);
-	mat4.translate(mMatrix, [-0.0, 3.0, 0.0]);
+	mat4.translate(mMatrix, [-10.0, 2.0, 10.0]);
 	this.addObject("sword", "brick", mMatrix);
 
-	// Ładowanie mieczyka 3
+	//	Ładowanie mieczyka 3
 	mMatrix = [];
 	mat4.identity(mMatrix);
-	mat4.translate(mMatrix, [3.0, 4.0, 3.0]);
+	mat4.translate(mMatrix, [10.0, 2.0, 10.0]);
 	this.addObject("sword", "grass", mMatrix);
+
+	//	Ładowanie mieczyka 4
+	mMatrix = [];
+	mat4.identity(mMatrix);
+	mat4.translate(mMatrix, [10.0, 2.0, -10.0]);
+	this.addObject("sword", "brick", mMatrix);
 };	/*	Level.load()	*/
 
 
@@ -183,24 +203,10 @@ Level.prototype.draw = function () {
 	mat4.translate(V, [-xPos, -yPos, -zPos]);
 
 
+	//	Przesuwanie gracza
+	mat4.identity(this.objects[this.player].M);
+	mat4.translate(this.objects[this.player].M, [-xPlayer, 1.0, zPlayer]);
 
-	// WALLS
-	mat4.identity(M);
-	var model1 = this.game.models["walls2"];
-	//model.M = M;
-	this.game.drawModel(model1);
-
-
-	// FLOOR
-	mat4.identity(M);
-	var model4 = this.game.models["floor2"];
-	//model.M = M;
-	this.game.drawModel(model4);
-
-
-
-	mat4.identity(this.objects[0].M);
-	mat4.translate(this.objects[0].M, [-xPlayer, 1.0, zPlayer]);
 
 	//	Objects
 	for (i = 0; i < this.objects.length; i++) {
@@ -211,7 +217,7 @@ Level.prototype.draw = function () {
 
 /*	Metoda rysująca obiekt	*/
 Level.prototype.drawObject = function (obj) {
-	this.game.drawModel2(obj.model, obj.M, obj.textureId);
+	this.game.drawModel(obj.model, obj.M, obj.textureId);
 };	/*	Level.drawObject()	*/
 
 

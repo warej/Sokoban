@@ -144,57 +144,8 @@ Sokoban.prototype.drawTime = function () {
 };
 
 
-/*	Metoda rysująca dany obiekty	*/
-Sokoban.prototype.drawModel = function (model) {
-	if (!model) {
-		log.e("Podany model nie istnieje!");
-		return null;
-	}
-
-	//	Tmp - przypisanie numeru tekstury
-	gl.uniform1i(shaderProgram.colorMapSamplerUniform, this.texturesNumbers["brick"]);
-
-	//	Ładowanie pozycji wierzchołków
-	if (model.vPosition) {
-		gl.bindBuffer(gl.ARRAY_BUFFER, model.vPosition);
-		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, model.vPosition.itemSize, gl.FLOAT, false, 0, 0);
-	}
-
-	//	Ładowanie współrzędnych teksturowania
-	if (model.vTextureCoords) {
-		gl.bindBuffer(gl.ARRAY_BUFFER, model.vTextureCoords);
-		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, model.vTextureCoords.itemSize, gl.FLOAT, false, 0, 0);
-	}
-
-	//	Ładowanie wektorów normalnych
-	if (model.vNormal) {
-		gl.bindBuffer(gl.ARRAY_BUFFER, model.vNormal);
-		gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, model.vNormal.itemSize, gl.FLOAT, false, 0, 0);
-	}
-
-	//	Ładowanie indeksów
-	if (model.vIndex) {
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, model.vIndex);
-	}
-
-	//	Przesyłanie buforów
-	setMatrixUniforms();
-
-	//	Rysowanie!
-	if (model.vIndex) {
-		gl.drawElements(gl.TRIANGLES, model.vIndex.numItems, gl.UNSIGNED_SHORT, 0);
-	}
-	else if (model.vPosition) {
-		gl.drawArrays(gl.TRIANGLES, 0, model.vPosition.numItems);
-	}
-	else {
-		log.e("Nie ma modelu do narysowania: " + model.name);
-	}
-};	/* Sokoban.drawModel()	*/
-
-
-/*	Metoda rysująca dany obiekty	*/
-Sokoban.prototype.drawModel2 = function (model, mMatrix, textureId) {
+/*	Metoda rysująca dany obiekt	*/
+Sokoban.prototype.drawModel = function (model, mMatrix, textureId) {
 	if (!model) {
 		log.e("Podany model nie istnieje!");
 		return null;
@@ -226,7 +177,7 @@ Sokoban.prototype.drawModel2 = function (model, mMatrix, textureId) {
 	}
 
 	//	Przesyłanie buforów
-	setMatrixUniforms2(mMatrix);
+	this.setMatrixUniforms(mMatrix);
 
 	//	Rysowanie!
 	if (model.vIndex) {
@@ -238,7 +189,7 @@ Sokoban.prototype.drawModel2 = function (model, mMatrix, textureId) {
 	else {
 		log.e("Nie ma modelu do narysowania: " + model.name);
 	}
-};	/* Sokoban.drawModel() v2	*/
+};	/* Sokoban.drawModel()	*/
 
 
 /*	Funkcja ładująca model JSONowy	*/
@@ -307,6 +258,22 @@ Sokoban.prototype.loadTXT = function (name) {
 
 	this.models[name] = model;
 };	/*	Sokoban.loadTXT()	*/
+
+
+/*		*/
+Sokoban.prototype.setMatrixUniforms = function (mMatrix) {
+	gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, mMatrix);
+	gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, V);
+	gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, P);
+
+
+	var N = mat3.create();
+	var mvMatrix = mMatrix;
+	mat4.toInverseMat3(mvMatrix, N);	// TODO czy na pewno V*M ?
+	mat3.transpose(N);
+	gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, N);
+
+}	/*	setMatrixUniforms2()	*/
 
 
 /* Funkcja odcztyująca modele z plików txt */

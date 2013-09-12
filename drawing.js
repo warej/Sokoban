@@ -61,36 +61,6 @@ function pStackPop() {
 }	/*	pStackPop()	*/
 
 /*		*/
-function setMatrixUniforms() {
-	gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, M);
-	gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, V);
-	gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, P);
-
-
-	var N = mat3.create();
-	var mvMatrix = M;
-	mat4.toInverseMat3(mvMatrix, N);	// TODO czy na pewno V*M ?
-	mat3.transpose(N);
-	gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, N);
-
-}	/*	setMatrixUniforms()	*/
-
-/*		*/
-function setMatrixUniforms2(mMatrix) {
-	gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, mMatrix);
-	gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, V);
-	gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, P);
-
-
-	var N = mat3.create();
-	var mvMatrix = mMatrix;
-	mat4.toInverseMat3(mvMatrix, N);	// TODO czy na pewno V*M ?
-	mat3.transpose(N);
-	gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, N);
-
-}	/*	setMatrixUniforms2()	*/
-
-/*		*/
 function degToRad(degrees) {
 	return degrees * Math.PI / 180;
 }	/*	degToRad()	*/
