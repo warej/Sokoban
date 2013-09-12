@@ -127,19 +127,23 @@ Sokoban.prototype.draw = function () {
 	this.texturesNumbers["crate"] = 2;
 	gl.activeTexture(gl.TEXTURE2);
 	gl.bindTexture(gl.TEXTURE_2D, this.textures["crate"]);
-	
-	this.texturesNumbers["target_tex"] =3;
+
+	this.texturesNumbers["target_tex"] = 3;
 	gl.activeTexture(gl.TEXTURE3);
 	gl.bindTexture(gl.TEXTURE_2D, this.textures["target_tex"]);
 
-	this.texturesNumbers["steel"] =4;
+	this.texturesNumbers["steel"] = 4;
 	gl.activeTexture(gl.TEXTURE4);
 	gl.bindTexture(gl.TEXTURE_2D, this.textures["steel"]);
-	
-	this.texturesNumbers["sword_tex"] =5;
+
+	this.texturesNumbers["sword_tex"] = 5;
 	gl.activeTexture(gl.TEXTURE5);
 	gl.bindTexture(gl.TEXTURE_2D, this.textures["sword_tex"]);
-	
+
+	this.texturesNumbers["crate_ok"] = 6;
+	gl.activeTexture(gl.TEXTURE6);
+	gl.bindTexture(gl.TEXTURE_2D, this.textures["crate_ok"]);
+
 
 	mat4.identity(M);
 	mat4.translate(M, [parseFloat(document.getElementById("lightPositionX1").value), parseFloat(document.getElementById("lightPositionY1").value), parseFloat(document.getElementById("lightPositionZ1").value)]);
