@@ -150,9 +150,14 @@ function initShaders() {
 		//shaderProgram.useSpecularMapUniform = gl.getUniformLocation(shaderProgram, "uUseSpecularMap");
 	shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
 	shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
-	shaderProgram.pointLightingLocationUniform = gl.getUniformLocation(shaderProgram, "uPointLightingLocation");
-	shaderProgram.pointLightingSpecularColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingSpecularColor");
-	shaderProgram.pointLightingDiffuseColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingDiffuseColor");
+	
+	shaderProgram.pointLightingLocation1Uniform = gl.getUniformLocation(shaderProgram, "uPointLightingLocation1");
+	shaderProgram.pointLightingSpecularColor1Uniform = gl.getUniformLocation(shaderProgram, "uPointLightingSpecularColor1");
+	shaderProgram.pointLightingDiffuseColor1Uniform = gl.getUniformLocation(shaderProgram, "uPointLightingDiffuseColor1");
+	
+	shaderProgram.pointLightingLocation2Uniform = gl.getUniformLocation(shaderProgram, "uPointLightingLocation2");
+	shaderProgram.pointLightingSpecularColor2Uniform = gl.getUniformLocation(shaderProgram, "uPointLightingSpecularColor2");
+	shaderProgram.pointLightingDiffuseColor2Uniform = gl.getUniformLocation(shaderProgram, "uPointLightingDiffuseColor2");
 
 	log.d("OK");
 }	/*	initShaders()	*/

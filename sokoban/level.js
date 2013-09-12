@@ -129,13 +129,13 @@ Level.prototype.load = function () {
 	mMatrix = [];
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [-10.0, 2.0, -10.0]);
-	this.addObject("sword", "crate", mMatrix);
+	this.addObject("sword", "sword_tex", mMatrix);
 
 	//	Ładowanie mieczyka 2
 	mMatrix = [];
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [-10.0, 2.0, 10.0]);
-	this.addObject("sword", "brick", mMatrix);
+	this.addObject("sword", "sword_tex", mMatrix);
 
 	//	Ładowanie mieczyka 3
 	mMatrix = [];

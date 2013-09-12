@@ -79,30 +79,39 @@ Sokoban.prototype.draw = function () {
 	if (lighting) {
 		gl.uniform3f(
 			shaderProgram.ambientColorUniform,
-			parseFloat(document.getElementById("ambientR").value),
-			parseFloat(document.getElementById("ambientG").value),
-			parseFloat(document.getElementById("ambientB").value)
+			parseFloat(document.getElementById("ambientR").value), parseFloat(document.getElementById("ambientG").value), parseFloat(document.getElementById("ambientB").value)
+		);
+
+
+		gl.uniform3f(
+			shaderProgram.pointLightingLocation1Uniform,
+			parseFloat(document.getElementById("lightPositionX1").value), parseFloat(document.getElementById("lightPositionY1").value), parseFloat(document.getElementById("lightPositionZ1").value)
 		);
 
 		gl.uniform3f(
-			shaderProgram.pointLightingLocationUniform,
-			parseFloat(document.getElementById("lightPositionX").value),
-			parseFloat(document.getElementById("lightPositionY").value),
-			parseFloat(document.getElementById("lightPositionZ").value)
+			shaderProgram.pointLightingSpecularColor1Uniform,
+			parseFloat(document.getElementById("specularR1").value), parseFloat(document.getElementById("specularG1").value), parseFloat(document.getElementById("specularB1").value)
 		);
 
 		gl.uniform3f(
-			shaderProgram.pointLightingSpecularColorUniform,
-			parseFloat(document.getElementById("specularR").value),
-			parseFloat(document.getElementById("specularG").value),
-			parseFloat(document.getElementById("specularB").value)
+			shaderProgram.pointLightingDiffuseColor1Uniform,
+			parseFloat(document.getElementById("diffuseR1").value), parseFloat(document.getElementById("diffuseG1").value), parseFloat(document.getElementById("diffuseB1").value)
+		);
+		
+		
+		gl.uniform3f(
+			shaderProgram.pointLightingLocation2Uniform,
+			parseFloat(document.getElementById("lightPositionX2").value), parseFloat(document.getElementById("lightPositionY2").value), parseFloat(document.getElementById("lightPositionZ2").value)
 		);
 
 		gl.uniform3f(
-			shaderProgram.pointLightingDiffuseColorUniform,
-			parseFloat(document.getElementById("diffuseR").value),
-			parseFloat(document.getElementById("diffuseG").value),
-			parseFloat(document.getElementById("diffuseB").value)
+			shaderProgram.pointLightingSpecularColor2Uniform,
+			parseFloat(document.getElementById("specularR2").value), parseFloat(document.getElementById("specularG2").value), parseFloat(document.getElementById("specularB2").value)
+		);
+
+		gl.uniform3f(
+			shaderProgram.pointLightingDiffuseColor2Uniform,
+			parseFloat(document.getElementById("diffuseR2").value), parseFloat(document.getElementById("diffuseG2").value), parseFloat(document.getElementById("diffuseB2").value)
 		);
 	}
 
@@ -133,7 +142,13 @@ Sokoban.prototype.draw = function () {
 	
 
 	mat4.identity(M);
-	mat4.translate(M, [parseFloat(document.getElementById("lightPositionX").value), parseFloat(document.getElementById("lightPositionY").value), parseFloat(document.getElementById("lightPositionZ").value)]);
+	mat4.translate(M, [parseFloat(document.getElementById("lightPositionX1").value), parseFloat(document.getElementById("lightPositionY1").value), parseFloat(document.getElementById("lightPositionZ1").value)]);
+	if (this.models["sword"]) {
+		this.drawModel(this.models["sword"], M, this.texturesNumbers["grass"]);
+	}
+	
+	mat4.identity(M);
+	mat4.translate(M, [parseFloat(document.getElementById("lightPositionX2").value), parseFloat(document.getElementById("lightPositionY2").value), parseFloat(document.getElementById("lightPositionZ2").value)]);
 	if (this.models["sword"]) {
 		this.drawModel(this.models["sword"], M, this.texturesNumbers["grass"]);
 	}
