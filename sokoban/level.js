@@ -66,16 +66,28 @@ Level.prototype.load = function () {
 	//this.game.loadTXT("player");
 
 	this.game.loadJSON("sword");
+	if (this.game.models["sword"]) {
+		log.d("OK");
+	}
 	this.game.loadJSON("proste");
+	if (this.game.models["proste"]) {
+		log.d("OK");
+	}
 	this.game.loadJSON("floor2");
+	if (this.game.models["floor2"]) {
+		log.d("OK");
+	}
 	this.game.loadJSON("walls2");
+	if (this.game.models["walls2"]) {
+		log.d("OK");
+	}
 
-/*
+
 	var mMatrix = [];
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [-xPlayer, 4.0, zPlayer]);
-	this.addObject("player", "brick", mMatrix);
-*/
+	this.addObject("proste", "brick", mMatrix);
+
 
 };	/*	Level.load()	*/
 
@@ -178,12 +190,12 @@ Level.prototype.draw = function () {
 
 
 
-/*
+
 	//	Objects
 	for (i = 0; i < this.objects.length; i++) {
 		this.drawObject(this.objects[i]);
 	}
-*/
+
 
 	// PLAYER
 	mat4.identity(M);
