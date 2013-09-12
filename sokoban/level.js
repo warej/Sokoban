@@ -42,11 +42,15 @@ function Level (gra, nr) {
 	this.score = 0;
 
 	//	Macierze przekształceń, które są jednakowe dla wszystkich obiektów
-	mat4.perspective(55, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, P);
-	mat4.identity(V);
+	//mat4.perspective(55, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, P);
+	//mat4.identity(V);
 
 	//	Pole na id obiektu playera
 	this.player = null;
+
+	//	Przesunięcia figur na planszy
+	this.xOffset = -9.5;
+	this.yOffset = 11.5;
 
 	//	Załadowanie obiektów
 	this.objects = [];
@@ -77,8 +81,8 @@ Level.prototype.load = function () {
 	if (this.game.models["floor2"]) {
 		log.d("OK");
 	}
-	this.game.loadJSON("walls2");
-	if (this.game.models["walls2"]) {
+	this.game.loadJSON("wall");
+	if (this.game.models["wall"]) {
 		log.d("OK");
 	}
 	this.game.loadJSON("box");
@@ -88,26 +92,40 @@ Level.prototype.load = function () {
 
 	var mMatrix = [];
 
-	//	Ładowanie playera
-	mMatrix = [];
-	mat4.identity(mMatrix);
-	this.player = this.addObject("proste", "brick", mMatrix);
-
 	//	Ładowanie podłogi
 	mMatrix = [];
 	mat4.identity(mMatrix);
 	this.addObject("floor2", "grass", mMatrix);
 
 	//	Ładowanie ścian
-	mMatrix = [];
-	mat4.identity(mMatrix);
-	this.addObject("walls2", "brick", mMatrix);
+	//mMatrix = [];
+	//mat4.identity(mMatrix);
+	//this.addObject("walls2", "brick", mMatrix);
+	//    Ładowanie ścian
+    mMatrix = [];
+    mat4.identity(mMatrix);
+    this.addObject("wall", "brick", mMatrix);
+
+    mMatrix = [];
+    mat4.identity(mMatrix);
+    mat4.rotate(mMatrix, degToRad(90), [0.0, 1.0, 0.0]);
+    this.addObject("wall", "brick", mMatrix);
+
+    mMatrix = [];
+    mat4.identity(mMatrix);
+    mat4.rotate(mMatrix, degToRad(180), [0.0, 1.0, 0.0]);
+    this.addObject("wall", "brick", mMatrix);
+
+    mMatrix = [];
+    mat4.identity(mMatrix);
+    mat4.rotate(mMatrix, degToRad(270), [0.0, 1.0, 0.0]);
+    this.addObject("wall", "brick", mMatrix);
 
 	//	Ładowanie mieczyka 1
 	mMatrix = [];
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [-10.0, 2.0, -10.0]);
-	this.addObject("sword", "grass", mMatrix);
+	this.addObject("sword", "crate", mMatrix);
 
 	//	Ładowanie mieczyka 2
 	mMatrix = [];
@@ -119,26 +137,18 @@ Level.prototype.load = function () {
 	mMatrix = [];
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [10.0, 2.0, 10.0]);
-	this.addObject("sword", "grass", mMatrix);
+	this.addObject("sword", "crate", mMatrix);
 
 	//	Ładowanie mieczyka 4
 	mMatrix = [];
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [10.0, 2.0, -10.0]);
 	this.addObject("sword", "brick", mMatrix);
-	
-	//	Ładowanie skrzyni
-	mMatrix = [];
-	mat4.identity(mMatrix);
-	mat4.translate(mMatrix, [4.0, 1.0, 4.0]);
-	this.addObject("box", "crate", mMatrix);
 };	/*	Level.load()	*/
 
 
 /*	Funkcja ładująca poziom	*/
 Level.prototype.loadLvl = function () {
-	this.plansza[0][0] = 1;
-
 	var request = new XMLHttpRequest();
 	var callback = this;
 	var path = "sokoban/level" + this.number + ".txt";
@@ -150,8 +160,6 @@ Level.prototype.loadLvl = function () {
 		}
 	}
 	request.send();
-
-	//this.addObject();
 };	/*	Level.loadLvl()	*/
 
 
@@ -159,11 +167,67 @@ Level.prototype.loadLvl = function () {
 Level.prototype.handleLevel = function (data) {
 	var lines = data.split("\n");
 	var y = 0;
+	var xOffset = this.xOffset;
+	var yOffset = this.yOffset;
 	for (var i = 0; i < lines.length; i++) {
 		var vals = lines[i].replace(/^\s+/, "").split(/\s+/);
 		if (vals.length >= 20 && vals[0] != "//") {
 			for (j = 0; j < 20; j++) {
-				this.plansza[j][y] = vals[j];
+				switch (vals[j]) {
+					case '*':
+						//	Ładowanie kawałka muru
+						var fig = {};
+						var mMatrix = [];
+
+						mat4.identity(mMatrix);
+						mat4.translate(mMatrix, [xOffset + j, 0.5, yOffset - i]);
+						fig.index = this.addObject("box", "brick", mMatrix);
+
+						fig.type = "box";
+						this.plansza[j][y] = fig;
+						break;
+					case '-':	//	nic
+						this.plansza[j][y] = null;
+						break;
+					case 'X':	//	cel
+						var fig = {};
+
+						fig.type = "target";
+						fig.index = -1;
+
+						this.plansza[j][y] = fig;
+						break;
+					case '$':
+						//	Ładowanie skrzyni
+						var fig = {};
+						var mMatrix = [];
+
+						mat4.identity(mMatrix);
+						mat4.translate(mMatrix, [xOffset + j, 0.5, yOffset - i]);
+						fig.index = this.addObject("box", "crate", mMatrix);
+
+						fig.type = "box";
+						this.plansza[j][y] = fig;
+						break;
+					case 'P':
+						//	Ładowanie playera
+						var fig = {};
+						mMatrix = [];
+						this.player = {};
+
+						//	obiekt
+						mat4.identity(mMatrix);
+						this.player.x = j;
+						this.player.y = y;
+						mat4.translate(mMatrix, [xOffset + this.player.x, 0.5, yOffset - this.player.y]);
+						this.player.id = this.addObject("proste", "brick", mMatrix);
+
+						//	figura
+						fig.type = "player";
+						fig.index = this.player.id;
+						this.plansza[j][y] = fig;
+						break;
+				}
 			}
 			y++;
 		}
@@ -203,19 +267,14 @@ Level.prototype.addObject = function (modelName, textureName, mMatrix) {
 Level.prototype.draw = function () {
 	//	Wyzerowanie macierzy
 	mat4.perspective(55, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, P);
-
 	mat4.identity(M);
 	mat4.identity(V);
+
 
 	//	Ustawienie macierzy widoku - kamery
 	mat4.rotate(V, degToRad(-pitch), [1, 0, 0]);
 	mat4.rotate(V, degToRad(-yaw), [0, 1, 0]);
 	mat4.translate(V, [-xPos, -yPos, -zPos]);
-
-
-	//	Przesuwanie gracza
-	mat4.identity(this.objects[this.player].M);
-	mat4.translate(this.objects[this.player].M, [-xPlayer, 1.0, zPlayer]);
 
 
 	//	Objects
