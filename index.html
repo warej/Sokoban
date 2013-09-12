@@ -104,8 +104,8 @@
 
 
 		void main(void) {
-			vPosition =  uM * vec4(aVertexPosition, 1.0);
-			gl_Position = uP * uV * vPosition;
+			vPosition =  uV * uM * vec4(aVertexPosition, 1.0);
+			gl_Position = uP * vPosition;
 
 			vTextureCoord = aTextureCoord;
 			vTransformedNormal = uN * aVertexNormal;
