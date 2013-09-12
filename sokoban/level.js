@@ -102,10 +102,7 @@ Level.prototype.load = function () {
 	this.addObject("floor2", "grass", mMatrix);
 
 	//	Ładowanie ścian
-	//mMatrix = [];
-	//mat4.identity(mMatrix);
-	//this.addObject("walls2", "brick", mMatrix);
-	//    Ładowanie ścian
+
     mMatrix = [];
     mat4.identity(mMatrix);
     this.addObject("wall", "brick", mMatrix);
@@ -129,31 +126,25 @@ Level.prototype.load = function () {
 	mMatrix = [];
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [-10.0, 2.0, -10.0]);
-	this.addObject("sword", "crate", mMatrix);
+	this.addObject("sword", "sword_tex", mMatrix);
 
 	//	Ładowanie mieczyka 2
 	mMatrix = [];
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [-10.0, 2.0, 10.0]);
-	this.addObject("sword", "brick", mMatrix);
+	this.addObject("sword", "sword_tex", mMatrix);
 
 	//	Ładowanie mieczyka 3
 	mMatrix = [];
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [10.0, 2.0, 10.0]);
-	this.addObject("sword", "crate", mMatrix);
+	this.addObject("sword", "sword_tex", mMatrix);
 
 	//	Ładowanie mieczyka 4
 	mMatrix = [];
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [10.0, 2.0, -10.0]);
-	this.addObject("sword", "brick", mMatrix);
-
-
-	mMatrix = [];
-	mat4.identity(mMatrix);
-	mat4.translate(mMatrix, [-3.0, 0.5, -3.0]);
-	this.addObject("target", "target_tex", mMatrix);
+	this.addObject("sword", "sword_tex", mMatrix);
 };	/*	Level.load()	*/
 
 
@@ -189,6 +180,7 @@ Level.prototype.handleLevel = function (data) {
 						var fig = {};
 						var mMatrix = [];
 
+						//	Podpinanie grafiki
 						mat4.identity(mMatrix);
 						mat4.translate(mMatrix, [xOffset + j, 0.5, zOffset - z]);
 						fig.index = this.addObject("box", "brick", mMatrix);
@@ -201,11 +193,19 @@ Level.prototype.handleLevel = function (data) {
 						break;
 					case 'X':	//	cel
 						var fig = {};
+						var mMatrix = [];
 
-						fig.type = "target";
-						fig.index = -1;	//TODO
+						log.d("target @ " + j + ", " + z);
+
+						//	Podpinanie grafiki
+						mat4.identity(mMatrix);
+						mat4.translate(mMatrix, [xOffset + j, 0.5, zOffset - z]);
+						fig.index = this.addObject("target", "target_tex", mMatrix);
+
+						//	Na targecie nie ma na razie niczego
 						fig.fig = null;
 
+						fig.type = "target";
 						this.plansza[j][z] = fig;
 						break;
 					case '$':
@@ -213,6 +213,7 @@ Level.prototype.handleLevel = function (data) {
 						var fig = {};
 						var mMatrix = [];
 
+						//	Podpinanie grafiki
 						mat4.identity(mMatrix);
 						mat4.translate(mMatrix, [xOffset + j, 0.5, zOffset - z]);
 						fig.index = this.addObject("box", "crate", mMatrix);
@@ -435,6 +436,7 @@ Level.prototype.moveLeft = function () {
 				//	Za boxem jest pusta przestrzeń
 				log.d("Przesun");
 				move = true;
+
 				//	Box do przesunięcia
 				box = this.objects[this.plansza[oldX - 1][oldZ].index];
 				//	Przesuń box
@@ -448,8 +450,11 @@ Level.prototype.moveLeft = function () {
 				//	Za boxem jest target
 				move = true;
 				log.d("Przesun na cel");
+
 				//	Box do przesunięcia
 				box = this.objects[this.plansza[oldX - 1][oldZ].index];
+				//	Zmień teksturę
+				box.textureId = this.game.texturesNumbers["crate_ok"];
 				//	Przesuń box
 				this.plansza[oldX - 2][oldZ].fig = this.plansza[oldX - 1][oldZ];
 				this.plansza[oldX - 1][oldZ] = null;
@@ -464,12 +469,15 @@ Level.prototype.moveLeft = function () {
 				//	Za boxem jest pusta przestrzeń
 				log.d("Przesun tgt na puste");
 				move = true;
+
 				//	Box do przesunięcia
 				box = this.objects[this.plansza[oldX - 1][oldZ].fig.index];
+				//	Zmień teksturę
+				box.textureId = this.game.texturesNumbers["crate"];
 				//	Przesuń box
-
 				this.plansza[oldX - 2][oldZ] = this.plansza[oldX - 1][oldZ].fig;
 				this.plansza[oldX - 1][oldZ].fig = null;
+
 				//	Przesuń pionka
 				this.player.x--;
 			}
@@ -477,6 +485,7 @@ Level.prototype.moveLeft = function () {
 				//	Za boxem jest target
 				move = true;
 				log.d("Przesun tgt na tgt");
+
 				//	Box do przesunięcia
 				box = this.objects[this.plansza[oldX - 1][oldZ].fig.index];
 				//	Przesuń box

@@ -192,7 +192,7 @@ function initTextures(gra) {
 	log.d("Ładowanie tekstury 'trawa3.gif'");
 	tex2 = gl.createTexture();
 	gra.textures["grass"] = loadImg("trawa3.gif", tex2);
-	
+
 	log.d("Ładowanie tekstury 'crate.gif'");
 	tex3 = gl.createTexture();
 	gra.textures["crate"] = loadImg("crate.gif", tex3);
@@ -200,14 +200,18 @@ function initTextures(gra) {
 	log.d("Ładowanie tekstury 'target_tex.gif'");
 	tex4 = gl.createTexture();
 	gra.textures["target_tex"] = loadImg("target_tex.gif", tex4);
-	
+
 	log.d("Ładowanie tekstury 'steel.gif'");
 	tex5 = gl.createTexture();
 	gra.textures["steel"] = loadImg("steel.gif", tex5);
-	
+
 	log.d("Ładowanie tekstury sword_tex.gif'");
 	tex6 = gl.createTexture();
 	gra.textures["sword_tex"] = loadImg("sword_tex.gif", tex6);
+
+	log.d("Ładowanie tekstury crate_ok.gif'");
+	tex7 = gl.createTexture();
+	gra.textures["crate_ok"] = loadImg("crate_ok.gif", tex7);
 
 	log.d("OK");
 }	/*	initTexture()	*/
