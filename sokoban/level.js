@@ -51,7 +51,7 @@ function Level (gra, nr) {
 
 	//	Stworzenie planszy
 	this.plansza = new Array (20);
-	for (i=0; i < 20; i++) {
+	for (var i=0; i < 20; i++) {
 		this.plansza[i] = new Array (20);
 	}
 
@@ -61,10 +61,7 @@ function Level (gra, nr) {
 
 /*	Funkcja ładująca wszystkie potrzebne modele	*/
 Level.prototype.load = function () {
-	//this.game.loadTXT("floor");
-	//this.game.loadTXT("walls");
-	//this.game.loadTXT("player");
-
+	//	Ładowanie modeli
 	this.game.loadJSON("sword");
 	if (this.game.models["sword"]) {
 		log.d("OK");
@@ -82,13 +79,29 @@ Level.prototype.load = function () {
 		log.d("OK");
 	}
 
-
 	var mMatrix = [];
+
+	// Ładowanie playera
 	mat4.identity(mMatrix);
-	mat4.translate(mMatrix, [-xPlayer, 10.0, zPlayer]);
 	this.addObject("proste", "brick", mMatrix);
 
+	// Ładowanie mieczyka 1
+	mMatrix = [];
+	mat4.identity(mMatrix);
+	mat4.translate(mMatrix, [-3.0, 5.0, 0.0]);
+	this.addObject("sword", "grass", mMatrix);
 
+	// Ładowanie mieczyka 2
+	mMatrix = [];
+	mat4.identity(mMatrix);
+	mat4.translate(mMatrix, [-0.0, 3.0, 0.0]);
+	this.addObject("sword", "brick", mMatrix);
+
+	// Ładowanie mieczyka 3
+	mMatrix = [];
+	mat4.identity(mMatrix);
+	mat4.translate(mMatrix, [3.0, 4.0, 3.0]);
+	this.addObject("sword", "grass", mMatrix);
 };	/*	Level.load()	*/
 
 
@@ -125,8 +138,6 @@ Level.prototype.handleLevel = function (data) {
 			y++;
 		}
 	}
-
-	log.d(this.plansza);
 };	/*	Level.handleLevel()	*/
 
 /*	Funkcja dodająca nowy obiekt	*/
@@ -134,29 +145,27 @@ Level.prototype.addObject = function (modelName, textureName, mMatrix) {
 	var i = this.objects.length;
 	var newObject = {};
 
+	//	Ustawianie modelu
 	newObject.model = this.game.models[modelName];
 	if (!newObject.model) {
 		log.e("Brak modelu " + modelName);
 	}
 
+	//	Ustawianie id tekstury
 	newObject.textureId = this.game.texturesNumbers[textureName];
+
+	//	Ustawianie macierzy M
 	newObject.M = mMatrix;
 
-	if (newObject.model) {
-		log.d("Model załadowany pomyślnie");
-	}
-	else {
-		log.d("Coś się skiepściło");
+	if (!newObject.model) {
+		log.d("Nie można załadować modelu " + modelName);
 	}
 
+	//	Zapisanie obiektu!
 	this.objects[i] = newObject;
-	log.d("i = " + i);
-	if (this.objects[i].model) {
-		log.d("Model załadowany pomyślnie");
-	}
-	else {
-		log.d("Coś się skiepściło");
-	}
+
+	//	Zwraca index dodanego obiektu
+	return i;
 };	/*	Level.addObject()	*/
 
 
@@ -190,48 +199,19 @@ Level.prototype.draw = function () {
 
 
 
+	mat4.identity(this.objects[0].M);
+	mat4.translate(this.objects[0].M, [-xPlayer, 1.0, zPlayer]);
 
 	//	Objects
 	for (i = 0; i < this.objects.length; i++) {
 		this.drawObject(this.objects[i]);
 	}
-
-
-	// PLAYER
-	mat4.identity(M);
-	mat4.translate(M, [-xPlayer, 1.0, zPlayer]);
-
-	var model2 = this.game.models["proste"];
-	//model.M = M;
-	this.game.drawModel(model2);
-
-
-
-	mat4.identity(M);
-	mat4.translate(M, [3.0, 3.0, -3.0]);
-	var model3 = this.game.models["sword"];
-	//model.M = M;
-	this.game.drawModel(model3);
-
-
-
-	mat4.identity(M);
-	mat4.translate(M, [-3.0, 3.0, 3.0]);
-	var model = this.game.models["sword"];
-	//model.M = M;
-	this.game.drawModel(model);
-
 };	/*	Level.draw()	*/
 
 
 /*	Metoda rysująca obiekt	*/
 Level.prototype.drawObject = function (obj) {
-	mat4.identity(M);
-	mat4.translate(M, [-xPlayer, 2.0, zPlayer]);
-
-	M = obj.M;
-	this.game.drawModel(obj.model);
-
+	this.game.drawModel2(obj.model, obj.M, obj.textureId);
 };	/*	Level.drawObject()	*/
 
 
