@@ -1,14 +1,14 @@
 
 // Obsługa kamery:
-var pitch = -40;
+var pitch = -35;
 var pitchRate = 0;
 
-var yaw = 245;
+var yaw = 355;
 var yawRate = 0;
 
-var xPos = -15;
+var xPos = -2;
 var yPos = 10;
-var zPos = -5;
+var zPos = 18;
 
 var speed = 0;
 var speedBok = 0;
@@ -148,8 +148,8 @@ Level.prototype.load = function () {
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [10.0, 2.0, -10.0]);
 	this.addObject("sword", "brick", mMatrix);
-	
-	
+
+
 	mMatrix = [];
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [-3.0, 0.5, -3.0]);
