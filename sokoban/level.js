@@ -53,13 +53,16 @@ function Level (gra, nr) {
 
 /*	Funkcja ładująca wszystkie potrzebne modele	*/
 Level.prototype.load = function () {
-	loadFloor();
+	//loadFloor();
 
-	this.game.loadTXT("floor");
-	this.game.loadTXT("walls");
-	this.game.loadTXT("player");
+	//this.game.loadTXT("floor");
+	//this.game.loadTXT("walls");
+	//this.game.loadTXT("player");
 
 	this.game.loadJSON("sword");
+	this.game.loadJSON("proste");
+	this.game.loadJSON("floor2");
+	this.game.loadJSON("walls2");
 };	/*	Level.load()	*/
 
 
@@ -84,52 +87,46 @@ Level.prototype.draw = function () {
 	mat4.translate(V, [-xPos, -yPos, -zPos]);
 
 
-	// FLOOR:
-	var model = this.game.models["floor"];
-	//model.M = M;
-	this.game.drawModel(model);
-
 
 	// WALLS
-
-	var model = this.game.models["walls"];
+	mat4.identity(M);
+	var model1 = this.game.models["walls2"];
 	//model.M = M;
-	this.game.drawModel(model);
+	this.game.drawModel(model1);
 
-	//vStackPush();
+
+	// FLOOR
+	mat4.identity(M);
+	var model4 = this.game.models["floor2"];
+	//model.M = M;
+	this.game.drawModel(model4);
+
+
 
 	// PLAYER
 	mat4.identity(M);
-	mat4.translate(M, [-xPlayer, 0.0, zPlayer]);
+	mat4.translate(M, [-xPlayer, 1.0, zPlayer]);
 
-	var model = this.game.models["player"];
+	var model2 = this.game.models["proste"];
 	//model.M = M;
-	this.game.drawModel(model);
+	this.game.drawModel(model2);
 
-	//vStackPop();
 
-	//	Tu dalej jest rysowanie mieczyków w wersji uproszczonej :)
 
-	//	Test 1 - wareja
 	mat4.identity(M);
-	mat4.translate(M, [0.0, 3.0, 0.0]);
+	mat4.translate(M, [3.0, 3.0, -3.0]);
+	var model3 = this.game.models["sword"];
+	//model.M = M;
+	this.game.drawModel(model3);
+
+
+
+	mat4.identity(M);
+	mat4.translate(M, [-3.0, 3.0, 3.0]);
 	var model = this.game.models["sword"];
 	//model.M = M;
 	this.game.drawModel(model);
 
-	//	Test 2 - wareja
-	mat4.identity(M);
-	mat4.translate(M, [0.0, 6.0, 0.0]);
-	var model = this.game.models["sword"];
-	//model.M = M;
-	this.game.drawModel(model);
-
-	//	Test 3 - wareja
-	mat4.identity(M);
-	mat4.translate(M, [0.0, 9.0, 0.0]);
-	var model = this.game.models["sword"];
-	//model.M = M;
-	this.game.drawModel(model);
 };	/*	Level.draw()	*/
 
 
@@ -259,7 +256,7 @@ Level.prototype.pause = function () {
 	this.game.scene.run();
 };	/*	Level.pause()	*/
 
-
+/*
 // FLOOR:
 var floorVertexPositionBuffer = null;
 var floorVertexTextureCoordBuffer = null;

@@ -187,6 +187,9 @@ Sokoban.prototype.drawModel = function (model) {
 	else if (model.vPosition) {
 		gl.drawArrays(gl.TRIANGLES, 0, model.vPosition.numItems);
 	}
+	else {
+		log.e("Nie ma modelu do narysowania " + model.name);
+	}
 };	/* Sokoban.drawModel()	*/
 
 
@@ -197,6 +200,7 @@ Sokoban.prototype.loadJSON = function (name) {
 	model.vTextureCoords = null;
 	model.vNormal = null;
 	model.vIndex = null;
+	model.name = name;
 	model.M = null;
 
 	//	Z jakiegoś powodu to mi nie działa ;/
@@ -230,6 +234,7 @@ Sokoban.prototype.loadTXT = function (name) {
 	model.vTextureCoords = null;
 	model.vNormal = null;
 	model.vIndex = null;
+	model.name = name;
 	model.M = null;
 
 	//	Z jakiegoś powodu to mi nie działa ;/
