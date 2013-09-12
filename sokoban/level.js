@@ -195,8 +195,6 @@ Level.prototype.handleLevel = function (data) {
 						var fig = {};
 						var mMatrix = [];
 
-						log.d("target @ " + j + ", " + z);
-
 						//	Podpinanie grafiki
 						mat4.identity(mMatrix);
 						mat4.translate(mMatrix, [xOffset + j, 0.5, zOffset - z]);
@@ -358,11 +356,13 @@ Level.prototype.handleKeys = function(first_argument) {
 	else {	//	Z jakichś powodów nie działa ;p
 		//	Góra
 		if (currentlyPressedKeys[38]) {
-			speedPlayerX = 0.01;
+			currentlyPressedKeys[38] = false;
+			this.moveUp();
 		} else
 		//	Dół
 		if (currentlyPressedKeys[40]) {
-			speedPlayerX = -0.01;
+			currentlyPressedKeys[40] = false;
+			this.moveDown();
 		}
 		else {
 			speedPlayerX = 0;
@@ -375,7 +375,8 @@ Level.prototype.handleKeys = function(first_argument) {
 		} else
 		// Prawo
 		if (currentlyPressedKeys[39]) {
-			speedPlayerZ = -0.01;
+			currentlyPressedKeys[39] = false;
+			this.moveRight();
 		}
 		else {
 			speedPlayerZ = 0;
@@ -384,11 +385,13 @@ Level.prototype.handleKeys = function(first_argument) {
 
 	//	W
 	if (currentlyPressedKeys[87]) {
-		speedPlayerX = 0.01;
+		currentlyPressedKeys[87] = false;
+		this.moveUp();
 	} else
 	//	S
 	if (currentlyPressedKeys[83]) {
-		speedPlayerX = -0.01;
+		currentlyPressedKeys[83] = false;
+		this.moveDown();
 	}
 	else {
 		speedPlayerX = 0;
@@ -396,11 +399,13 @@ Level.prototype.handleKeys = function(first_argument) {
 
 	//	A
 	if (currentlyPressedKeys[65]) {
-		speedPlayerZ = 0.01;
+		currentlyPressedKeys[65] = false;
+		this.moveLeft();
 	} else
 	// D
 	if (currentlyPressedKeys[68]) {
-		speedPlayerZ = -0.01;
+		currentlyPressedKeys[68] = false;
+		this.moveRight();
 	}
 	else {
 		speedPlayerZ = 0;
@@ -425,7 +430,7 @@ Level.prototype.moveLeft = function () {
 		var src;
 		var dst;
 
-		if (this.plansza[oldX - 1][oldZ] == null) {
+		if (this.plansza[oldX - 1][oldZ] == null || (this.plansza[oldX - 1][oldZ].type == "target" && this.plansza[oldX - 1][oldZ].fig == null )) {
 			//	Puste pole - przesuń pionka
 			this.player.x--;
 			log.d("Puste pole");
@@ -511,6 +516,303 @@ Level.prototype.moveLeft = function () {
 		this.score++;
 	}
 };	/* Level.moveLeft() */
+
+
+/*	Rusz pionkiem w górę	*/
+Level.prototype.moveUp = function () {
+	// Odświeżenie pozycji gracza
+	if (this.player && this.player.z < 19) {
+		var oldX = this.player.x;
+		var oldZ = this.player.z;
+		var move = false;
+		var box;
+		var src;
+		var dst;
+
+		if (this.plansza[oldX][oldZ + 1] == null || (this.plansza[oldX][oldZ + 1].type == "target" && this.plansza[oldX][oldZ + 1].fig == null )) {
+			//	Puste pole - przesuń pionka
+			this.player.z++;
+			log.d("Puste pole");
+		}
+		else if (this.plansza[oldX][oldZ + 1].type == "box" && (oldZ < 18)) {
+			//	Mamy boxa obok i nie jest dosunięty do samego końca
+			if (this.plansza[oldX][oldZ + 2] == null) {
+				//	Za boxem jest pusta przestrzeń
+				log.d("Przesun");
+				move = true;
+
+				//	Box do przesunięcia
+				box = this.objects[this.plansza[oldX][oldZ + 1].index];
+				//	Przesuń box
+
+				this.plansza[oldX][oldZ + 2] = this.plansza[oldX][oldZ + 1];
+				this.plansza[oldX][oldZ + 1] = null;
+				//	Przesuń pionka
+				this.player.z++;
+			}
+			else if (this.plansza[oldX][oldZ + 2].type == "target" && this.plansza[oldX][oldZ + 2].fig == null) {
+				//	Za boxem jest target
+				move = true;
+				log.d("Przesun na cel");
+
+				//	Box do przesunięcia
+				box = this.objects[this.plansza[oldX][oldZ + 1].index];
+				//	Zmień teksturę
+				box.textureId = this.game.texturesNumbers["crate_ok"];
+				//	Przesuń box
+				this.plansza[oldX][oldZ + 2].fig = this.plansza[oldX][oldZ + 1];
+				this.plansza[oldX][oldZ + 1] = null;
+
+				//	Przesuń pionka
+				this.player.z++;
+			}
+		}
+		else if (this.plansza[oldX][oldZ + 1].type == "target" && this.plansza[oldX][oldZ + 1].fig.type == "box" && (oldZ < 18)) {
+			//	Mamy obok boxa na target'cie i nie jest dosunięty do samego końca
+			if (this.plansza[oldX][oldZ + 2] == null) {
+				//	Za boxem jest pusta przestrzeń
+				log.d("Przesun tgt na puste");
+				move = true;
+
+				//	Box do przesunięcia
+				box = this.objects[this.plansza[oldX][oldZ + 1].fig.index];
+				//	Zmień teksturę
+				box.textureId = this.game.texturesNumbers["crate"];
+				//	Przesuń box
+				this.plansza[oldX][oldZ + 2] = this.plansza[oldX][oldZ + 1].fig;
+				this.plansza[oldX][oldZ + 1].fig = null;
+
+				//	Przesuń pionka
+				this.player.z++;
+			}
+			else if (this.plansza[oldX][oldZ + 2].type == "target" && this.plansza[oldX][oldZ + 2].fig == null) {
+				//	Za boxem jest target
+				move = true;
+				log.d("Przesun tgt na tgt");
+
+				//	Box do przesunięcia
+				box = this.objects[this.plansza[oldX][oldZ + 1].fig.index];
+				//	Przesuń box
+				this.plansza[oldX][oldZ + 2].fig = this.plansza[oldX][oldZ + 1].fig;
+				this.plansza[oldX][oldZ + 1].fig = null;
+
+				//	Przesuń pionka
+				this.player.z++;
+			}
+		}
+
+		if (move) {
+			//	Przerysuj box
+			mat4.identity(box.M);
+			mat4.translate(box.M, [this.xOffset + oldX, 0.5, this.zOffset - (oldZ + 2)]);
+		}
+
+		//	Przerysuj pozycję grajka
+		mat4.identity(this.objects[this.player.id].M);
+		mat4.translate(this.objects[this.player.id].M, [this.xOffset + this.player.x, 0.5, this.zOffset - this.player.z]);
+
+		//	Zinkrementuj wynik
+		this.score++;
+	}
+};	/* Level.moveUp() */
+
+
+/*	Rusz pionkiem w prawo	*/
+Level.prototype.moveRight = function () {
+	// Odświeżenie pozycji gracza
+	if (this.player && this.player.x < 19) {
+		var oldX = this.player.x;
+		var oldZ = this.player.z;
+		var move = false;
+		var box;
+		var src;
+		var dst;
+
+		if (this.plansza[oldX + 1][oldZ] == null || (this.plansza[oldX + 1][oldZ].type == "target" && this.plansza[oldX + 1][oldZ].fig == null )) {
+			//	Puste pole - przesuń pionka
+			this.player.x++;
+			log.d("Puste pole");
+		}
+		else if (this.plansza[oldX + 1][oldZ].type == "box" && (oldX < 18)) {
+			//	Mamy boxa obok i nie jest dosunięty do samego końca
+			if (this.plansza[oldX + 2][oldZ] == null) {
+				//	Za boxem jest pusta przestrzeń
+				log.d("Przesun");
+				move = true;
+
+				//	Box do przesunięcia
+				box = this.objects[this.plansza[oldX + 1][oldZ].index];
+				//	Przesuń box
+
+				this.plansza[oldX + 2][oldZ] = this.plansza[oldX + 1][oldZ];
+				this.plansza[oldX + 1][oldZ] = null;
+				//	Przesuń pionka
+				this.player.x++;
+			}
+			else if (this.plansza[oldX + 2][oldZ].type == "target" && this.plansza[oldX + 2][oldZ].fig == null) {
+				//	Za boxem jest target
+				move = true;
+				log.d("Przesun na cel");
+
+				//	Box do przesunięcia
+				box = this.objects[this.plansza[oldX + 1][oldZ].index];
+				//	Zmień teksturę
+				box.textureId = this.game.texturesNumbers["crate_ok"];
+				//	Przesuń box
+				this.plansza[oldX + 2][oldZ].fig = this.plansza[oldX + 1][oldZ];
+				this.plansza[oldX + 1][oldZ] = null;
+
+				//	Przesuń pionka
+				this.player.x++;
+			}
+		}
+		else if (this.plansza[oldX + 1][oldZ].type == "target" && this.plansza[oldX + 1][oldZ].fig.type == "box" && (oldX < 18)) {
+			//	Mamy obok boxa na target'cie i nie jest dosunięty do samego końca
+			if (this.plansza[oldX + 2][oldZ] == null) {
+				//	Za boxem jest pusta przestrzeń
+				log.d("Przesun tgt na puste");
+				move = true;
+
+				//	Box do przesunięcia
+				box = this.objects[this.plansza[oldX + 1][oldZ].fig.index];
+				//	Zmień teksturę
+				box.textureId = this.game.texturesNumbers["crate"];
+				//	Przesuń box
+				this.plansza[oldX + 2][oldZ] = this.plansza[oldX + 1][oldZ].fig;
+				this.plansza[oldX + 1][oldZ].fig = null;
+
+				//	Przesuń pionka
+				this.player.x++;
+			}
+			else if (this.plansza[oldX + 2][oldZ].type == "target" && this.plansza[oldX + 2][oldZ].fig == null) {
+				//	Za boxem jest target
+				move = true;
+				log.d("Przesun tgt na tgt");
+
+				//	Box do przesunięcia
+				box = this.objects[this.plansza[oldX + 1][oldZ].fig.index];
+				//	Przesuń box
+				this.plansza[oldX + 2][oldZ].fig = this.plansza[oldX + 1][oldZ].fig;
+				this.plansza[oldX + 1][oldZ].fig = null;
+
+				//	Przesuń pionka
+				this.player.x++;
+			}
+		}
+
+		if (move) {
+			//	Przerysuj box
+			mat4.identity(box.M);
+			mat4.translate(box.M, [this.xOffset + oldX + 2, 0.5, this.zOffset - oldZ]);
+		}
+
+		//	Przerysuj pozycję grajka
+		mat4.identity(this.objects[this.player.id].M);
+		mat4.translate(this.objects[this.player.id].M, [this.xOffset + this.player.x, 0.5, this.zOffset - this.player.z]);
+
+		//	Zinkrementuj wynik
+		this.score++;
+	}
+};	/* Level.moveRight() */
+
+
+/*	Rusz pionkiem w dół	*/
+Level.prototype.moveDown = function () {
+	// Odświeżenie pozycji gracza
+	if (this.player && this.player.z > 0) {
+		var oldX = this.player.x;
+		var oldZ = this.player.z;
+		var move = false;
+		var box;
+		var src;
+		var dst;
+
+		if (this.plansza[oldX][oldZ - 1] == null || (this.plansza[oldX][oldZ - 1].type == "target" && this.plansza[oldX][oldZ - 1].fig == null )) {
+			//	Puste pole - przesuń pionka
+			this.player.z--;
+			log.d("Puste pole");
+		}
+		else if (this.plansza[oldX][oldZ - 1].type == "box" && (oldZ > 1)) {
+			//	Mamy boxa obok i nie jest dosunięty do samego końca
+			if (this.plansza[oldX][oldZ - 2] == null) {
+				//	Za boxem jest pusta przestrzeń
+				log.d("Przesun");
+				move = true;
+
+				//	Box do przesunięcia
+				box = this.objects[this.plansza[oldX][oldZ - 1].index];
+				//	Przesuń box
+
+				this.plansza[oldX][oldZ - 2] = this.plansza[oldX][oldZ - 1];
+				this.plansza[oldX][oldZ - 1] = null;
+				//	Przesuń pionka
+				this.player.z--;
+			}
+			else if (this.plansza[oldX][oldZ - 2].type == "target" && this.plansza[oldX][oldZ - 2].fig == null) {
+				//	Za boxem jest target
+				move = true;
+				log.d("Przesun na cel");
+
+				//	Box do przesunięcia
+				box = this.objects[this.plansza[oldX][oldZ - 1].index];
+				//	Zmień teksturę
+				box.textureId = this.game.texturesNumbers["crate_ok"];
+				//	Przesuń box
+				this.plansza[oldX][oldZ - 2].fig = this.plansza[oldX][oldZ - 1];
+				this.plansza[oldX][oldZ - 1] = null;
+
+				//	Przesuń pionka
+				this.player.z--;
+			}
+		}
+		else if (this.plansza[oldX][oldZ - 1].type == "target" && this.plansza[oldX][oldZ - 1].fig.type == "box" && (oldZ > 1)) {
+			//	Mamy obok boxa na target'cie i nie jest dosunięty do samego końca
+			if (this.plansza[oldX][oldZ - 2] == null) {
+				//	Za boxem jest pusta przestrzeń
+				log.d("Przesun tgt na puste");
+				move = true;
+
+				//	Box do przesunięcia
+				box = this.objects[this.plansza[oldX][oldZ - 1].fig.index];
+				//	Zmień teksturę
+				box.textureId = this.game.texturesNumbers["crate"];
+				//	Przesuń box
+				this.plansza[oldX][oldZ - 2] = this.plansza[oldX][oldZ - 1].fig;
+				this.plansza[oldX][oldZ - 1].fig = null;
+
+				//	Przesuń pionka
+				this.player.z--;
+			}
+			else if (this.plansza[oldX][oldZ - 2].type == "target" && this.plansza[oldX][oldZ - 2].fig == null) {
+				//	Za boxem jest target
+				move = true;
+				log.d("Przesun tgt na tgt");
+
+				//	Box do przesunięcia
+				box = this.objects[this.plansza[oldX][oldZ - 1].fig.index];
+				//	Przesuń box
+				this.plansza[oldX][oldZ - 2].fig = this.plansza[oldX][oldZ - 1].fig;
+				this.plansza[oldX][oldZ - 1].fig = null;
+
+				//	Przesuń pionka
+				this.player.z--;
+			}
+		}
+
+		if (move) {
+			//	Przerysuj box
+			mat4.identity(box.M);
+			mat4.translate(box.M, [this.xOffset + oldX, 0.5, this.zOffset - (oldZ - 2)]);
+		}
+
+		//	Przerysuj pozycję grajka
+		mat4.identity(this.objects[this.player.id].M);
+		mat4.translate(this.objects[this.player.id].M, [this.xOffset + this.player.x, 0.5, this.zOffset - this.player.z]);
+
+		//	Zinkrementuj wynik
+		this.score++;
+	}
+};	/* Level.moveDown() */
 
 
 /*	Level.pause()	*/
