@@ -105,10 +105,8 @@ Menu.prototype.continueLevel = function () {
 Menu.prototype.runLevel = function (nr) {
 	log.d("Runing level " + nr);
 	//	Uruchom poziom numer 'nr'
-	this.game.running = false;
 	this.game.scene = new Level(this.game, nr);
 	this.game.scene.run();
-	this.game.running = true;
 };	/*	Menu.runLevel()	*/
 
 
