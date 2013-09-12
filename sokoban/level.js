@@ -52,6 +52,9 @@ function Level (gra, nr) {
 	this.xOffset = -9.5;
 	this.zOffset = 9.5;
 
+	//	liczba boxów/targetów
+	this.boxCounter = 0;
+
 	//	Załadowanie obiektów
 	this.objects = [];
 	this.load();
@@ -96,13 +99,14 @@ Level.prototype.load = function () {
 
 	var mMatrix = [];
 
+
 	//	Ładowanie podłogi
 	mMatrix = [];
 	mat4.identity(mMatrix);
 	this.addObject("floor2", "grass", mMatrix);
 
-	//	Ładowanie ścian
 
+	//	Ładowanie ścian
     mMatrix = [];
     mat4.identity(mMatrix);
     this.addObject("wall", "brick", mMatrix);
@@ -122,28 +126,36 @@ Level.prototype.load = function () {
     mat4.rotate(mMatrix, degToRad(270), [0.0, 1.0, 0.0]);
     this.addObject("wall", "brick", mMatrix);
 
+
 	//	Ładowanie mieczyka 1
 	mMatrix = [];
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [-10.0, 2.0, -10.0]);
+    mat4.rotate(mMatrix, degToRad(45), [0.0, 1.0, 0.0]);
 	this.addObject("sword", "sword_tex", mMatrix);
+
 
 	//	Ładowanie mieczyka 2
 	mMatrix = [];
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [-10.0, 2.0, 10.0]);
+    mat4.rotate(mMatrix, degToRad(135), [0.0, 1.0, 0.0]);
 	this.addObject("sword", "sword_tex", mMatrix);
+
 
 	//	Ładowanie mieczyka 3
 	mMatrix = [];
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [10.0, 2.0, 10.0]);
+    mat4.rotate(mMatrix, degToRad(225), [0.0, 1.0, 0.0]);
 	this.addObject("sword", "sword_tex", mMatrix);
+
 
 	//	Ładowanie mieczyka 4
 	mMatrix = [];
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix, [10.0, 2.0, -10.0]);
+    mat4.rotate(mMatrix, degToRad(315), [0.0, 1.0, 0.0]);
 	this.addObject("sword", "sword_tex", mMatrix);
 };	/*	Level.load()	*/
 
