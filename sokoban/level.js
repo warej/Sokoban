@@ -85,7 +85,7 @@ Level.prototype.load = function () {
 
 	var mMatrix = [];
 	mat4.identity(mMatrix);
-	mat4.translate(mMatrix, [-xPlayer, 4.0, zPlayer]);
+	mat4.translate(mMatrix, [-xPlayer, 10.0, zPlayer]);
 	this.addObject("proste", "brick", mMatrix);
 
 
