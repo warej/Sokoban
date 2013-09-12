@@ -50,7 +50,7 @@ function Level (gra, nr) {
 
 	//	Przesunięcia figur na planszy
 	this.xOffset = -9.5;
-	this.yOffset = 11.5;
+	this.zOffset = 9.5;
 
 	//	Załadowanie obiektów
 	this.objects = [];
@@ -166,9 +166,9 @@ Level.prototype.loadLvl = function () {
 /*	Funkcja obsługująca pobrany poziom	*/
 Level.prototype.handleLevel = function (data) {
 	var lines = data.split("\n");
-	var y = 0;
+	var z = 0;
 	var xOffset = this.xOffset;
-	var yOffset = this.yOffset;
+	var zOffset = this.zOffset;
 	for (var i = 0; i < lines.length; i++) {
 		var vals = lines[i].replace(/^\s+/, "").split(/\s+/);
 		if (vals.length >= 20 && vals[0] != "//") {
@@ -180,14 +180,14 @@ Level.prototype.handleLevel = function (data) {
 						var mMatrix = [];
 
 						mat4.identity(mMatrix);
-						mat4.translate(mMatrix, [xOffset + j, 0.5, yOffset - i]);
+						mat4.translate(mMatrix, [xOffset + j, 0.5, zOffset - z]);
 						fig.index = this.addObject("box", "brick", mMatrix);
 
-						fig.type = "box";
-						this.plansza[j][y] = fig;
+						fig.type = "wall";
+						this.plansza[j][z] = fig;
 						break;
 					case '-':	//	nic
-						this.plansza[j][y] = null;
+						this.plansza[j][z] = null;
 						break;
 					case 'X':	//	cel
 						var fig = {};
@@ -195,7 +195,7 @@ Level.prototype.handleLevel = function (data) {
 						fig.type = "target";
 						fig.index = -1;
 
-						this.plansza[j][y] = fig;
+						this.plansza[j][z] = fig;
 						break;
 					case '$':
 						//	Ładowanie skrzyni
@@ -203,11 +203,11 @@ Level.prototype.handleLevel = function (data) {
 						var mMatrix = [];
 
 						mat4.identity(mMatrix);
-						mat4.translate(mMatrix, [xOffset + j, 0.5, yOffset - i]);
+						mat4.translate(mMatrix, [xOffset + j, 0.5, zOffset - z]);
 						fig.index = this.addObject("box", "crate", mMatrix);
 
 						fig.type = "box";
-						this.plansza[j][y] = fig;
+						this.plansza[j][z] = fig;
 						break;
 					case 'P':
 						//	Ładowanie playera
@@ -216,20 +216,15 @@ Level.prototype.handleLevel = function (data) {
 						this.player = {};
 
 						//	obiekt
-						mat4.identity(mMatrix);
 						this.player.x = j;
-						this.player.y = y;
-						mat4.translate(mMatrix, [xOffset + this.player.x, 0.5, yOffset - this.player.y]);
+						this.player.z = z;
+						mat4.identity(mMatrix);
+						mat4.translate(mMatrix, [xOffset + this.player.x, 0.5, zOffset - this.player.z]);
 						this.player.id = this.addObject("proste", "brick", mMatrix);
-
-						//	figura
-						fig.type = "player";
-						fig.index = this.player.id;
-						this.plansza[j][y] = fig;
 						break;
 				}
 			}
-			y++;
+			z++;
 		}
 	}
 };	/*	Level.handleLevel()	*/
@@ -363,7 +358,8 @@ Level.prototype.handleKeys = function(first_argument) {
 
 		//	Lewo
 		if (currentlyPressedKeys[37]) {
-			speedPlayerZ = 0.01;
+			currentlyPressedKeys[37] = false;
+			this.moveLeft();
 		} else
 		// Prawo
 		if (currentlyPressedKeys[39]) {
@@ -408,7 +404,38 @@ Level.prototype.handleKeys = function(first_argument) {
 
 /*	Rusz pionkiem w lewo	*/
 Level.prototype.moveLeft = function () {
-	//
+	// Odświeżenie pozycji gracza
+	if (this.player && this.player.x > 0) {
+		var oldX = this.player.x;
+		var oldZ = this.player.z;
+		log.d("x: " + oldX + ", z: " + oldZ);
+		if (this.plansza[oldX - 1][oldZ] == null) {
+			//	Puste pole - przesuń pionka
+			this.player.x--;
+			log.d("Puste pole");
+		}
+		else if (this.plansza[oldX - 1][oldZ].type == "box" && (oldX > 1) && (this.plansza[oldX - 2][oldZ] == null)) {
+			log.d("Przesun");
+			//	Box do przesunięcia
+			var box = this.objects[this.plansza[oldX - 1][oldZ].index];
+			//	Przesuń box
+			this.plansza[oldX - 2][oldZ] = this.plansza[oldX - 1][oldZ];
+			this.plansza[oldX - 1][oldZ] = null;
+			mat4.identity(box.M);
+			mat4.translate(box.M, [this.xOffset + oldX - 2, 0.5, this.zOffset - oldZ]);
+
+			//	Przesuń pionka
+			this.player.x--;
+		}
+		else if (this.plansza[oldX - 1][oldZ].type == "target") {
+			log.d("target");
+			//	Coś innego TODO
+		}
+
+		//	Przerysuj pozycję
+		mat4.identity(this.objects[this.player.id].M);
+		mat4.translate(this.objects[this.player.id].M, [this.xOffset + this.player.x, 0.5, this.zOffset - this.player.z]);
+	}
 };	/* Level.moveLeft() */
 
 
