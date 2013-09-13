@@ -55,8 +55,10 @@ Sokoban.prototype.start = function () {
 	this.scene = new Menu(this);
 	this.scene.run();
 
-    // Po załadowaniu znika ekran ładowania gry
-    $("#loadingPage").fadeOut(300);
+	setTimeout(function () {
+	    // Po załadowaniu znika ekran ładowania gry
+	    $("#loadingPage").delay(500).fadeOut(500);
+		}, 500);
 
     //	Zmiana zmiennej start, żeby zaczęły działać f-cje animate(), draw() i ;przechwytywanie klawiszy.
     //	De facto start menu :)
