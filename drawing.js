@@ -59,8 +59,3 @@ function pStackPop() {
 	}
 	P = pStack.pop();
 }	/*	pStackPop()	*/
-
-/*		*/
-function degToRad(degrees) {
-	return degrees * Math.PI / 180;
-}	/*	degToRad()	*/

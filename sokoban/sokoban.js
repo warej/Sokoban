@@ -429,3 +429,10 @@ function handleLoadedModelJSON(data) {
 	result["vIndex"] = tempVertexIndexBuffer;
 	return result;
 }   /*  handleLoadedModelJSON(data) */
+
+
+/*		*/
+function degToRad(degrees) {
+	return degrees * Math.PI / 180;
+}	/*	degToRad()	*/
+
