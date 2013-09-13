@@ -188,35 +188,35 @@ function initTextures(gra) {
 
 	log.d("Ładowanie tekstury 'brick.gif'");
 	tex1 = gl.createTexture();
-	gra.textures["brick"] = loadImg("brick.gif", tex1);
+	gra.textures["brick"] = loadImg("img/brick.gif", tex1);
 
 	log.d("Ładowanie tekstury 'trawa3.gif'");
 	tex2 = gl.createTexture();
-	gra.textures["grass"] = loadImg("trawa3.gif", tex2);
+	gra.textures["grass"] = loadImg("img/trawa3.gif", tex2);
 
 	log.d("Ładowanie tekstury 'crate.gif'");
 	tex3 = gl.createTexture();
-	gra.textures["crate"] = loadImg("crate.gif", tex3);
+	gra.textures["crate"] = loadImg("img/crate.gif", tex3);
 
 	log.d("Ładowanie tekstury 'target_tex.gif'");
 	tex4 = gl.createTexture();
-	gra.textures["target_tex"] = loadImg("target_tex.gif", tex4);
+	gra.textures["target_tex"] = loadImg("img/target_tex.gif", tex4);
 
 	log.d("Ładowanie tekstury 'steel.gif'");
 	tex5 = gl.createTexture();
-	gra.textures["steel"] = loadImg("steel.gif", tex5);
+	gra.textures["steel"] = loadImg("img/steel.gif", tex5);
 
 	log.d("Ładowanie tekstury sword_tex.gif'");
 	tex6 = gl.createTexture();
-	gra.textures["sword_tex"] = loadImg("sword_tex.gif", tex6);
+	gra.textures["sword_tex"] = loadImg("img/sword_tex.gif", tex6);
 
 	log.d("Ładowanie tekstury crate_ok.gif'");
 	tex7 = gl.createTexture();
-	gra.textures["crate_ok"] = loadImg("crate_ok.gif", tex7);
+	gra.textures["crate_ok"] = loadImg("img/crate_ok.gif", tex7);
 	
 	log.d("Ładowanie tekstury sun_tex.gif'");
 	tex8 = gl.createTexture();
-	gra.textures["sun_tex"] = loadImg("sun_tex.gif", tex8);
+	gra.textures["sun_tex"] = loadImg("img/sun_tex.gif", tex8);
 
 	log.d("OK");
 }	/*	initTexture()	*/
