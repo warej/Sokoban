@@ -41,6 +41,10 @@ Menu.prototype.load = function() {
 /*	Menu.run()	*/
 Menu.prototype.run = function() {
 	log.i("Witaj w menu!");
+	var g =this.game;
+	setTimeout(function () {
+		g.runLevel(1);
+		}, 2000);
 };	/*	Menu.run()	*/
 
 

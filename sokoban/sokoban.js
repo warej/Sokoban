@@ -77,7 +77,9 @@ Sokoban.prototype.runLevel = function (nr) {
 /*	Funkcja kończąca poziom	*/
 Sokoban.prototype.finishLevel = function () {
 	this.sumScore += this.scene.score;
+	log.d("Łączny wynik: " + this.sumScore + " ruchów.");
 	this.sumTime += this.scene.totalTime;
+	log.d("Łączny czas: " + this.sumTime + "s.");
 	this.levelNo++;
 	this.lastState = null;
 	this.runLevel(this.levelNo);

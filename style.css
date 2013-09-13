@@ -58,7 +58,7 @@ body {
 	text-align: 		center;
 	text-shadow:		gray;
 	background-color: 	#008800;
-	visibility:			hidden;
+	visibility:			visible;
 }
 
 tr {
