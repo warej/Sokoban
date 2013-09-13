@@ -143,18 +143,22 @@ Sokoban.prototype.draw = function () {
 	this.texturesNumbers["crate_ok"] = 6;
 	gl.activeTexture(gl.TEXTURE6);
 	gl.bindTexture(gl.TEXTURE_2D, this.textures["crate_ok"]);
+	
+	this.texturesNumbers["sun_tex"] = 7;
+	gl.activeTexture(gl.TEXTURE7);
+	gl.bindTexture(gl.TEXTURE_2D, this.textures["sun_tex"]);
 
 
 	mat4.identity(M);
 	mat4.translate(M, [parseFloat(document.getElementById("lightPositionX1").value), parseFloat(document.getElementById("lightPositionY1").value), parseFloat(document.getElementById("lightPositionZ1").value)]);
-	if (this.models["sword"]) {
-		this.drawModel(this.models["sword"], M, this.texturesNumbers["grass"]);
+	if (this.models["sun"]) {
+		this.drawModel(this.models["sun"], M, this.texturesNumbers["sun_tex"]);
 	}
 	
 	mat4.identity(M);
 	mat4.translate(M, [parseFloat(document.getElementById("lightPositionX2").value), parseFloat(document.getElementById("lightPositionY2").value), parseFloat(document.getElementById("lightPositionZ2").value)]);
-	if (this.models["sword"]) {
-		this.drawModel(this.models["sword"], M, this.texturesNumbers["grass"]);
+	if (this.models["sun"]) {
+		this.drawModel(this.models["sun"], M, this.texturesNumbers["sun_tex"]);
 	}
 
 	//	Rysowanie obecnej sceny

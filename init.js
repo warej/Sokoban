@@ -217,6 +217,10 @@ function initTextures(gra) {
 	log.d("Ładowanie tekstury crate_ok.gif'");
 	tex7 = gl.createTexture();
 	gra.textures["crate_ok"] = loadImg("crate_ok.gif", tex7);
+	
+	log.d("Ładowanie tekstury sun_tex.gif'");
+	tex8 = gl.createTexture();
+	gra.textures["sun_tex"] = loadImg("sun_tex.gif", tex8);
 
 	log.d("OK");
 }	/*	initTexture()	*/

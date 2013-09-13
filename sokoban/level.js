@@ -96,6 +96,10 @@ Level.prototype.load = function () {
 	if (this.game.models["target"]) {
 		log.d("OK");
 	}
+	this.game.loadJSON("sun");
+	if (this.game.models["sun"]) {
+		log.d("OK");
+	}
 
 	var mMatrix = [];
 
