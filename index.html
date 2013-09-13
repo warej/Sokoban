@@ -39,7 +39,7 @@
 		uniform vec3 uPointLightingLocation1;
 		uniform vec3 uPointLightingSpecularColor1;
 		uniform vec3 uPointLightingDiffuseColor1;
-		
+
 		uniform vec3 uPointLightingLocation2;
 		uniform vec3 uPointLightingSpecularColor2;
 		uniform vec3 uPointLightingDiffuseColor2;
@@ -62,24 +62,24 @@
 			// LIGHT 1:
 				vec3 lightDirectionA1 = normalize(uPointLightingLocation1 - vPosition.xyz);
 				vec3 lightDirectionB1 = normalize(uPointLightingLocation1);
-				
+
 				vec3 reflectionDirection1 = reflect(-lightDirectionA1, normal);
 
 				float specularLightWeighting1 = pow(max(dot(reflectionDirection1, eyeDirection), 0.0), shininess);
 
 				float diffuseLightWeighting1 = max(dot(normal, lightDirectionB1), 0.0);
-				
+
 			// LIGHT 2:
 				vec3 lightDirectionA2 = normalize(uPointLightingLocation2 - vPosition.xyz);
 				vec3 lightDirectionB2 = normalize(uPointLightingLocation2);
-				
+
 				vec3 reflectionDirection2 = reflect(-lightDirectionA2, normal);
 
 				float specularLightWeighting2 = pow(max(dot(reflectionDirection2, eyeDirection), 0.0), shininess);
 
 				float diffuseLightWeighting2 = max(dot(normal, lightDirectionB2), 0.0);
-				
-				
+
+
 				lightWeighting = uAmbientColor
 					+ uPointLightingSpecularColor1 * specularLightWeighting1
 					+ uPointLightingDiffuseColor1 * diffuseLightWeighting1
@@ -168,9 +168,9 @@
 				<table style="border: 0; padding: 10px;">
 					<tr>
 						<td><b>Pozycja:</b>
-						<td>X: <input type="text" id="lightPositionX1" value="30.0" size="4" />
-						<td>Y: <input type="text" id="lightPositionY1" value="4.0" size="4" />
-						<td>Z: <input type="text" id="lightPositionZ1" value="-30.0" size="4" />
+						<td>X: <input type="text" id="lightPositionX1" value="12.0" size="4" />
+						<td>Y: <input type="text" id="lightPositionY1" value="5.0" size="4" />
+						<td>Z: <input type="text" id="lightPositionZ1" value="-12.0" size="4" />
 					</tr>
 					<tr>
 						<td><b>Specular colour:</b>
@@ -180,12 +180,12 @@
 					</tr>
 					<tr>
 						<td><b>Diffuse colour:</b>
-						<td>R: <input type="text" id="diffuseR1" value="0.4" size="4" />
-						<td>G: <input type="text" id="diffuseG1" value="0.4" size="4" />
-						<td>B: <input type="text" id="diffuseB1" value="0.4" size="4" />
+						<td>R: <input type="text" id="diffuseR1" value="1" size="4" />
+						<td>G: <input type="text" id="diffuseG1" value="1" size="4" />
+						<td>B: <input type="text" id="diffuseB1" value="1" size="4" />
 					</tr>
 				</table>
-				
+
 				<h3> Oświetlenie punktowe 2:</h3>
 
 				<table style="border: 0; padding: 10px;">
@@ -214,9 +214,9 @@
 				<table style="border: 0; padding: 10px;">
 					<tr>
 						<td><b>Kolor:</b>
-						<td>R: <input type="text" id="ambientR" value="0.5" size="4" />
-						<td>G: <input type="text" id="ambientG" value="0.5" size="4" />
-						<td>B: <input type="text" id="ambientB" value="0.5" size="4" />
+						<td>R: <input type="text" id="ambientR" value="0.1" size="4" />
+						<td>G: <input type="text" id="ambientG" value="0.1" size="4" />
+						<td>B: <input type="text" id="ambientB" value="0.1" size="4" />
 					</tr>
 				</table>
 			</div>
