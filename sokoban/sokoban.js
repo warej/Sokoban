@@ -9,8 +9,8 @@
 
 /*	Konstruktor klasy gry	*/
 function Sokoban () {
-	//	Zaczynamy od poziomu zerowego
-	this.levelNo = 0;
+	//	Zaczynamy od poziomu pierwszego
+	this.levelNo = 1;
 
 	//	Na początku sumaryczny czas i wynik jest zerowy
 	this.sumTime = 0;
@@ -64,6 +64,12 @@ Sokoban.prototype.start = function () {
 };	/*	Sokoban.start()	*/
 
 
+/*	Funkcja kończąca poziom	*/
+Sokoban.prototype.finishLevel = function () {
+
+};	/*	Sokoban.finishLevel()	*/
+
+
 /*	Funkcja rysująca zawartość gry	*/
 Sokoban.prototype.draw = function () {
 	//	Czyszczenie ekranu
@@ -97,8 +103,8 @@ Sokoban.prototype.draw = function () {
 			shaderProgram.pointLightingDiffuseColor1Uniform,
 			parseFloat(document.getElementById("diffuseR1").value), parseFloat(document.getElementById("diffuseG1").value), parseFloat(document.getElementById("diffuseB1").value)
 		);
-		
-		
+
+
 		gl.uniform3f(
 			shaderProgram.pointLightingLocation2Uniform,
 			parseFloat(document.getElementById("lightPositionX2").value), parseFloat(document.getElementById("lightPositionY2").value), parseFloat(document.getElementById("lightPositionZ2").value)
@@ -154,7 +160,7 @@ Sokoban.prototype.draw = function () {
 	if (this.models["sun"]) {
 		this.drawModel(this.models["sun"], M, this.texturesNumbers["sun_tex"]);
 	}
-	
+
 	mat4.identity(M);
 	mat4.translate(M, [parseFloat(document.getElementById("lightPositionX2").value), parseFloat(document.getElementById("lightPositionY2").value), parseFloat(document.getElementById("lightPositionZ2").value)]);
 	if (this.models["sun"]) {

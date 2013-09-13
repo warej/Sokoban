@@ -316,6 +316,14 @@ Level.prototype.drawObject = function (obj) {
 
 /*		*/
 Level.prototype.animate = function () {
+	if (this.paused) {
+		return;
+	}
+
+	if (this.player != null && this.boxCounter == 0) {
+		this.finish();
+	}
+
 	var timeNow = new Date().getTime();
 	if (lastTime != 0) {
 		var elapsed = timeNow - lastTime;
@@ -509,6 +517,9 @@ Level.prototype.moveLeft = function () {
 				this.plansza[oldX - 2][oldZ].fig = this.plansza[oldX - 1][oldZ];
 				this.plansza[oldX - 1][oldZ] = null;
 
+				//	kolejny box na miejscu!
+				this.boxCounter--;
+
 				//	Przesuń pionka
 				this.player.x--;
 			}
@@ -527,6 +538,9 @@ Level.prototype.moveLeft = function () {
 				//	Przesuń box
 				this.plansza[oldX - 2][oldZ] = this.plansza[oldX - 1][oldZ].fig;
 				this.plansza[oldX - 1][oldZ].fig = null;
+
+				//	Box wyszedł z dobrego miejsca
+				this.boxCounter++;
 
 				//	Przesuń pionka
 				this.player.x--;
@@ -870,3 +884,11 @@ Level.prototype.pause = function () {
 	this.game.scene.run();
 };	/*	Level.pause()	*/
 
+
+/*	Level.finish()	*/
+Level.prototype.finish = function () {
+	log.d("Skończ waść wstydu oszczędź.");
+	this.totalTime += new Date().getTime() - this.startTime;
+	this.paused = true;
+	this.game.finishLevel();
+};	/*	Level.finish()	*/
