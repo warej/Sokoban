@@ -243,7 +243,7 @@ Sokoban.prototype.drawModel = function (model, mMatrix, textureId) {
 		gl.drawArrays(gl.TRIANGLES, 0, model.vPosition.numItems);
 	}
 	else {
-		log.e("Nie ma modelu do narysowania: " + model.name);
+		//log.e("Nie ma modelu do narysowania: " + model.name);
 	}
 };	/* Sokoban.drawModel()	*/
 
