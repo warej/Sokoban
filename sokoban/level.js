@@ -357,6 +357,7 @@ Level.prototype.animate = function () {
 Level.prototype.run = function () {
 	log.d("Startuję poziom " + this.number);
 	this.startTime = new Date().getTime();
+	//this.pause = true;	//	TODO later
 };  /*	Level.roun()	*/
 
 

@@ -64,9 +64,23 @@ Sokoban.prototype.start = function () {
 };	/*	Sokoban.start()	*/
 
 
+/*	Menu.runLevel()	*/
+Sokoban.prototype.runLevel = function (nr) {
+	log.d("Runing level " + nr);
+	//	Uruchom poziom numer 'nr'
+	this.levelNo = nr;
+	this.scene = new Level(this, nr);
+	this.scene.run();
+};	/*	Menu.runLevel()	*/
+
+
 /*	Funkcja kończąca poziom	*/
 Sokoban.prototype.finishLevel = function () {
-
+	this.sumScore += this.scene.score;
+	this.sumTime += this.scene.totalTime;
+	this.levelNo++;
+	this.lastState = null;
+	this.runLevel(this.levelNo);
 };	/*	Sokoban.finishLevel()	*/
 
 
@@ -141,7 +155,7 @@ Sokoban.prototype.draw = function () {
 	this.texturesNumbers["crate_ok"] = 6;
 	gl.activeTexture(gl.TEXTURE6);
 	gl.bindTexture(gl.TEXTURE_2D, this.textures["crate_ok"]);
-	
+
 	this.texturesNumbers["sun_tex"] = 7;
 	gl.activeTexture(gl.TEXTURE7);
 	gl.bindTexture(gl.TEXTURE_2D, this.textures["sun_tex"]);
