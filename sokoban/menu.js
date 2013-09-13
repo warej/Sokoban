@@ -78,7 +78,7 @@ Menu.prototype.handleKeys = function () {
 				this.continueLevel();
 				break;
 			case 1:
-				this.runLevel(1);
+				this.game.runLevel(1);
 				break;
 			case 2:
 				this.finish();
@@ -96,19 +96,9 @@ Menu.prototype.continueLevel = function () {
 		this.game.scene.run();
 	}
 	else {
-		this.runLevel(1);
+		this.game.runLevel(1);
 	}
 };	/*	Menu.continueLevel()	*/
-
-
-/*	Menu.runLevel()	*/
-Menu.prototype.runLevel = function (nr) {
-	log.d("Runing level " + nr);
-	//	Uruchom poziom numer 'nr'
-	this.game.levelNo = 1;
-	this.game.scene = new Level(this.game, nr);
-	this.game.scene.run();
-};	/*	Menu.runLevel()	*/
 
 
 /*	Menu.finish()	*/
