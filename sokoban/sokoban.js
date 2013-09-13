@@ -94,10 +94,6 @@ Sokoban.prototype.draw = function () {
 			parseFloat(document.getElementById("lightPositionX1").value), parseFloat(document.getElementById("lightPositionY1").value), parseFloat(document.getElementById("lightPositionZ1").value)
 		);
 
-		gl.uniform3f(
-			shaderProgram.pointLightingSpecularColor1Uniform,
-			parseFloat(document.getElementById("specularR1").value), parseFloat(document.getElementById("specularG1").value), parseFloat(document.getElementById("specularB1").value)
-		);
 
 		gl.uniform3f(
 			shaderProgram.pointLightingDiffuseColor1Uniform,
@@ -110,10 +106,6 @@ Sokoban.prototype.draw = function () {
 			parseFloat(document.getElementById("lightPositionX2").value), parseFloat(document.getElementById("lightPositionY2").value), parseFloat(document.getElementById("lightPositionZ2").value)
 		);
 
-		gl.uniform3f(
-			shaderProgram.pointLightingSpecularColor2Uniform,
-			parseFloat(document.getElementById("specularR2").value), parseFloat(document.getElementById("specularG2").value), parseFloat(document.getElementById("specularB2").value)
-		);
 
 		gl.uniform3f(
 			shaderProgram.pointLightingDiffuseColor2Uniform,

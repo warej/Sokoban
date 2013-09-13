@@ -31,21 +31,17 @@
 		varying vec4 vPosition;
 
 		uniform bool uUseColorMap;
-			//uniform bool uUseSpecularMap;
 		uniform bool uUseLighting;
 
 		uniform vec3 uAmbientColor;
 
 		uniform vec3 uPointLightingLocation1;
-		uniform vec3 uPointLightingSpecularColor1;
 		uniform vec3 uPointLightingDiffuseColor1;
 
 		uniform vec3 uPointLightingLocation2;
-		uniform vec3 uPointLightingSpecularColor2;
 		uniform vec3 uPointLightingDiffuseColor2;
 
 		uniform sampler2D uColorMapSampler;
-			//uniform sampler2D uSpecularMapSampler;
 
 
 		void main(void) {
@@ -60,30 +56,16 @@
 				vec3 eyeDirection = normalize(-vPosition.xyz);
 
 			// LIGHT 1:
-				vec3 lightDirectionA1 = normalize(uPointLightingLocation1 - vPosition.xyz);
-				vec3 lightDirectionB1 = normalize(uPointLightingLocation1);
-
-				vec3 reflectionDirection1 = reflect(-lightDirectionA1, normal);
-
-				float specularLightWeighting1 = pow(max(dot(reflectionDirection1, eyeDirection), 0.0), shininess);
-
-				float diffuseLightWeighting1 = max(dot(normal, lightDirectionB1), 0.0);
+				vec3 lightDirection1 = normalize(uPointLightingLocation1);
+				float diffuseLightWeighting1 = max(dot(normal, lightDirection1), 0.0);
 
 			// LIGHT 2:
-				vec3 lightDirectionA2 = normalize(uPointLightingLocation2 - vPosition.xyz);
-				vec3 lightDirectionB2 = normalize(uPointLightingLocation2);
-
-				vec3 reflectionDirection2 = reflect(-lightDirectionA2, normal);
-
-				float specularLightWeighting2 = pow(max(dot(reflectionDirection2, eyeDirection), 0.0), shininess);
-
-				float diffuseLightWeighting2 = max(dot(normal, lightDirectionB2), 0.0);
+				vec3 lightDirection2 = normalize(uPointLightingLocation2);
+				float diffuseLightWeighting2 = max(dot(normal, lightDirection2), 0.0);
 
 
 				lightWeighting = uAmbientColor
-					+ uPointLightingSpecularColor1 * specularLightWeighting1
 					+ uPointLightingDiffuseColor1 * diffuseLightWeighting1
-					+ uPointLightingSpecularColor2 * specularLightWeighting2
 					+ uPointLightingDiffuseColor2 * diffuseLightWeighting2;
 			}
 
@@ -138,13 +120,6 @@
 		<div id="panel">
 			<h2>Opcje:</h2> <hr />
 
-			<!--
-			<div id="konsola1">start</div>
-			<div id="konsola2">start</div>
-			<div id="konsola3">start</div>
-			<hr />
-			-->
-
 			<div id="options" >
 				<b>Sterowanie kamerą:</b>
 				<ul>
@@ -173,12 +148,6 @@
 						<td>Z: <input type="text" id="lightPositionZ1" value="-12.0" size="4" />
 					</tr>
 					<tr>
-						<td><b>Specular colour:</b>
-						<td>R: <input type="text" id="specularR1" value="0.0" size="4" />
-						<td>G: <input type="text" id="specularG1" value="0.0" size="4" />
-						<td>B: <input type="text" id="specularB1" value="0.0" size="4" />
-					</tr>
-					<tr>
 						<td><b>Diffuse colour:</b>
 						<td>R: <input type="text" id="diffuseR1" value="1" size="4" />
 						<td>G: <input type="text" id="diffuseG1" value="1" size="4" />
@@ -196,12 +165,6 @@
 						<td>Z: <input type="text" id="lightPositionZ2" value="30.0" size="4" />
 					</tr>
 					<tr>
-						<td><b>Specular colour:</b>
-						<td>R: <input type="text" id="specularR2" value="0" size="4" />
-						<td>G: <input type="text" id="specularG2" value="0" size="4" />
-						<td>B: <input type="text" id="specularB2" value="0" size="4" />
-					</tr>
-					<tr>
 						<td><b>Diffuse colour:</b>
 						<td>R: <input type="text" id="diffuseR2" value="0.3" size="4" />
 						<td>G: <input type="text" id="diffuseG2" value="0.3" size="4" />
@@ -214,9 +177,9 @@
 				<table style="border: 0; padding: 10px;">
 					<tr>
 						<td><b>Kolor:</b>
-						<td>R: <input type="text" id="ambientR" value="0.1" size="4" />
-						<td>G: <input type="text" id="ambientG" value="0.1" size="4" />
-						<td>B: <input type="text" id="ambientB" value="0.1" size="4" />
+						<td>R: <input type="text" id="ambientR" value="0.3" size="4" />
+						<td>G: <input type="text" id="ambientG" value="0.3" size="4" />
+						<td>B: <input type="text" id="ambientB" value="0.3" size="4" />
 					</tr>
 				</table>
 			</div>
