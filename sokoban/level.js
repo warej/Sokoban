@@ -223,6 +223,9 @@ Level.prototype.handleLevel = function (data) {
 						var fig = {};
 						var mMatrix = [];
 
+						//	Mamy kolejnego boxa
+						this.boxCounter++;
+
 						//	Podpinanie grafiki
 						mat4.identity(mMatrix);
 						mat4.translate(mMatrix, [xOffset + j, 0.5, zOffset - z]);
@@ -309,7 +312,33 @@ Level.prototype.drawObject = function (obj) {
 
 /*		*/
 Level.prototype.animate = function () {
-	animate();
+	var timeNow = new Date().getTime();
+	if (lastTime != 0) {
+		var elapsed = timeNow - lastTime;
+
+		// KAMERA:
+		if (speed != 0) {
+			xPos -= speed * elapsed * Math.sin(degToRad(yaw));
+			zPos -= speed * elapsed * Math.cos(degToRad(yaw));
+			yPos += speed * elapsed * Math.sin(degToRad(pitch));
+
+			//joggingAngle += elapsed * 0.6; // 0.6 "fiddle factor" - makes it feel more realistic :-)
+			//yPos = Math.sin(degToRad(joggingAngle)) / 20 + 0.4
+		}
+
+		if (speedBok != 0) {
+			xPos -= speedBok * elapsed * Math.cos(degToRad(yaw));
+			zPos -= speedBok * elapsed * Math.sin(degToRad(-yaw));
+		}
+
+		if (speedPion != 0) {
+			yPos += speedPion * elapsed;
+		}
+
+		yaw += yawRate * elapsed;
+		pitch += pitchRate * elapsed;
+	}
+	lastTime = timeNow;
 };	/*	Level.animate()	*/
 
 /*	Level.run()	*/
